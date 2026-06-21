@@ -1,0 +1,55 @@
+# Cargo build artifacts
+/target/
+**/*.rs.bk
+
+# Fuzzing: keep the targets + config in git, but not the build output,
+# evolving corpora, or crash artifacts (regressions are pinned as unit tests).
+/fuzz/target/
+/fuzz/corpus/
+/fuzz/artifacts/
+/fuzz/coverage/
+/fuzz/Cargo.lock
+
+# SwiftPM build artifacts (the swift/ subdir is a separate package).
+swift/.build/
+swift/Package.resolved
+
+# macOS metadata
+.DS_Store
+
+# Per-developer Spotlight exclusion marker (not part of source)
+.metadata_never_index
+
+# Local agent / editor tooling (not part of source)
+.claude/
+
+# Marketing site — deployed separately to farewell.pro, not part of the code repo
+site/
+
+# License-issuance backend (SRL-side service) — kept private, not part of the public repo
+portal/
+tools/license-signer/
+docs/LICENSE_PORTAL.md
+scripts/make-grant.sh
+scripts/make-license.sh
+
+# Internal roadmap — kept private
+ROADMAP.md
+
+# Cloud Build context filter for the private portal deploy — local only
+.gcloudignore
+
+# IDE settings (not project-wide)
+.idea/
+.vscode/
+
+# Editor swap files
+*.swp
+*.swo
+
+# Local Rust toolchain overrides (we ship rust-toolchain.toml for the
+# enforced pin; an `override` file would silently break reproducibility)
+.rustup/
+
+# Release artifacts (built by scripts/package-release.sh)
+dist/

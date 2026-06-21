@@ -1,0 +1,44 @@
+[package]
+name = "farewell_license"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "Offline license tokens for Farewell: ECDSA P-256 signed payloads (cloud-KMS-friendly), hardware-SN-bound, verified locally. See CHARTER §10.4."
+
+[dependencies]
+p256 = { workspace = true }
+sha2 = { workspace = true }
+base64 = { workspace = true }
+byteorder = { workspace = true }
+thiserror = { workspace = true }
+zeroize = { workspace = true }
+# Optional: only pulled in when `dev-keygen` is enabled — i.e. SRL-side
+# signing tooling, not the user-facing app. Gated this way so the
+# production build of farewell-cli never links rand into the binary.
+rand = { workspace = true, optional = true }
+
+[dev-dependencies]
+rand = { workspace = true }
+hex = { workspace = true }
+
+[features]
+# `dev-keygen` exposes APIs that allow signing license tokens (i.e. it
+# requires access to the private key). The production app never enables
+# this — only the SRL-side signing tool does.
+dev-keygen = ["dep:rand"]
+
+# Gating the example and integration test on the feature lets
+# `cargo test --workspace` skip them cleanly (the production crate
+# build does not pull in signing code) while
+# `cargo test -p farewell_license --features dev-keygen` still
+# exercises the full surface.
+[[example]]
+name = "sign_license"
+required-features = ["dev-keygen"]
+
+[[test]]
+name = "integration"
+required-features = ["dev-keygen"]

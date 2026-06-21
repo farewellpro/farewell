@@ -1,0 +1,325 @@
+/* ===================================================================
+   Farewell — English base strings (the development language).
+   Keys are the English source text; values here mirror them.
+   Organised screen by screen as localization rolls out.
+   =================================================================== */
+
+/* --- Open / Create / Unlock screen --- */
+"Open vault" = "打开保险库";
+"Create vault" = "创建保险库";
+"Licensed to %@" = "已授权给 %@";
+"Not activated" = "未激活";
+"Manage license…" = "管理许可证…";
+
+/* Open form */
+"Vault path" = "保险库路径";
+"Choose…" = "选择…";
+"Passphrase" = "密码短语";
+"Using a hardware key with a PIN?" = "使用带 PIN 码的硬件密钥？";
+"YubiKey PIN" = "YubiKey PIN 码";
+"Leave the PIN blank if your key has none. You'll be asked to touch the key if this vault requires it." = "如果你的密钥没有 PIN 码，请留空。如果此保险库需要，系统会要求你轻触密钥。";
+"Unlock" = "解锁";
+"No vault at this path. Check the location, or use Choose…." = "此路径下没有保险库。请检查位置，或使用「选择…」。";
+
+/* --- Manage-license sheet --- */
+"License" = "许可证";
+"Paste the license key you received by email, then Activate. Everything is verified locally — Farewell never contacts a server." = "粘贴你通过电子邮件收到的许可证密钥，然后点击「激活」。一切都在本地验证——Farewell 从不联系任何服务器。";
+"Open file…" = "打开文件…";
+"Close" = "关闭";
+"Activate" = "激活";
+"Licensed to %@ — %@" = "已授权给 %@ — %@";
+"Not activated on this Mac" = "未在此 Mac 上激活";
+
+/* License tiers (typeName) */
+"Standard" = "标准版";
+"Family" = "家庭版";
+"Education" = "教育版";
+"Business" = "商业版";
+"At-risk grant" = "互助许可";
+
+/* License verdict notes */
+"Paste your license key first." = "请先粘贴你的许可证密钥。";
+"Couldn't read the license input." = "无法读取输入的许可证。";
+"Activated. Thank you for supporting Farewell." = "已激活。感谢你支持 Farewell。";
+"No license installed." = "未安装任何许可证。";
+"This key isn’t valid for this build (wrong key, or the key was altered)." = "此密钥对该版本无效（密钥错误，或密钥已被篡改）。";
+"This license is for a different major version of Farewell." = "此许可证适用于 Farewell 的其他主版本。";
+"This license isn’t authorized for this Mac. A free re-issue is available — see farewell.pro/license-policy." = "此许可证未授权用于此 Mac。可免费重新签发——请参阅 farewell.pro/license-policy。";
+"That doesn’t look like a valid license key." = "这看起来不是有效的许可证密钥。";
+"Couldn’t verify (couldn’t read this Mac’s serial number)." = "无法验证（无法读取此 Mac 的序列号）。";
+"Unknown license state." = "许可证状态未知。";
+
+/* --- Create-vault form --- */
+"New vault path (…/my.vault)" = "新保险库路径（…/my.vault）";
+"Capacity" = "容量";
+"size" = "大小";
+"MB" = "MB";
+"Choose any size you want (e.g. 64, 512, 4096…). The vault file is always exactly this size on disk, no matter how much you store — that's part of the deniability." = "选择任意你想要的大小（例如 64、512、4096…）。无论你存储多少，保险库文件在磁盘上始终正好占用此大小——这是可否认性的一部分。";
+"Generated (recommended)" = "生成的（推荐）";
+"My own" = "我自己的";
+"There is no recovery, and there is no self-destruct: the file looks like random data and your passphrase is the ONLY thing protecting it. That is why it must be strong — and why you must not lose it." = "没有恢复，也没有自毁：文件看起来像随机数据，而你的密码短语是唯一保护它的东西。因此它必须足够强——也因此你绝不能丢失它。";
+"Also require a YubiKey (hardware key)" = "同时要求 YubiKey（硬件密钥）";
+"YubiKey PIN (leave blank if none)" = "YubiKey PIN 码（若无则留空）";
+"Also enrol a backup key now" = "现在同时注册一个备份密钥";
+"You'll enrol the keys one at a time: insert the first key and touch it, then swap to the second when asked. Either key will open the vault — keep the backup somewhere safe and separate." = "你将逐个注册密钥：插入第一个密钥并轻触，然后在提示时换上第二个。任一密钥都能打开保险库——请将备份密钥保存在安全且独立的地方。";
+"You'll be asked to TOUCH the key to enrol it. Then a copy of this vault can't be brute-forced without the physical key. Lose your only key and the vault is gone — there is no recovery, so a backup key is recommended." = "系统会要求你轻触密钥以完成注册。之后，没有实体密钥就无法暴力破解此保险库的副本。若丢失唯一的密钥，保险库将无法找回——没有恢复，因此建议设置备份密钥。";
+"Record my identity in this vault" = "在此保险库中记录我的身份";
+"Stores “%@” inside the encrypted vault — visible only after unlock. ⚠︎ This ATTRIBUTES the vault to you if it is ever decrypted. Leave OFF if you need deniability." = "将「%@」存储在加密保险库内——仅在解锁后可见。⚠︎ 一旦保险库被解密，这会将其归属于你。如果你需要可否认性，请保持关闭。";
+"Activate a license first to record your identity." = "请先激活许可证以记录你的身份。";
+"Create and open" = "创建并打开";
+"Creating a vault needs an active license. Activate one with “Manage license…” below. (Opening existing vaults always works.)" = "创建保险库需要有效的许可证。请通过下方的「管理许可证…」激活一个。（打开现有保险库始终可用。）";
+"Choose where to save the vault (Choose…)." = "选择保险库的保存位置（「选择…」）。";
+"Generate a passphrase." = "生成一个密码短语。";
+"Tick the box confirming you saved the passphrase." = "勾选复选框以确认你已保存密码短语。";
+"Enter a passphrase." = "输入一个密码短语。";
+"Passphrases don't match." = "两个密码短语不一致。";
+"Passphrase must reach “Very strong” (4/4)." = "密码短语必须达到「非常强」（4/4）。";
+"Regenerate" = "重新生成";
+"≈ 129 bits — 10 random words" = "≈ 129 位 — 10 个随机单词";
+"I have written this passphrase down somewhere safe" = "我已将此密码短语记在安全的地方";
+"Confirm passphrase" = "确认密码短语";
+"Must reach “Very strong” (4/4). Tip: 5+ random, unrelated words beat any short clever password." = "必须达到「非常强」（4/4）。提示：5 个以上互不相关的随机单词胜过任何简短而巧妙的密码。";
+"Choose Folder" = "选择文件夹";
+"Choose the folder for the new vault. You'll set its name back in the Farewell window. An existing vault is never overwritten." = "为新保险库选择文件夹。你将在 Farewell 窗口中设置其名称。现有保险库绝不会被覆盖。";
+
+/* --- Error messages (humanError) --- */
+"OK (unexpected)" = "好（意外）";
+"Invalid argument" = "参数无效";
+"Not found" = "未找到";
+"Couldn't read the vault file (missing or unreadable)." = "无法读取保险库文件（缺失或不可读）。";
+"This vault is already open in another window or process." = "此保险库已在另一个窗口或进程中打开。";
+"Vault has been wiped — contents unrecoverable" = "保险库已被擦除——内容无法恢复";
+"Couldn't open it. Check the passphrase — and, if this vault uses a YubiKey, that it's plugged in and you entered its PIN." = "无法打开。请检查密码短语——如果此保险库使用 YubiKey，请检查它已插入且你已输入其 PIN 码。";
+"Vault header has been tampered with" = "保险库标头已被篡改";
+"Counter rollback detected" = "检测到计数器回滚";
+"Passphrase too weak — use a stronger or generated one" = "密码短语太弱——请使用更强的或生成的密码短语";
+"No YubiKey detected — plug it in and try again." = "未检测到 YubiKey——请插入后重试。";
+"YubiKey check failed — wrong PIN, or it wasn't touched in time." = "YubiKey 检查失败——PIN 码错误，或未及时轻触。";
+"More than one key is plugged in. With a PIN, please leave only the key you're unlocking with plugged in (trying a PIN on the wrong key can lock it), then try again." = "插入了多个密钥。使用 PIN 码时，请仅保留你要用来解锁的那个密钥（在错误的密钥上尝试 PIN 码可能将其锁定），然后重试。";
+"Not a Farewell vault file" = "不是 Farewell 保险库文件";
+"Vault uses a format this build cannot read" = "保险库使用了此版本无法读取的格式";
+
+/* --- Keys-management panel --- */
+"Keys" = "密钥";
+"Hardware-key management." = "硬件密钥管理。";
+"Vault passphrase" = "保险库密码短语";
+"Current key's PIN (leave blank if no PIN or no key)" = "当前密钥的 PIN 码（若无 PIN 码或无密钥则留空）";
+"Cancel" = "取消";
+"Show keys" = "显示密钥";
+"Reading keys…" = "正在读取密钥…";
+"Done" = "完成";
+"Passphrase-only — no hardware key enrolled." = "仅密码短语——未注册任何硬件密钥。";
+"Only one key opens this vault. **Lose it and the vault is gone forever — there is no recovery.** Enrol a backup key below so either key works." = "只有一个密钥能打开此保险库。**丢失它，保险库将永远丢失——没有恢复。** 请在下方注册一个备份密钥，使两个密钥都可用。";
+"Key %lld" = "密钥 %lld";
+"Remove (last)" = "移除（最后一个）";
+"Revoke" = "吊销";
+"Revoke this key?" = "吊销此密钥？";
+"It will no longer open this vault; the other keys still will. Revoking uses only your passphrase, then you'll touch a remaining key once to reopen the vault." = "它将不再打开此保险库；其他密钥仍可使用。吊销仅使用你的密码短语，然后你将轻触一个剩余密钥一次以重新打开保险库。";
+"Remove your last key?" = "移除你的最后一个密钥？";
+"Remove last key" = "移除最后一个密钥";
+"This turns the vault back into passphrase-only: the passphrase alone will open it, and opening becomes slower again (by design). Insert the key now — you'll touch it once so it can be safely removed." = "这会将保险库恢复为仅密码短语模式：仅凭密码短语即可打开，而打开会再次变慢（出于设计）。现在请插入密钥——你将轻触它一次，以便安全地移除它。";
+"Add a hardware key" = "添加硬件密钥";
+"Add a backup key" = "添加备份密钥";
+"Require a physical key (plus your passphrase) to open this vault. Insert the new key and touch it twice to enrol." = "要求实体密钥（外加你的密码短语）来打开此保险库。插入新密钥并轻触两次以完成注册。";
+"Enrol another key so any enrolled key opens this vault. Insert your current key and touch it, then swap to the new key and touch it twice. Keep the backup safe and separate — there's no recovery if you lose every key." = "注册另一个密钥，使任一已注册密钥都能打开此保险库。插入你当前的密钥并轻触，然后换上新密钥并轻触两次。请将备份密钥保存在安全且独立的地方——若丢失所有密钥则没有恢复。";
+"Set/enter this key's PIN (leave blank if none)" = "设置/输入此密钥的 PIN 码（若无则留空）";
+"New key's PIN (leave blank if none)" = "新密钥的 PIN 码（若无则留空）";
+"Name (optional)" = "名称（可选）";
+"Add key…" = "添加密钥…";
+"Add backup…" = "添加备份…";
+"This vault already has the maximum of %lld keys." = "此保险库已达到最多 %lld 个密钥。";
+"Working…" = "正在处理…";
+"Follow the prompts on your key — insert, swap, and touch as asked. Don't unplug a key unless you're told to." = "按照密钥上的提示操作——按要求插入、更换和轻触。除非有提示，否则请勿拔下任何密钥。";
+
+/* --- Key-operation prompts (insert / remove / touch) --- */
+"Insert your YubiKey…" = "请插入你的 YubiKey…";
+"Insert your CURRENT key (the one that already opens this vault)…" = "请插入你当前的密钥（已经能打开此保险库的那个）…";
+"Now insert the NEW backup key…" = "现在请插入新的备份密钥…";
+"Insert key %lld of %lld…" = "请插入第 %lld 个密钥，共 %lld 个…";
+"Insert the key you're removing…" = "请插入你要移除的密钥…";
+"Remove your current key, then insert the NEW backup key…" = "请拔下你当前的密钥，然后插入新的备份密钥…";
+"Remove that key, then insert the next one…" = "请拔下该密钥，然后插入下一个…";
+" — touch %lld of %lld" = "——轻触第 %lld 次，共 %lld 次";
+"Key %lld of %lld: touch it now" = "第 %lld 个密钥，共 %lld 个：现在轻触它";
+"Touch your YubiKey now" = "现在轻触你的 YubiKey";
+"Touch your CURRENT key now — not the new one yet" = "现在轻触你当前的密钥——先别碰新密钥";
+"Touch the new backup key now" = "现在轻触新的备份密钥";
+"Touch the key to remove it" = "轻触密钥以移除它";
+
+/* --- Key-operation status messages --- */
+"Backup key enrolled. Either key now opens this vault — keep the backup somewhere safe and separate. There is still no recovery if you lose both." = "备份密钥已注册。现在任一密钥都能打开此保险库——请将备份密钥保存在安全且独立的地方。若两个都丢失，仍然没有恢复。";
+"Backup key enrolled. Unlock again to continue." = "备份密钥已注册。请重新解锁以继续。";
+"Could not add the backup key: %@. Your vault is unchanged." = "无法添加备份密钥：%@。你的保险库未更改。";
+"Enter your passphrase to add a backup key." = "输入你的密码短语以添加备份密钥。";
+"Could not read keys: %@." = "无法读取密钥：%@。";
+"Key revoked — it no longer opens this vault. Unlock again to continue." = "密钥已吊销——它不再打开此保险库。请重新解锁以继续。";
+"Could not revoke the key: %@. Your vault is unchanged." = "无法吊销该密钥：%@。你的保险库未更改。";
+"Enter your passphrase to remove a key." = "输入你的密码短语以移除一个密钥。";
+"Enter your passphrase to remove the last key." = "输入你的密码短语以移除最后一个密钥。";
+"Last key removed. This vault now opens with the passphrase alone — and opening is slower again, by design." = "已移除最后一个密钥。此保险库现在仅凭密码短语即可打开——而打开会再次变慢，出于设计。";
+"Last key removed. Unlock again with your passphrase." = "已移除最后一个密钥。请用你的密码短语重新解锁。";
+"Could not remove the last key: %@. Your vault is unchanged." = "无法移除最后一个密钥：%@。你的保险库未更改。";
+
+/* --- Busy / progress messages --- */
+"Copying files into the new vault…" = "正在将文件复制到新保险库…";
+"Verifying the new vault…" = "正在验证新保险库…";
+"Preparing the new vault…" = "正在准备新保险库…";
+"Removing the key — re-securing the vault…" = "正在移除密钥——正在重新保护保险库…";
+"Adding your backup key…" = "正在添加你的备份密钥…";
+"Creating your Farewell vault…" = "正在创建你的 Farewell 保险库…";
+"Unlocking…\nThis takes a few seconds." = "正在解锁…\n这需要几秒钟。";
+"Touch your key now — it should be blinking." = "现在轻触你的密钥——它应该正在闪烁。";
+"Enrolling backup key…" = "正在注册备份密钥…";
+"Removing the last key…" = "正在移除最后一个密钥…";
+"Enrolling your key…" = "正在注册你的密钥…";
+"Creating vault…" = "正在创建保险库…";
+"Migrating… touch your YubiKey when it blinks." = "正在迁移…当 YubiKey 闪烁时请轻触它。";
+
+/* --- Vault window header / toolbar --- */
+"Migrate…" = "迁移…";
+"Keys…" = "密钥…";
+"Lock" = "锁定";
+"Discard" = "丢弃";
+"Dismiss" = "关闭";
+"1 key — add a backup" = "1 个密钥 — 添加备份";
+"Re-encrypt this vault into a fresh file (new keys, or a smaller size). Used to rotate keys or upgrade the format. The original is kept until you confirm." = "将此保险库重新加密到一个全新文件（新密钥，或更小的大小）。用于轮换密钥或升级格式。在你确认之前会保留原文件。";
+"Add a hardware key so a physical key is required to open this vault — or just review that it's passphrase-only." = "添加硬件密钥，使打开此保险库需要实体密钥——或仅查看它是否为仅密码短语。";
+"Name, add, or revoke the hardware keys that open this vault (%lld of %lld enrolled), or convert back to passphrase-only." = "命名、添加或吊销打开此保险库的硬件密钥（已注册 %lld 个，共 %lld 个），或恢复为仅密码短语。";
+"This vault has only one hardware key. Lose it and the vault is gone — enrol a backup key." = "此保险库只有一个硬件密钥。丢失它，保险库就会丢失——请注册一个备份密钥。";
+"This vault records its creator's identity (opt-in)." = "此保险库记录其创建者的身份（可选）。";
+"%@ free of %@" = "可用 %@，共 %@";
+"counter %llu" = "计数器 %llu";
+"%lld hardware keys" = "%lld 个硬件密钥";
+"created by %@" = "由 %@ 创建";
+"An interrupted migration left “%@”. Your vault is intact." = "一次中断的迁移留下了「%@」。你的保险库完好无损。";
+
+/* --- File list / folders --- */
+"This vault contains no files." = "此保险库不包含任何文件。";
+"Drag files here, or use Import below." = "将文件拖到此处，或使用下方的「导入」。";
+"Search files…" = "搜索文件…";
+"No file matches “%@”." = "没有文件匹配「%@」。";
+"Drop to import into the vault" = "放下以导入到保险库";
+"New folder" = "新建文件夹";
+"New folder in “%@”" = "在「%@」中新建文件夹";
+"Import…" = "导入…";
+"Delete" = "删除";
+"Rename" = "重命名";
+
+/* --- File / folder dialogs --- */
+"Delete this file?" = "删除此文件？";
+"“%@” will be permanently removed and its encrypted chunks securely shredded. This cannot be undone — there is no recovery, by design." = "「%@」将被永久移除，其加密分块将被安全粉碎。此操作无法撤销——没有恢复，出于设计。";
+"Delete this folder?" = "删除此文件夹？";
+"“%@” and ALL its contents will be permanently removed and securely shredded. This cannot be undone." = "「%@」及其全部内容将被永久移除并安全粉碎。此操作无法撤销。";
+"Folder name" = "文件夹名称";
+"Create" = "创建";
+"Rename file" = "重命名文件";
+"Renaming “%@”. The encrypted content is unchanged; only the name in the manifest is updated." = "正在重命名「%@」。加密内容不变；仅更新清单中的名称。";
+"New name" = "新名称";
+
+/* --- Import bar --- */
+"New note" = "新建笔记";
+"Create a new empty note and open it in the editor. It lives only inside the encrypted vault." = "创建一个新的空白笔记并在编辑器中打开。它仅存在于加密保险库内。";
+"1 pass" = "1 遍";
+"3 passes" = "3 遍";
+"7 passes" = "7 遍";
+"Overwrite passes. 1 is enough on any modern drive; 3/7 exist only for standards that mandate them and add nothing on an SSD." = "覆写遍数。在任何现代驱动器上 1 遍即足够；3/7 仅为强制要求的标准而存在，在 SSD 上没有任何额外作用。";
+"Shred originals" = "粉碎原件";
+"After importing, securely overwrite and delete the source file. On a hard disk this physically erases it; on an SSD wear-leveling means it's best-effort only (no guarantee) — the real protection is the encrypted vault." = "导入后，安全地覆写并删除源文件。在硬盘上这会将其物理擦除；在 SSD 上，磨损均衡意味着这只是尽力而为（不保证）——真正的保护是加密保险库。";
+"Drag files here, or click Import. Files are encrypted into the vault; nothing is written elsewhere." = "将文件拖到此处，或点击「导入」。文件将被加密到保险库；不会在其他任何地方写入内容。";
+"Imported %lld; last error: %@" = "已导入 %lld 个；最后一个错误：%@";
+"Imported 1 file." = "已导入 1 个文件。";
+"Imported %lld files." = "已导入 %lld 个文件。";
+"Original securely erased (overwritten %lld× in place on a hard disk)." = "原件已安全擦除（在硬盘上原地覆写 %lld 次）。";
+"Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "原件已覆写并删除——但这是 SSD：磨损均衡意味着单元可能仍然残留。真正的保护是加密保险库，而非擦除。";
+"Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "原件已覆写并删除（存储类型未知；按闪存处理——不保证物理擦除）。";
+
+/* --- File viewer --- */
+"Save" = "保存";
+"Save the changes back into the encrypted vault. Nothing is written to disk." = "将更改保存回加密保险库。不会向磁盘写入任何内容。";
+"Edit" = "编辑";
+"Edit this text file in the app and save it back into the vault. Nothing is written to disk." = "在应用内编辑此文本文件并保存回保险库。不会向磁盘写入任何内容。";
+"Export…" = "导出…";
+"Write a decrypted copy of this file to disk, outside the vault. Shows a warning first." = "将此文件的解密副本写入磁盘，保险库之外。会先显示警告。";
+"The vault isn’t open." = "保险库未打开。";
+
+/* --- Export warning --- */
+"Export a decrypted copy?" = "导出解密副本？";
+"You are about to write the decrypted contents of “%@” to a regular file on disk. Once written, that file leaves Farewell's protection:" = "你即将把「%@」的解密内容写入磁盘上的普通文件。一旦写入，该文件就离开了 Farewell 的保护：";
+"Spotlight will index its contents" = "聚焦（Spotlight）会索引其内容";
+"QuickLook will cache a thumbnail" = "快速查看（QuickLook）会缓存缩略图";
+"Time Machine will back it up (if enabled)" = "时间机器（Time Machine）会备份它（若已启用）";
+"Apps that open it keep it in Recent Items" = "打开它的应用会将其保留在「最近使用的项目」中";
+"Farewell can no longer track or recall it" = "Farewell 将无法再跟踪或召回它";
+"Use the in-app viewer instead unless you genuinely need an external copy. For device-to-device transfer, Farewell-to-Farewell P2P (coming later) never writes cleartext to disk." = "除非你确实需要外部副本，否则请改用应用内查看器。对于设备间传输，Farewell 到 Farewell 的点对点功能（即将推出）绝不会向磁盘写入明文。";
+"Export anyway" = "仍然导出";
+"This file will be written UNENCRYPTED outside the vault." = "此文件将以未加密形式写入保险库之外。";
+
+/* --- Migrate sheet --- */
+"Migrate / rotate vault" = "迁移 / 轮换保险库";
+"Re-encrypts everything into a brand-new vault file with fresh keys (the same passphrase). Your files are copied and verified before anything is replaced; nothing is written to disk in the clear. The original is kept until you delete it." = "将所有内容重新加密到一个全新的保险库文件中，使用新密钥（相同的密码短语）。在替换任何内容之前，你的文件会被复制并验证；不会以明文向磁盘写入任何内容。在你删除之前会保留原文件。";
+"New size" = "新大小";
+"Keep current capacity" = "保持当前容量";
+"Shrink to fit contents" = "收缩以适应内容";
+"Destination:" = "目标位置：";
+"Needs about %@; %@ free here." = "大约需要 %@；此处可用 %@。";
+"This vault requires a YubiKey" = "此保险库需要 YubiKey";
+"Migrate" = "迁移";
+"Use Folder" = "使用此文件夹";
+"Not enough space on %@: the new vault needs about %@ but only %@ is free. Choose “Shrink to fit” or a different drive." = "%@ 上空间不足：新保险库大约需要 %@，但仅有 %@ 可用。请选择「收缩以适应内容」或其他驱动器。";
+"A file named “%@” already exists in that folder. Pick another destination." = "该文件夹中已存在名为「%@」的文件。请选择其他目标位置。";
+"Migration failed: %@. Your original vault is unchanged." = "迁移失败：%@。你的原始保险库未更改。";
+"Migrated. The previous vault is kept as “%@” — delete it once you’ve confirmed this one works." = "已迁移。先前的保险库保留为「%@」——确认此保险库可用后请将其删除。";
+"Migrated to %@. Your original vault is unchanged — delete it when ready." = "已迁移到 %@。你的原始保险库未更改——准备好后请将其删除。";
+"Migration verified but the file swap failed: %@. Your original vault is unchanged." = "迁移已验证，但文件交换失败：%@。你的原始保险库未更改。";
+
+/* --- Create-vault rename notice --- */
+"“%@” already existed — created “%@” instead. A vault is never overwritten." = "「%@」已存在——已改为创建「%@」。保险库绝不会被覆盖。";
+
+/* --- Settings / About / auto-lock --- */
+"Auto-lock after inactivity:" = "不活动后自动锁定：";
+"1 minute" = "1 分钟";
+"5 minutes" = "5 分钟";
+"15 minutes" = "15 分钟";
+"30 minutes" = "30 分钟";
+"Never" = "从不";
+"The vault always locks on system sleep and screen lock. Inactivity is measured system-wide." = "在系统睡眠和锁屏时，保险库始终会锁定。不活动按整个系统范围计量。";
+"About Farewell" = "关于 Farewell";
+"sleep" = "睡眠";
+"screen lock" = "锁屏";
+"inactivity" = "不活动";
+"Vault locked automatically (%@). Unlock to continue." = "保险库已自动锁定（%@）。请解锁以继续。";
+
+/* --- Import failure reasons --- */
+"vault not open" = "保险库未打开";
+"empty name" = "名称为空";
+"cannot stat %@" = "无法获取 %@ 的状态";
+"cannot read %@" = "无法读取 %@";
+"“%@” is %@ but only %@ is free in this level." = "「%@」为 %@，但此层级仅有 %@ 可用。";
+"Not enough space: the edit needs %@ but only %@ is available." = "空间不足：此次编辑需要 %@，但仅有 %@ 可用。";
+
+/* --- Context menus & viewer states --- */
+"Clear search" = "清除搜索";
+"Rename…" = "重命名…";
+"Rename folder…" = "重命名文件夹…";
+"New subfolder…" = "新建子文件夹…";
+"Move to top level" = "移动到顶层";
+"Delete folder" = "删除文件夹";
+"Passes" = "遍数";
+"Select a file to view it." = "选择一个文件以查看。";
+"Cannot preview" = "无法预览";
+"Failed to load" = "加载失败";
+"Fullscreen (Esc to exit)" = "全屏（按 Esc 退出）";
+"Copy this Mac’s serial number" = "复制此 Mac 的序列号";
+
+/* --- Clé matérielle initiale + clarté clé de secours (ajout) --- */
+"Adding a backup happens in two steps — and the order matters:" = "添加备份密钥分两步——顺序很重要：";
+"**1.** First insert your **current key** (the one that already opens this vault) and touch it — **not the new key yet**." = "**1.** 先插入你的**当前密钥**（已经能打开此保险库的那个）并轻触它——**先别碰新密钥**。";
+"**2.** Only then, when asked, swap to the **new backup key** and touch it twice." = "**2.** 然后在提示时，再换成**新的备份密钥**并轻触两次。";
+"Either key will then open the vault. Keep the backup somewhere safe and separate — there's no recovery if you lose every key." = "之后任一密钥都能打开此保险库。请将备份密钥保存在安全且独立的地方——若丢失所有密钥，将无法恢复。";
+"Enter your passphrase to add a hardware key." = "输入你的密码短语以添加硬件密钥。";
+"Adding your hardware key…" = "正在添加你的硬件密钥…";
+"Enrolling your hardware key…" = "正在注册你的硬件密钥…";
+"Hardware key enrolled. This vault now needs that key plus your passphrase to open. Enrol a backup key too — lose your only key and the vault is gone, with no recovery." = "硬件密钥已注册。现在打开此保险库需要该密钥加上你的密码短语。也请注册一个备份密钥——若丢失唯一的密钥，保险库将丢失且无法恢复。";
+"Hardware key enrolled. Unlock again to continue." = "硬件密钥已注册。请重新解锁以继续。";
+"Could not add the hardware key: %@. Your vault is unchanged." = "无法添加硬件密钥：%@。你的保险库未更改。";
+"Touch your new key now" = "现在轻触你的新密钥";

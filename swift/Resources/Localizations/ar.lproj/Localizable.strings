@@ -1,0 +1,325 @@
+/* ===================================================================
+   Farewell — English base strings (the development language).
+   Keys are the English source text; values here mirror them.
+   Organised screen by screen as localization rolls out.
+   =================================================================== */
+
+/* --- Open / Create / Unlock screen --- */
+"Open vault" = "فتح خزنة";
+"Create vault" = "إنشاء خزنة";
+"Licensed to %@" = "مُرخَّص لـ %@";
+"Not activated" = "غير مُفعَّل";
+"Manage license…" = "إدارة الترخيص…";
+
+/* Open form */
+"Vault path" = "مسار الخزنة";
+"Choose…" = "اختيار…";
+"Passphrase" = "عبارة المرور";
+"Using a hardware key with a PIN?" = "هل تستخدم مفتاحاً مادياً مع رمز PIN؟";
+"YubiKey PIN" = "رمز PIN لمفتاح YubiKey";
+"Leave the PIN blank if your key has none. You'll be asked to touch the key if this vault requires it." = "اترك رمز PIN فارغاً إذا كان مفتاحك بلا رمز. سيُطلب منك لمس المفتاح إذا كانت هذه الخزنة تتطلب ذلك.";
+"Unlock" = "فتح القفل";
+"No vault at this path. Check the location, or use Choose…." = "لا توجد خزنة في هذا المسار. تحقق من الموقع، أو استخدم اختيار….";
+
+/* --- Manage-license sheet --- */
+"License" = "ترخيص";
+"Paste the license key you received by email, then Activate. Everything is verified locally — Farewell never contacts a server." = "الصق مفتاح الترخيص الذي وصلك بالبريد، ثم اضغط تفعيل. يتم التحقق من كل شيء محلياً — لا يتصل Farewell بأي خادم أبداً.";
+"Open file…" = "فتح ملف…";
+"Close" = "إغلاق";
+"Activate" = "تفعيل";
+"Licensed to %@ — %@" = "مُرخَّص لـ %@ — %@";
+"Not activated on this Mac" = "غير مُفعَّل على هذا الـ Mac";
+
+/* License tiers (typeName) */
+"Standard" = "قياسي";
+"Family" = "عائلي";
+"Education" = "تعليمي";
+"Business" = "أعمال";
+"At-risk grant" = "ترخيص تضامني";
+
+/* License verdict notes */
+"Paste your license key first." = "الصق مفتاح الترخيص أولاً.";
+"Couldn't read the license input." = "تعذّرت قراءة بيانات الترخيص المُدخَلة.";
+"Activated. Thank you for supporting Farewell." = "تم التفعيل. شكراً لدعمك Farewell.";
+"No license installed." = "لا يوجد ترخيص مُثبَّت.";
+"This key isn’t valid for this build (wrong key, or the key was altered)." = "هذا المفتاح غير صالح لهذه النسخة (مفتاح خاطئ، أو تم تعديله).";
+"This license is for a different major version of Farewell." = "هذا الترخيص لإصدار رئيسي مختلف من Farewell.";
+"This license isn’t authorized for this Mac. A free re-issue is available — see farewell.pro/license-policy." = "هذا الترخيص غير مُصرَّح به لهذا الـ Mac. تتوفر إعادة إصدار مجانية — راجع farewell.pro/license-policy.";
+"That doesn’t look like a valid license key." = "هذا لا يبدو مفتاح ترخيص صالحاً.";
+"Couldn’t verify (couldn’t read this Mac’s serial number)." = "تعذّر التحقق (تعذّرت قراءة الرقم التسلسلي لهذا الـ Mac).";
+"Unknown license state." = "حالة ترخيص غير معروفة.";
+
+/* --- Create-vault form --- */
+"New vault path (…/my.vault)" = "مسار الخزنة الجديدة (…/my.vault)";
+"Capacity" = "السعة";
+"size" = "الحجم";
+"MB" = "ميغابايت";
+"Choose any size you want (e.g. 64, 512, 4096…). The vault file is always exactly this size on disk, no matter how much you store — that's part of the deniability." = "اختر أي حجم تريده (مثلاً 64، 512، 4096…). يشغل ملف الخزنة دائماً هذا الحجم بالضبط على القرص، مهما خزّنت — وهذا جزء من قابلية الإنكار.";
+"Generated (recommended)" = "مُولَّدة (مُوصى به)";
+"My own" = "الخاصة بي";
+"There is no recovery, and there is no self-destruct: the file looks like random data and your passphrase is the ONLY thing protecting it. That is why it must be strong — and why you must not lose it." = "لا يوجد استرداد، ولا تدمير ذاتي: يبدو الملف كبيانات عشوائية، وعبارة المرور هي الشيء الوحيد الذي يحميه. لذلك يجب أن تكون قوية — ولذلك يجب ألا تفقدها.";
+"Also require a YubiKey (hardware key)" = "اطلب أيضاً مفتاح YubiKey (مفتاح مادي)";
+"YubiKey PIN (leave blank if none)" = "رمز PIN لمفتاح YubiKey (اتركه فارغاً إن لم يوجد)";
+"Also enrol a backup key now" = "سجّل أيضاً مفتاحاً احتياطياً الآن";
+"You'll enrol the keys one at a time: insert the first key and touch it, then swap to the second when asked. Either key will open the vault — keep the backup somewhere safe and separate." = "ستسجّل المفاتيح واحداً تلو الآخر: أدخل المفتاح الأول والمسه، ثم بدّل إلى الثاني عند الطلب. سيفتح أي من المفتاحين الخزنة — احتفظ بالاحتياطي في مكان آمن ومنفصل.";
+"You'll be asked to TOUCH the key to enrol it. Then a copy of this vault can't be brute-forced without the physical key. Lose your only key and the vault is gone — there is no recovery, so a backup key is recommended." = "سيُطلب منك لمس المفتاح لتسجيله. بعدها لا يمكن كسر نسخة من هذه الخزنة دون المفتاح المادي. إذا فقدت مفتاحك الوحيد، تضيع الخزنة — لا يوجد استرداد، لذا يُوصى بمفتاح احتياطي.";
+"Record my identity in this vault" = "سجّل هويتي في هذه الخزنة";
+"Stores “%@” inside the encrypted vault — visible only after unlock. ⚠︎ This ATTRIBUTES the vault to you if it is ever decrypted. Leave OFF if you need deniability." = "يخزّن « %@ » داخل الخزنة المُشفَّرة — مرئي فقط بعد فتح القفل. ⚠︎ هذا يَنسُب الخزنة إليك إذا فُكّ تشفيرها يوماً ما. اتركه مُعطَّلاً إذا كنت تحتاج إلى قابلية الإنكار.";
+"Activate a license first to record your identity." = "فعّل ترخيصاً أولاً لتسجيل هويتك.";
+"Create and open" = "إنشاء وفتح";
+"Creating a vault needs an active license. Activate one with “Manage license…” below. (Opening existing vaults always works.)" = "يتطلب إنشاء خزنة ترخيصاً مُفعَّلاً. فعّل واحداً عبر « إدارة الترخيص… » بالأسفل. (فتح الخزائن الموجودة يعمل دائماً.)";
+"Choose where to save the vault (Choose…)." = "اختر مكان حفظ الخزنة (اختيار…).";
+"Generate a passphrase." = "وَلّد عبارة مرور.";
+"Tick the box confirming you saved the passphrase." = "علّم المربع لتأكيد أنك حفظت عبارة المرور.";
+"Enter a passphrase." = "أدخل عبارة مرور.";
+"Passphrases don't match." = "عبارتا المرور غير متطابقتين.";
+"Passphrase must reach “Very strong” (4/4)." = "يجب أن تبلغ عبارة المرور « قوية جداً » (4/4).";
+"Regenerate" = "إعادة توليد";
+"≈ 129 bits — 10 random words" = "≈ 129 بت — 10 كلمات عشوائية";
+"I have written this passphrase down somewhere safe" = "لقد دوّنت عبارة المرور هذه في مكان آمن";
+"Confirm passphrase" = "أكّد عبارة المرور";
+"Must reach “Very strong” (4/4). Tip: 5+ random, unrelated words beat any short clever password." = "يجب أن تبلغ « قوية جداً » (4/4). نصيحة: 5 كلمات عشوائية غير مترابطة أو أكثر تتفوق على أي كلمة مرور قصيرة وذكية.";
+"Choose Folder" = "اختيار مجلد";
+"Choose the folder for the new vault. You'll set its name back in the Farewell window. An existing vault is never overwritten." = "اختر المجلد للخزنة الجديدة. ستحدد اسمها في نافذة Farewell. لا يُستبدَل أي خزنة موجودة أبداً.";
+
+/* --- Error messages (humanError) --- */
+"OK (unexpected)" = "موافق (غير متوقع)";
+"Invalid argument" = "معطى غير صالح";
+"Not found" = "غير موجود";
+"Couldn't read the vault file (missing or unreadable)." = "تعذّرت قراءة ملف الخزنة (مفقود أو غير قابل للقراءة).";
+"This vault is already open in another window or process." = "هذه الخزنة مفتوحة بالفعل في نافذة أو عملية أخرى.";
+"Vault has been wiped — contents unrecoverable" = "تم مسح الخزنة — المحتويات غير قابلة للاسترداد";
+"Couldn't open it. Check the passphrase — and, if this vault uses a YubiKey, that it's plugged in and you entered its PIN." = "تعذّر فتحها. تحقق من عبارة المرور — وإذا كانت هذه الخزنة تستخدم مفتاح YubiKey، فتأكد من توصيله وأنك أدخلت رمز PIN الخاص به.";
+"Vault header has been tampered with" = "تم العبث برأس الخزنة";
+"Counter rollback detected" = "تم اكتشاف تراجع في العدّاد";
+"Passphrase too weak — use a stronger or generated one" = "عبارة المرور ضعيفة جداً — استخدم واحدة أقوى أو مُولَّدة";
+"No YubiKey detected — plug it in and try again." = "لم يُكتشف أي مفتاح YubiKey — وصّله وحاول مرة أخرى.";
+"YubiKey check failed — wrong PIN, or it wasn't touched in time." = "فشل التحقق من YubiKey — رمز PIN خاطئ، أو لم يُلمَس في الوقت المناسب.";
+"More than one key is plugged in. With a PIN, please leave only the key you're unlocking with plugged in (trying a PIN on the wrong key can lock it), then try again." = "هناك أكثر من مفتاح موصّل. مع وجود رمز PIN، أبقِ موصّلاً فقط المفتاح الذي تفتح به (تجربة رمز PIN على المفتاح الخطأ قد تقفله)، ثم حاول مرة أخرى.";
+"Not a Farewell vault file" = "ليس ملف خزنة Farewell";
+"Vault uses a format this build cannot read" = "تستخدم الخزنة تنسيقاً لا يستطيع هذا الإصدار قراءته";
+
+/* --- Keys-management panel --- */
+"Keys" = "المفاتيح";
+"Hardware-key management." = "إدارة المفاتيح المادية.";
+"Vault passphrase" = "عبارة مرور الخزنة";
+"Current key's PIN (leave blank if no PIN or no key)" = "رمز PIN للمفتاح الحالي (اتركه فارغاً إن لم يوجد رمز PIN أو مفتاح)";
+"Cancel" = "إلغاء";
+"Show keys" = "إظهار المفاتيح";
+"Reading keys…" = "جارٍ قراءة المفاتيح…";
+"Done" = "تم";
+"Passphrase-only — no hardware key enrolled." = "عبارة مرور فقط — لا يوجد مفتاح مادي مُسجَّل.";
+"Only one key opens this vault. **Lose it and the vault is gone forever — there is no recovery.** Enrol a backup key below so either key works." = "مفتاح واحد فقط يفتح هذه الخزنة. **افقده وتضيع الخزنة إلى الأبد — لا يوجد استرداد.** سجّل مفتاحاً احتياطياً بالأسفل ليعمل أي من المفتاحين.";
+"Key %lld" = "المفتاح %lld";
+"Remove (last)" = "إزالة (الأخير)";
+"Revoke" = "إبطال";
+"Revoke this key?" = "إبطال هذا المفتاح؟";
+"It will no longer open this vault; the other keys still will. Revoking uses only your passphrase, then you'll touch a remaining key once to reopen the vault." = "لن يفتح هذه الخزنة بعد الآن؛ ستظل المفاتيح الأخرى تفتحها. يستخدم الإبطال عبارة المرور وحدها، ثم ستلمس مفتاحاً متبقياً مرة واحدة لإعادة فتح الخزنة.";
+"Remove your last key?" = "إزالة مفتاحك الأخير؟";
+"Remove last key" = "إزالة المفتاح الأخير";
+"This turns the vault back into passphrase-only: the passphrase alone will open it, and opening becomes slower again (by design). Insert the key now — you'll touch it once so it can be safely removed." = "هذا يُعيد الخزنة إلى عبارة المرور فقط: ستفتحها عبارة المرور وحدها، ويصبح الفتح أبطأ مجدداً (عن قصد). أدخل المفتاح الآن — ستلمسه مرة واحدة حتى يمكن إزالته بأمان.";
+"Add a hardware key" = "إضافة مفتاح مادي";
+"Add a backup key" = "إضافة مفتاح احتياطي";
+"Require a physical key (plus your passphrase) to open this vault. Insert the new key and touch it twice to enrol." = "اطلب مفتاحاً مادياً (إضافة إلى عبارة المرور) لفتح هذه الخزنة. أدخل المفتاح الجديد والمسه مرتين لتسجيله.";
+"Enrol another key so any enrolled key opens this vault. Insert your current key and touch it, then swap to the new key and touch it twice. Keep the backup safe and separate — there's no recovery if you lose every key." = "سجّل مفتاحاً آخر ليفتح أي مفتاح مُسجَّل هذه الخزنة. أدخل مفتاحك الحالي والمسه، ثم بدّل إلى الجديد والمسه مرتين. احتفظ بالاحتياطي في مكان آمن ومنفصل — لا يوجد استرداد إذا فقدت كل المفاتيح.";
+"Set/enter this key's PIN (leave blank if none)" = "عيّن/أدخل رمز PIN لهذا المفتاح (اتركه فارغاً إن لم يوجد)";
+"New key's PIN (leave blank if none)" = "رمز PIN للمفتاح الجديد (اتركه فارغاً إن لم يوجد)";
+"Name (optional)" = "الاسم (اختياري)";
+"Add key…" = "إضافة مفتاح…";
+"Add backup…" = "إضافة احتياطي…";
+"This vault already has the maximum of %lld keys." = "تحتوي هذه الخزنة بالفعل على الحد الأقصى من المفاتيح وهو %lld.";
+"Working…" = "جارٍ العمل…";
+"Follow the prompts on your key — insert, swap, and touch as asked. Don't unplug a key unless you're told to." = "اتبع التعليمات على مفتاحك — أدخل وبدّل والمس حسب الطلب. لا تفصل أي مفتاح إلا إذا طُلب منك ذلك.";
+
+/* --- Key-operation prompts (insert / remove / touch) --- */
+"Insert your YubiKey…" = "أدخل مفتاح YubiKey الخاص بك…";
+"Insert your CURRENT key (the one that already opens this vault)…" = "أدخل مفتاحك الحالي (الذي يفتح هذه الخزنة بالفعل)…";
+"Now insert the NEW backup key…" = "أدخل الآن المفتاح الاحتياطي الجديد…";
+"Insert key %lld of %lld…" = "أدخل المفتاح %lld من %lld…";
+"Insert the key you're removing…" = "أدخل المفتاح الذي تزيله…";
+"Remove your current key, then insert the NEW backup key…" = "أزل مفتاحك الحالي، ثم أدخل المفتاح الاحتياطي الجديد…";
+"Remove that key, then insert the next one…" = "أزل ذلك المفتاح، ثم أدخل التالي…";
+" — touch %lld of %lld" = " — لمسة %lld من %lld";
+"Key %lld of %lld: touch it now" = "المفتاح %lld من %lld: المسه الآن";
+"Touch your YubiKey now" = "المس مفتاح YubiKey الآن";
+"Touch your CURRENT key now — not the new one yet" = "المس مفتاحك الحالي الآن — ليس الجديد بعد";
+"Touch the new backup key now" = "المس المفتاح الاحتياطي الجديد الآن";
+"Touch the key to remove it" = "المس المفتاح لإزالته";
+
+/* --- Key-operation status messages --- */
+"Backup key enrolled. Either key now opens this vault — keep the backup somewhere safe and separate. There is still no recovery if you lose both." = "تم تسجيل المفتاح الاحتياطي. أي من المفتاحين يفتح الآن هذه الخزنة — احتفظ بالاحتياطي في مكان آمن ومنفصل. لا يزال لا يوجد استرداد إذا فقدت كليهما.";
+"Backup key enrolled. Unlock again to continue." = "تم تسجيل المفتاح الاحتياطي. افتح القفل مجدداً للمتابعة.";
+"Could not add the backup key: %@. Your vault is unchanged." = "تعذّرت إضافة المفتاح الاحتياطي: %@. خزنتك لم تتغير.";
+"Enter your passphrase to add a backup key." = "أدخل عبارة مرورك لإضافة مفتاح احتياطي.";
+"Could not read keys: %@." = "تعذّرت قراءة المفاتيح: %@.";
+"Key revoked — it no longer opens this vault. Unlock again to continue." = "تم إبطال المفتاح — لم يعد يفتح هذه الخزنة. افتح القفل مجدداً للمتابعة.";
+"Could not revoke the key: %@. Your vault is unchanged." = "تعذّر إبطال المفتاح: %@. خزنتك لم تتغير.";
+"Enter your passphrase to remove a key." = "أدخل عبارة مرورك لإزالة مفتاح.";
+"Enter your passphrase to remove the last key." = "أدخل عبارة مرورك لإزالة المفتاح الأخير.";
+"Last key removed. This vault now opens with the passphrase alone — and opening is slower again, by design." = "تمت إزالة المفتاح الأخير. تُفتح هذه الخزنة الآن بعبارة المرور وحدها — والفتح أبطأ مجدداً، عن قصد.";
+"Last key removed. Unlock again with your passphrase." = "تمت إزالة المفتاح الأخير. افتح القفل مجدداً بعبارة مرورك.";
+"Could not remove the last key: %@. Your vault is unchanged." = "تعذّرت إزالة المفتاح الأخير: %@. خزنتك لم تتغير.";
+
+/* --- Busy / progress messages --- */
+"Copying files into the new vault…" = "جارٍ نسخ الملفات إلى الخزنة الجديدة…";
+"Verifying the new vault…" = "جارٍ التحقق من الخزنة الجديدة…";
+"Preparing the new vault…" = "جارٍ تحضير الخزنة الجديدة…";
+"Removing the key — re-securing the vault…" = "جارٍ إزالة المفتاح — إعادة تأمين الخزنة…";
+"Adding your backup key…" = "جارٍ إضافة مفتاحك الاحتياطي…";
+"Creating your Farewell vault…" = "جارٍ إنشاء خزنة Farewell الخاصة بك…";
+"Unlocking…\nThis takes a few seconds." = "جارٍ فتح القفل…\nيستغرق هذا بضع ثوانٍ.";
+"Touch your key now — it should be blinking." = "المس مفتاحك الآن — يجب أن يكون وامضاً.";
+"Enrolling backup key…" = "جارٍ تسجيل المفتاح الاحتياطي…";
+"Removing the last key…" = "جارٍ إزالة المفتاح الأخير…";
+"Enrolling your key…" = "جارٍ تسجيل مفتاحك…";
+"Creating vault…" = "جارٍ إنشاء الخزنة…";
+"Migrating… touch your YubiKey when it blinks." = "جارٍ الترحيل… المس مفتاح YubiKey عندما يومض.";
+
+/* --- Vault window header / toolbar --- */
+"Migrate…" = "ترحيل…";
+"Keys…" = "المفاتيح…";
+"Lock" = "قفل";
+"Discard" = "تجاهل";
+"Dismiss" = "إخفاء";
+"1 key — add a backup" = "مفتاح واحد — أضف احتياطياً";
+"Re-encrypt this vault into a fresh file (new keys, or a smaller size). Used to rotate keys or upgrade the format. The original is kept until you confirm." = "أعد تشفير هذه الخزنة في ملف جديد (مفاتيح جديدة، أو حجم أصغر). يُستخدم لتدوير المفاتيح أو ترقية التنسيق. يُحتفظ بالأصل حتى تؤكد.";
+"Add a hardware key so a physical key is required to open this vault — or just review that it's passphrase-only." = "أضف مفتاحاً مادياً ليصبح مطلوباً لفتح هذه الخزنة — أو فقط تأكد من أنها بعبارة مرور فقط.";
+"Name, add, or revoke the hardware keys that open this vault (%lld of %lld enrolled), or convert back to passphrase-only." = "سمِّ أو أضف أو أبطل المفاتيح المادية التي تفتح هذه الخزنة (%lld من %lld مُسجَّلة)، أو عُد إلى عبارة مرور فقط.";
+"This vault has only one hardware key. Lose it and the vault is gone — enrol a backup key." = "تحتوي هذه الخزنة على مفتاح مادي واحد فقط. افقده وتضيع الخزنة — سجّل مفتاحاً احتياطياً.";
+"This vault records its creator's identity (opt-in)." = "تسجّل هذه الخزنة هوية مُنشئها (اختياري).";
+"%@ free of %@" = "%@ متاح من %@";
+"counter %llu" = "العدّاد %llu";
+"%lld hardware keys" = "%lld مفاتيح مادية";
+"created by %@" = "أنشأها %@";
+"An interrupted migration left “%@”. Your vault is intact." = "ترك ترحيلٌ مُتوقَّف « %@ ». خزنتك سليمة.";
+
+/* --- File list / folders --- */
+"This vault contains no files." = "لا تحتوي هذه الخزنة على أي ملفات.";
+"Drag files here, or use Import below." = "اسحب الملفات إلى هنا، أو استخدم استيراد بالأسفل.";
+"Search files…" = "بحث في الملفات…";
+"No file matches “%@”." = "لا يوجد ملف يطابق « %@ ».";
+"Drop to import into the vault" = "أفلت للاستيراد إلى الخزنة";
+"New folder" = "مجلد جديد";
+"New folder in “%@”" = "مجلد جديد في « %@ »";
+"Import…" = "استيراد…";
+"Delete" = "حذف";
+"Rename" = "إعادة تسمية";
+
+/* --- File / folder dialogs --- */
+"Delete this file?" = "حذف هذا الملف؟";
+"“%@” will be permanently removed and its encrypted chunks securely shredded. This cannot be undone — there is no recovery, by design." = "ستُحذف « %@ » نهائياً وتُمزَّق أجزاؤها المُشفَّرة بأمان. لا يمكن التراجع عن هذا — لا يوجد استرداد، عن قصد.";
+"Delete this folder?" = "حذف هذا المجلد؟";
+"“%@” and ALL its contents will be permanently removed and securely shredded. This cannot be undone." = "ستُحذف « %@ » وكل محتوياتها نهائياً وتُمزَّق بأمان. لا يمكن التراجع عن هذا.";
+"Folder name" = "اسم المجلد";
+"Create" = "إنشاء";
+"Rename file" = "إعادة تسمية الملف";
+"Renaming “%@”. The encrypted content is unchanged; only the name in the manifest is updated." = "إعادة تسمية « %@ ». المحتوى المُشفَّر لا يتغير؛ يُحدَّث الاسم فقط في الفهرس.";
+"New name" = "الاسم الجديد";
+
+/* --- Import bar --- */
+"New note" = "ملاحظة جديدة";
+"Create a new empty note and open it in the editor. It lives only inside the encrypted vault." = "أنشئ ملاحظة فارغة جديدة وافتحها في المحرر. توجد فقط داخل الخزنة المُشفَّرة.";
+"1 pass" = "تمريرة واحدة";
+"3 passes" = "3 تمريرات";
+"7 passes" = "7 تمريرات";
+"Overwrite passes. 1 is enough on any modern drive; 3/7 exist only for standards that mandate them and add nothing on an SSD." = "تمريرات الكتابة فوق البيانات. تكفي تمريرة واحدة على أي قرص حديث؛ 3/7 موجودة فقط للمعايير التي تفرضها ولا تضيف شيئاً على قرص SSD.";
+"Shred originals" = "تمزيق الأصول";
+"After importing, securely overwrite and delete the source file. On a hard disk this physically erases it; on an SSD wear-leveling means it's best-effort only (no guarantee) — the real protection is the encrypted vault." = "بعد الاستيراد، اكتب فوق ملف المصدر واحذفه بأمان. على القرص الصلب يمحوه فيزيائياً؛ على قرص SSD، تعني موازنة التآكل أنه أفضل جهد فقط (دون ضمان) — الحماية الحقيقية هي الخزنة المُشفَّرة.";
+"Drag files here, or click Import. Files are encrypted into the vault; nothing is written elsewhere." = "اسحب الملفات إلى هنا، أو اضغط استيراد. تُشفَّر الملفات داخل الخزنة؛ لا يُكتب أي شيء في أي مكان آخر.";
+"Imported %lld; last error: %@" = "تم استيراد %lld؛ آخر خطأ: %@";
+"Imported 1 file." = "تم استيراد ملف واحد.";
+"Imported %lld files." = "تم استيراد %lld ملفات.";
+"Original securely erased (overwritten %lld× in place on a hard disk)." = "تم محو الأصل بأمان (كُتب فوقه %lld× في مكانه على قرص صلب).";
+"Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "كُتب فوق الأصل + حُذف — لكن هذا قرص SSD: تعني موازنة التآكل أن الخلايا قد تبقى. الحماية الحقيقية هي الخزنة المُشفَّرة، وليس المحو.";
+"Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "كُتب فوق الأصل + حُذف (نوع التخزين غير معروف؛ يُعامَل كذاكرة فلاش — دون ضمان محو فيزيائي).";
+
+/* --- File viewer --- */
+"Save" = "حفظ";
+"Save the changes back into the encrypted vault. Nothing is written to disk." = "احفظ التغييرات في الخزنة المُشفَّرة. لا يُكتب أي شيء على القرص.";
+"Edit" = "تحرير";
+"Edit this text file in the app and save it back into the vault. Nothing is written to disk." = "حرّر هذا الملف النصي في التطبيق وأعد حفظه في الخزنة. لا يُكتب أي شيء على القرص.";
+"Export…" = "تصدير…";
+"Write a decrypted copy of this file to disk, outside the vault. Shows a warning first." = "اكتب نسخة مُفكّكة التشفير من هذا الملف على القرص، خارج الخزنة. يعرض تحذيراً أولاً.";
+"The vault isn’t open." = "الخزنة غير مفتوحة.";
+
+/* --- Export warning --- */
+"Export a decrypted copy?" = "تصدير نسخة مُفكّكة التشفير؟";
+"You are about to write the decrypted contents of “%@” to a regular file on disk. Once written, that file leaves Farewell's protection:" = "أنت على وشك كتابة المحتوى المُفكّك التشفير لـ « %@ » في ملف عادي على القرص. بمجرد كتابته، يخرج ذلك الملف من حماية Farewell:";
+"Spotlight will index its contents" = "سيفهرس Spotlight محتواه";
+"QuickLook will cache a thumbnail" = "سيخزّن QuickLook صورة مصغّرة مؤقتاً";
+"Time Machine will back it up (if enabled)" = "ستنسخه Time Machine احتياطياً (إن كان مُفعَّلاً)";
+"Apps that open it keep it in Recent Items" = "التطبيقات التي تفتحه تحتفظ به في العناصر الأخيرة";
+"Farewell can no longer track or recall it" = "لم يعد بإمكان Farewell تتبعه أو استرجاعه";
+"Use the in-app viewer instead unless you genuinely need an external copy. For device-to-device transfer, Farewell-to-Farewell P2P (coming later) never writes cleartext to disk." = "استخدم العارض داخل التطبيق بدلاً من ذلك ما لم تكن بحاجة فعلاً إلى نسخة خارجية. للنقل بين الأجهزة، فإن خاصية Farewell-إلى-Farewell الند للند (قادمة لاحقاً) لا تكتب أبداً نصاً غير مُشفَّر على القرص.";
+"Export anyway" = "تصدير على أي حال";
+"This file will be written UNENCRYPTED outside the vault." = "سيُكتب هذا الملف غير مُشفَّر خارج الخزنة.";
+
+/* --- Migrate sheet --- */
+"Migrate / rotate vault" = "ترحيل / تدوير الخزنة";
+"Re-encrypts everything into a brand-new vault file with fresh keys (the same passphrase). Your files are copied and verified before anything is replaced; nothing is written to disk in the clear. The original is kept until you delete it." = "يعيد تشفير كل شيء في ملف خزنة جديد تماماً بمفاتيح جديدة (نفس عبارة المرور). تُنسخ ملفاتك ويُتحقق منها قبل استبدال أي شيء؛ لا يُكتب أي شيء على القرص بشكل واضح. يُحتفظ بالأصل حتى تحذفه.";
+"New size" = "الحجم الجديد";
+"Keep current capacity" = "الإبقاء على السعة الحالية";
+"Shrink to fit contents" = "التقليص ليناسب المحتوى";
+"Destination:" = "الوجهة:";
+"Needs about %@; %@ free here." = "يحتاج إلى نحو %@؛ %@ متاح هنا.";
+"This vault requires a YubiKey" = "تتطلب هذه الخزنة مفتاح YubiKey";
+"Migrate" = "ترحيل";
+"Use Folder" = "استخدام المجلد";
+"Not enough space on %@: the new vault needs about %@ but only %@ is free. Choose “Shrink to fit” or a different drive." = "لا توجد مساحة كافية على %@: تحتاج الخزنة الجديدة إلى نحو %@ لكن المتاح %@ فقط. اختر « التقليص ليناسب المحتوى » أو قرصاً آخر.";
+"A file named “%@” already exists in that folder. Pick another destination." = "يوجد بالفعل ملف باسم « %@ » في ذلك المجلد. اختر وجهة أخرى.";
+"Migration failed: %@. Your original vault is unchanged." = "فشل الترحيل: %@. خزنتك الأصلية لم تتغير.";
+"Migrated. The previous vault is kept as “%@” — delete it once you’ve confirmed this one works." = "تم الترحيل. يُحتفظ بالخزنة السابقة باسم « %@ » — احذفها بمجرد أن تتأكد من أن هذه تعمل.";
+"Migrated to %@. Your original vault is unchanged — delete it when ready." = "تم الترحيل إلى %@. خزنتك الأصلية لم تتغير — احذفها عندما تكون جاهزاً.";
+"Migration verified but the file swap failed: %@. Your original vault is unchanged." = "تم التحقق من الترحيل لكن فشل تبديل الملفات: %@. خزنتك الأصلية لم تتغير.";
+
+/* --- Create-vault rename notice --- */
+"“%@” already existed — created “%@” instead. A vault is never overwritten." = "« %@ » كانت موجودة بالفعل — تم إنشاء « %@ » بدلاً منها. لا يُستبدَل أي خزنة أبداً.";
+
+/* --- Settings / About / auto-lock --- */
+"Auto-lock after inactivity:" = "القفل التلقائي بعد عدم النشاط:";
+"1 minute" = "دقيقة واحدة";
+"5 minutes" = "5 دقائق";
+"15 minutes" = "15 دقيقة";
+"30 minutes" = "30 دقيقة";
+"Never" = "أبداً";
+"The vault always locks on system sleep and screen lock. Inactivity is measured system-wide." = "تُقفَل الخزنة دائماً عند سكون النظام وقفل الشاشة. يُقاس عدم النشاط على مستوى النظام بأكمله.";
+"About Farewell" = "حول Farewell";
+"sleep" = "السكون";
+"screen lock" = "قفل الشاشة";
+"inactivity" = "عدم النشاط";
+"Vault locked automatically (%@). Unlock to continue." = "تم قفل الخزنة تلقائياً (%@). افتح القفل للمتابعة.";
+
+/* --- Import failure reasons --- */
+"vault not open" = "الخزنة غير مفتوحة";
+"empty name" = "اسم فارغ";
+"cannot stat %@" = "تعذّر فحص %@";
+"cannot read %@" = "تعذّرت قراءة %@";
+"“%@” is %@ but only %@ is free in this level." = "حجم « %@ » هو %@ لكن المتاح %@ فقط في هذا المستوى.";
+"Not enough space: the edit needs %@ but only %@ is available." = "لا توجد مساحة كافية: يحتاج التعديل إلى %@ لكن المتاح %@ فقط.";
+
+/* --- Context menus & viewer states --- */
+"Clear search" = "مسح البحث";
+"Rename…" = "إعادة تسمية…";
+"Rename folder…" = "إعادة تسمية المجلد…";
+"New subfolder…" = "مجلد فرعي جديد…";
+"Move to top level" = "نقل إلى المستوى الأعلى";
+"Delete folder" = "حذف المجلد";
+"Passes" = "التمريرات";
+"Select a file to view it." = "اختر ملفاً لعرضه.";
+"Cannot preview" = "تعذّرت المعاينة";
+"Failed to load" = "فشل التحميل";
+"Fullscreen (Esc to exit)" = "ملء الشاشة (Esc للخروج)";
+"Copy this Mac’s serial number" = "نسخ الرقم التسلسلي لهذا الماك";
+
+/* --- Clé matérielle initiale + clarté clé de secours (ajout) --- */
+"Adding a backup happens in two steps — and the order matters:" = "تتم إضافة مفتاح احتياطي في خطوتين — والترتيب مهم:";
+"**1.** First insert your **current key** (the one that already opens this vault) and touch it — **not the new key yet**." = "**1.** أولاً أدخل **مفتاحك الحالي** (الذي يفتح هذه الخزنة بالفعل) والمسه — **ليس المفتاح الجديد بعد**.";
+"**2.** Only then, when asked, swap to the **new backup key** and touch it twice." = "**2.** بعد ذلك فقط، عند الطلب، بدّل إلى **المفتاح الاحتياطي الجديد** والمسه مرتين.";
+"Either key will then open the vault. Keep the backup somewhere safe and separate — there's no recovery if you lose every key." = "بعدها سيفتح أيٌّ من المفتاحين الخزنة. احتفظ بالاحتياطي في مكان آمن ومنفصل — لا يوجد استرداد إذا فقدت كل المفاتيح.";
+"Enter your passphrase to add a hardware key." = "أدخل عبارة مرورك لإضافة مفتاح مادي.";
+"Adding your hardware key…" = "جارٍ إضافة مفتاحك المادي…";
+"Enrolling your hardware key…" = "جارٍ تسجيل مفتاحك المادي…";
+"Hardware key enrolled. This vault now needs that key plus your passphrase to open. Enrol a backup key too — lose your only key and the vault is gone, with no recovery." = "تم تسجيل المفتاح المادي. تحتاج هذه الخزنة الآن إلى ذلك المفتاح بالإضافة إلى عبارة مرورك لفتحها. سجّل مفتاحاً احتياطياً أيضاً — إذا فقدت مفتاحك الوحيد تضيع الخزنة، دون استرداد.";
+"Hardware key enrolled. Unlock again to continue." = "تم تسجيل المفتاح المادي. افتح القفل مجدداً للمتابعة.";
+"Could not add the hardware key: %@. Your vault is unchanged." = "تعذّرت إضافة المفتاح المادي: %@. خزنتك لم تتغير.";
+"Touch your new key now" = "المس مفتاحك الجديد الآن";

@@ -1,0 +1,16 @@
+# Cargo settings for reproducible builds.
+#
+# Path remapping (`--remap-path-prefix`) is set at build time by the
+# reproducible-build script and the CI workflow, because the prefixes
+# need to be computed from the runtime environment ($PWD, $CARGO_HOME).
+# That cannot be expressed in a static TOML file.
+#
+# This file is intentionally minimal: the goal is that a developer
+# running `cargo build --release` locally produces a binary that
+# differs from the official one only by absolute paths embedded in
+# debuginfo. To produce a binary that matches the official one
+# bit-for-bit, run `scripts/verify-reproducible.sh`.
+
+[net]
+# Avoid surprises from a misconfigured registry.
+git-fetch-with-cli = false

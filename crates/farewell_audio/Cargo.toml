@@ -1,0 +1,32 @@
+[package]
+name = "farewell_audio"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "In-process audio decoding (Symphonia) for the Farewell in-app viewer. Decodes encrypted-then-loaded bytes to PCM in RAM; never touches disk."
+
+[lib]
+name = "farewell_audio"
+crate-type = ["rlib"]
+
+[dependencies]
+# Pure-Rust demuxers + decoders. We pick the formats explicitly (no patent-
+# encumbered surprises): MP3, AAC/M4A, ALAC, FLAC, Vorbis/Ogg, WAV, AIFF,
+# CAF, PCM/ADPCM. Decoding happens in our own audited code, in RAM only.
+symphonia = { version = "0.6", default-features = false, features = [
+    "mp3",
+    "aac",
+    "isomp4",
+    "alac",
+    "flac",
+    "vorbis",
+    "ogg",
+    "wav",
+    "aiff",
+    "caf",
+    "pcm",
+    "adpcm",
+] }

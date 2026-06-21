@@ -1,0 +1,21 @@
+[package]
+name = "farewell_fido2"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "FIDO2/CTAP2 hmac-secret client for Farewell hardware-key authentication."
+
+[dependencies]
+anyhow.workspace = true
+blake3.workspace = true
+ctap-hid-fido2.workspace = true
+rand.workspace = true
+rand_core.workspace = true
+thiserror.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+hex.workspace = true

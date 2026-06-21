@@ -1,0 +1,325 @@
+/* ===================================================================
+   Farewell — English base strings (the development language).
+   Keys are the English source text; values here mirror them.
+   Organised screen by screen as localization rolls out.
+   =================================================================== */
+
+/* --- Open / Create / Unlock screen --- */
+"Open vault" = "Открыть сейф";
+"Create vault" = "Создать сейф";
+"Licensed to %@" = "Лицензия для %@";
+"Not activated" = "Не активировано";
+"Manage license…" = "Управление лицензией…";
+
+/* Open form */
+"Vault path" = "Путь к сейфу";
+"Choose…" = "Выбрать…";
+"Passphrase" = "Парольная фраза";
+"Using a hardware key with a PIN?" = "Используете аппаратный ключ с PIN-кодом?";
+"YubiKey PIN" = "PIN-код YubiKey";
+"Leave the PIN blank if your key has none. You'll be asked to touch the key if this vault requires it." = "Оставьте PIN-код пустым, если у ключа его нет. Вас попросят коснуться ключа, если этого требует сейф.";
+"Unlock" = "Разблокировать";
+"No vault at this path. Check the location, or use Choose…." = "По этому пути нет сейфа. Проверьте расположение или используйте «Выбрать…».";
+
+/* --- Manage-license sheet --- */
+"License" = "Лицензия";
+"Paste the license key you received by email, then Activate. Everything is verified locally — Farewell never contacts a server." = "Вставьте лицензионный ключ, полученный по эл. почте, затем нажмите «Активировать». Всё проверяется локально — Farewell никогда не обращается к серверу.";
+"Open file…" = "Открыть файл…";
+"Close" = "Закрыть";
+"Activate" = "Активировать";
+"Licensed to %@ — %@" = "Лицензия для %@ — %@";
+"Not activated on this Mac" = "Не активировано на этом Mac";
+
+/* License tiers (typeName) */
+"Standard" = "Стандарт";
+"Family" = "Семейная";
+"Education" = "Образование";
+"Business" = "Бизнес";
+"At-risk grant" = "Солидарная лицензия";
+
+/* License verdict notes */
+"Paste your license key first." = "Сначала вставьте лицензионный ключ.";
+"Couldn't read the license input." = "Не удалось прочитать введённую лицензию.";
+"Activated. Thank you for supporting Farewell." = "Активировано. Спасибо за поддержку Farewell.";
+"No license installed." = "Лицензия не установлена.";
+"This key isn’t valid for this build (wrong key, or the key was altered)." = "Этот ключ недействителен для этой сборки (неверный ключ или ключ изменён).";
+"This license is for a different major version of Farewell." = "Эта лицензия предназначена для другой основной версии Farewell.";
+"This license isn’t authorized for this Mac. A free re-issue is available — see farewell.pro/license-policy." = "Эта лицензия не авторизована для этого Mac. Доступен бесплатный перевыпуск — см. farewell.pro/license-policy.";
+"That doesn’t look like a valid license key." = "Это не похоже на действительный лицензионный ключ.";
+"Couldn’t verify (couldn’t read this Mac’s serial number)." = "Не удалось проверить (не удалось прочитать серийный номер этого Mac).";
+"Unknown license state." = "Неизвестное состояние лицензии.";
+
+/* --- Create-vault form --- */
+"New vault path (…/my.vault)" = "Путь к новому сейфу (…/my.vault)";
+"Capacity" = "Объём";
+"size" = "размер";
+"MB" = "МБ";
+"Choose any size you want (e.g. 64, 512, 4096…). The vault file is always exactly this size on disk, no matter how much you store — that's part of the deniability." = "Выберите любой нужный размер (например 64, 512, 4096…). Файл сейфа всегда занимает на диске ровно этот размер, сколько бы вы ни хранили, — это часть правдоподобного отрицания.";
+"Generated (recommended)" = "Сгенерированная (рекомендуется)";
+"My own" = "Своя";
+"There is no recovery, and there is no self-destruct: the file looks like random data and your passphrase is the ONLY thing protecting it. That is why it must be strong — and why you must not lose it." = "Восстановления нет, и самоуничтожения нет: файл выглядит как случайные данные, и ваша парольная фраза — единственное, что его защищает. Поэтому она должна быть надёжной — и поэтому её нельзя терять.";
+"Also require a YubiKey (hardware key)" = "Также требовать YubiKey (аппаратный ключ)";
+"YubiKey PIN (leave blank if none)" = "PIN-код YubiKey (оставьте пустым, если его нет)";
+"Also enrol a backup key now" = "Также зарегистрировать резервный ключ сейчас";
+"You'll enrol the keys one at a time: insert the first key and touch it, then swap to the second when asked. Either key will open the vault — keep the backup somewhere safe and separate." = "Вы будете регистрировать ключи по одному: вставьте первый ключ и коснитесь его, затем по запросу переключитесь на второй. Любой из ключей откроет сейф — храните резервный в надёжном и отдельном месте.";
+"You'll be asked to TOUCH the key to enrol it. Then a copy of this vault can't be brute-forced without the physical key. Lose your only key and the vault is gone — there is no recovery, so a backup key is recommended." = "Вас попросят КОСНУТЬСЯ ключа для регистрации. После этого копию сейфа нельзя будет взломать без физического ключа. Потеряете единственный ключ — сейф потерян: восстановления нет, поэтому рекомендуется резервный ключ.";
+"Record my identity in this vault" = "Записать мою личность в этот сейф";
+"Stores “%@” inside the encrypted vault — visible only after unlock. ⚠︎ This ATTRIBUTES the vault to you if it is ever decrypted. Leave OFF if you need deniability." = "Сохраняет « %@ » внутри зашифрованного сейфа — видно только после разблокировки. ⚠︎ Это ПРИПИСЫВАЕТ сейф вам, если его когда-либо расшифруют. Оставьте ВЫКЛ, если вам нужно правдоподобное отрицание.";
+"Activate a license first to record your identity." = "Сначала активируйте лицензию, чтобы записать свою личность.";
+"Create and open" = "Создать и открыть";
+"Creating a vault needs an active license. Activate one with “Manage license…” below. (Opening existing vaults always works.)" = "Для создания сейфа нужна активная лицензия. Активируйте её через «Управление лицензией…» ниже. (Открытие существующих сейфов работает всегда.)";
+"Choose where to save the vault (Choose…)." = "Выберите, где сохранить сейф («Выбрать…»).";
+"Generate a passphrase." = "Сгенерируйте парольную фразу.";
+"Tick the box confirming you saved the passphrase." = "Отметьте флажок, подтверждая, что вы сохранили парольную фразу.";
+"Enter a passphrase." = "Введите парольную фразу.";
+"Passphrases don't match." = "Парольные фразы не совпадают.";
+"Passphrase must reach “Very strong” (4/4)." = "Парольная фраза должна достичь уровня «Очень надёжная» (4/4).";
+"Regenerate" = "Сгенерировать заново";
+"≈ 129 bits — 10 random words" = "≈ 129 бит — 10 случайных слов";
+"I have written this passphrase down somewhere safe" = "Я записал(а) эту парольную фразу в надёжном месте";
+"Confirm passphrase" = "Подтвердите парольную фразу";
+"Must reach “Very strong” (4/4). Tip: 5+ random, unrelated words beat any short clever password." = "Должна достичь «Очень надёжная» (4/4). Совет: 5+ случайных несвязанных слов лучше любого короткого хитрого пароля.";
+"Choose Folder" = "Выбрать папку";
+"Choose the folder for the new vault. You'll set its name back in the Farewell window. An existing vault is never overwritten." = "Выберите папку для нового сейфа. Имя вы зададите в окне Farewell. Существующий сейф никогда не перезаписывается.";
+
+/* --- Error messages (humanError) --- */
+"OK (unexpected)" = "OK (неожиданно)";
+"Invalid argument" = "Недопустимый аргумент";
+"Not found" = "Не найдено";
+"Couldn't read the vault file (missing or unreadable)." = "Не удалось прочитать файл сейфа (отсутствует или нечитаем).";
+"This vault is already open in another window or process." = "Этот сейф уже открыт в другом окне или процессе.";
+"Vault has been wiped — contents unrecoverable" = "Сейф был стёрт — содержимое невосстановимо";
+"Couldn't open it. Check the passphrase — and, if this vault uses a YubiKey, that it's plugged in and you entered its PIN." = "Не удалось открыть. Проверьте парольную фразу — и, если этот сейф использует YubiKey, что он подключён и вы ввели его PIN-код.";
+"Vault header has been tampered with" = "Заголовок сейфа был подделан";
+"Counter rollback detected" = "Обнаружен откат счётчика";
+"Passphrase too weak — use a stronger or generated one" = "Парольная фраза слишком слабая — используйте более надёжную или сгенерированную";
+"No YubiKey detected — plug it in and try again." = "YubiKey не обнаружен — подключите его и повторите попытку.";
+"YubiKey check failed — wrong PIN, or it wasn't touched in time." = "Проверка YubiKey не удалась — неверный PIN-код или ключ не был задействован вовремя.";
+"More than one key is plugged in. With a PIN, please leave only the key you're unlocking with plugged in (trying a PIN on the wrong key can lock it), then try again." = "Подключено более одного ключа. При вводе PIN-кода оставьте подключённым только тот ключ, которым разблокируете (ввод PIN-кода на неправильном ключе может заблокировать его), затем повторите попытку.";
+"Not a Farewell vault file" = "Это не файл сейфа Farewell";
+"Vault uses a format this build cannot read" = "Сейф использует формат, который эта сборка не может прочитать";
+
+/* --- Keys-management panel --- */
+"Keys" = "Ключи";
+"Hardware-key management." = "Управление аппаратными ключами.";
+"Vault passphrase" = "Парольная фраза сейфа";
+"Current key's PIN (leave blank if no PIN or no key)" = "PIN-код текущего ключа (оставьте пустым, если нет PIN-кода или ключа)";
+"Cancel" = "Отмена";
+"Show keys" = "Показать ключи";
+"Reading keys…" = "Чтение ключей…";
+"Done" = "Готово";
+"Passphrase-only — no hardware key enrolled." = "Только парольная фраза — аппаратные ключи не зарегистрированы.";
+"Only one key opens this vault. **Lose it and the vault is gone forever — there is no recovery.** Enrol a backup key below so either key works." = "Этот сейф открывает только один ключ. **Потеряете его — сейф потерян навсегда: восстановления нет.** Зарегистрируйте ниже резервный ключ, чтобы работали оба.";
+"Key %lld" = "Ключ %lld";
+"Remove (last)" = "Удалить (последний)";
+"Revoke" = "Отозвать";
+"Revoke this key?" = "Отозвать этот ключ?";
+"It will no longer open this vault; the other keys still will. Revoking uses only your passphrase, then you'll touch a remaining key once to reopen the vault." = "Он больше не будет открывать этот сейф; остальные ключи продолжат работать. Отзыв использует только вашу парольную фразу, затем вы один раз коснётесь оставшегося ключа, чтобы снова открыть сейф.";
+"Remove your last key?" = "Удалить ваш последний ключ?";
+"Remove last key" = "Удалить последний ключ";
+"This turns the vault back into passphrase-only: the passphrase alone will open it, and opening becomes slower again (by design). Insert the key now — you'll touch it once so it can be safely removed." = "Это вернёт сейф к режиму только парольной фразы: его будет открывать одна парольная фраза, а открытие снова станет медленнее (так задумано). Вставьте ключ сейчас — вы коснётесь его один раз, чтобы его можно было безопасно удалить.";
+"Add a hardware key" = "Добавить аппаратный ключ";
+"Add a backup key" = "Добавить резервный ключ";
+"Require a physical key (plus your passphrase) to open this vault. Insert the new key and touch it twice to enrol." = "Требовать физический ключ (в дополнение к парольной фразе) для открытия этого сейфа. Вставьте новый ключ и коснитесь его дважды для регистрации.";
+"Enrol another key so any enrolled key opens this vault. Insert your current key and touch it, then swap to the new key and touch it twice. Keep the backup safe and separate — there's no recovery if you lose every key." = "Зарегистрируйте ещё один ключ, чтобы сейф открывал любой зарегистрированный ключ. Вставьте текущий ключ и коснитесь его, затем переключитесь на новый и коснитесь его дважды. Храните резервный отдельно и в надёжном месте — восстановления нет, если потеряете все ключи.";
+"Set/enter this key's PIN (leave blank if none)" = "Задайте/введите PIN-код этого ключа (оставьте пустым, если его нет)";
+"New key's PIN (leave blank if none)" = "PIN-код нового ключа (оставьте пустым, если его нет)";
+"Name (optional)" = "Имя (необязательно)";
+"Add key…" = "Добавить ключ…";
+"Add backup…" = "Добавить резервный…";
+"This vault already has the maximum of %lld keys." = "В этом сейфе уже максимальное число ключей: %lld.";
+"Working…" = "Выполняется…";
+"Follow the prompts on your key — insert, swap, and touch as asked. Don't unplug a key unless you're told to." = "Следуйте подсказкам для вашего ключа — вставляйте, переключайте и касайтесь по запросу. Не отключайте ключ, пока вас не попросят.";
+
+/* --- Key-operation prompts (insert / remove / touch) --- */
+"Insert your YubiKey…" = "Вставьте ваш YubiKey…";
+"Insert your CURRENT key (the one that already opens this vault)…" = "Вставьте ваш ТЕКУЩИЙ ключ (тот, что уже открывает этот сейф)…";
+"Now insert the NEW backup key…" = "Теперь вставьте НОВЫЙ резервный ключ…";
+"Insert key %lld of %lld…" = "Вставьте ключ %lld из %lld…";
+"Insert the key you're removing…" = "Вставьте ключ, который удаляете…";
+"Remove your current key, then insert the NEW backup key…" = "Удалите текущий ключ, затем вставьте НОВЫЙ резервный ключ…";
+"Remove that key, then insert the next one…" = "Удалите этот ключ, затем вставьте следующий…";
+" — touch %lld of %lld" = " — касание %lld из %lld";
+"Key %lld of %lld: touch it now" = "Ключ %lld из %lld: коснитесь его сейчас";
+"Touch your YubiKey now" = "Коснитесь вашего YubiKey сейчас";
+"Touch your CURRENT key now — not the new one yet" = "Коснитесь вашего ТЕКУЩЕГО ключа сейчас — пока не нового";
+"Touch the new backup key now" = "Коснитесь нового резервного ключа сейчас";
+"Touch the key to remove it" = "Коснитесь ключа, чтобы удалить его";
+
+/* --- Key-operation status messages --- */
+"Backup key enrolled. Either key now opens this vault — keep the backup somewhere safe and separate. There is still no recovery if you lose both." = "Резервный ключ зарегистрирован. Теперь сейф открывает любой из ключей — храните резервный отдельно и в надёжном месте. Восстановления по-прежнему нет, если потеряете оба.";
+"Backup key enrolled. Unlock again to continue." = "Резервный ключ зарегистрирован. Разблокируйте снова, чтобы продолжить.";
+"Could not add the backup key: %@. Your vault is unchanged." = "Не удалось добавить резервный ключ: %@. Ваш сейф не изменён.";
+"Enter your passphrase to add a backup key." = "Введите парольную фразу, чтобы добавить резервный ключ.";
+"Could not read keys: %@." = "Не удалось прочитать ключи: %@.";
+"Key revoked — it no longer opens this vault. Unlock again to continue." = "Ключ отозван — он больше не открывает этот сейф. Разблокируйте снова, чтобы продолжить.";
+"Could not revoke the key: %@. Your vault is unchanged." = "Не удалось отозвать ключ: %@. Ваш сейф не изменён.";
+"Enter your passphrase to remove a key." = "Введите парольную фразу, чтобы удалить ключ.";
+"Enter your passphrase to remove the last key." = "Введите парольную фразу, чтобы удалить последний ключ.";
+"Last key removed. This vault now opens with the passphrase alone — and opening is slower again, by design." = "Последний ключ удалён. Теперь этот сейф открывает одна парольная фраза — и открытие снова медленнее, так задумано.";
+"Last key removed. Unlock again with your passphrase." = "Последний ключ удалён. Разблокируйте снова с помощью парольной фразы.";
+"Could not remove the last key: %@. Your vault is unchanged." = "Не удалось удалить последний ключ: %@. Ваш сейф не изменён.";
+
+/* --- Busy / progress messages --- */
+"Copying files into the new vault…" = "Копирование файлов в новый сейф…";
+"Verifying the new vault…" = "Проверка нового сейфа…";
+"Preparing the new vault…" = "Подготовка нового сейфа…";
+"Removing the key — re-securing the vault…" = "Удаление ключа — повторная защита сейфа…";
+"Adding your backup key…" = "Добавление резервного ключа…";
+"Creating your Farewell vault…" = "Создание вашего сейфа Farewell…";
+"Unlocking…\nThis takes a few seconds." = "Разблокировка…\nЭто займёт несколько секунд.";
+"Touch your key now — it should be blinking." = "Коснитесь ключа сейчас — он должен мигать.";
+"Enrolling backup key…" = "Регистрация резервного ключа…";
+"Removing the last key…" = "Удаление последнего ключа…";
+"Enrolling your key…" = "Регистрация вашего ключа…";
+"Creating vault…" = "Создание сейфа…";
+"Migrating… touch your YubiKey when it blinks." = "Перенос… коснитесь YubiKey, когда он замигает.";
+
+/* --- Vault window header / toolbar --- */
+"Migrate…" = "Перенести…";
+"Keys…" = "Ключи…";
+"Lock" = "Заблокировать";
+"Discard" = "Отклонить";
+"Dismiss" = "Скрыть";
+"1 key — add a backup" = "1 ключ — добавьте резервный";
+"Re-encrypt this vault into a fresh file (new keys, or a smaller size). Used to rotate keys or upgrade the format. The original is kept until you confirm." = "Перешифровать этот сейф в новый файл (новые ключи или меньший размер). Используется для смены ключей или обновления формата. Оригинал сохраняется до вашего подтверждения.";
+"Add a hardware key so a physical key is required to open this vault — or just review that it's passphrase-only." = "Добавьте аппаратный ключ, чтобы для открытия сейфа требовался физический ключ, — или просто проверьте, что сейф защищён только парольной фразой.";
+"Name, add, or revoke the hardware keys that open this vault (%lld of %lld enrolled), or convert back to passphrase-only." = "Назовите, добавьте или отзовите аппаратные ключи, открывающие этот сейф (%lld из %lld зарегистрировано), или вернитесь к режиму только парольной фразы.";
+"This vault has only one hardware key. Lose it and the vault is gone — enrol a backup key." = "У этого сейфа только один аппаратный ключ. Потеряете его — сейф потерян: зарегистрируйте резервный ключ.";
+"This vault records its creator's identity (opt-in)." = "Этот сейф записывает личность создателя (по желанию).";
+"%@ free of %@" = "%@ свободно из %@";
+"counter %llu" = "счётчик %llu";
+"%lld hardware keys" = "%lld аппаратных ключей";
+"created by %@" = "создан %@";
+"An interrupted migration left “%@”. Your vault is intact." = "Прерванный перенос оставил « %@ ». Ваш сейф цел.";
+
+/* --- File list / folders --- */
+"This vault contains no files." = "В этом сейфе нет файлов.";
+"Drag files here, or use Import below." = "Перетащите файлы сюда или используйте «Импорт» ниже.";
+"Search files…" = "Поиск файлов…";
+"No file matches “%@”." = "Нет файлов, соответствующих « %@ ».";
+"Drop to import into the vault" = "Отпустите, чтобы импортировать в сейф";
+"New folder" = "Новая папка";
+"New folder in “%@”" = "Новая папка в « %@ »";
+"Import…" = "Импорт…";
+"Delete" = "Удалить";
+"Rename" = "Переименовать";
+
+/* --- File / folder dialogs --- */
+"Delete this file?" = "Удалить этот файл?";
+"“%@” will be permanently removed and its encrypted chunks securely shredded. This cannot be undone — there is no recovery, by design." = "« %@ » будет безвозвратно удалён, а его зашифрованные фрагменты надёжно уничтожены. Это нельзя отменить — восстановления нет, так задумано.";
+"Delete this folder?" = "Удалить эту папку?";
+"“%@” and ALL its contents will be permanently removed and securely shredded. This cannot be undone." = "« %@ » и ВСЁ её содержимое будут безвозвратно удалены и надёжно уничтожены. Это нельзя отменить.";
+"Folder name" = "Имя папки";
+"Create" = "Создать";
+"Rename file" = "Переименовать файл";
+"Renaming “%@”. The encrypted content is unchanged; only the name in the manifest is updated." = "Переименование « %@ ». Зашифрованное содержимое не меняется; обновляется только имя в манифесте.";
+"New name" = "Новое имя";
+
+/* --- Import bar --- */
+"New note" = "Новая заметка";
+"Create a new empty note and open it in the editor. It lives only inside the encrypted vault." = "Создайте новую пустую заметку и откройте её в редакторе. Она существует только внутри зашифрованного сейфа.";
+"1 pass" = "1 проход";
+"3 passes" = "3 прохода";
+"7 passes" = "7 проходов";
+"Overwrite passes. 1 is enough on any modern drive; 3/7 exist only for standards that mandate them and add nothing on an SSD." = "Проходы перезаписи. 1 достаточно на любом современном диске; 3/7 существуют только для стандартов, которые их требуют, и ничего не дают на SSD.";
+"Shred originals" = "Уничтожать оригиналы";
+"After importing, securely overwrite and delete the source file. On a hard disk this physically erases it; on an SSD wear-leveling means it's best-effort only (no guarantee) — the real protection is the encrypted vault." = "После импорта надёжно перезаписать и удалить исходный файл. На жёстком диске это стирает его физически; на SSD выравнивание износа означает, что это лишь наилучшее усилие (без гарантии) — настоящая защита — это зашифрованный сейф.";
+"Drag files here, or click Import. Files are encrypted into the vault; nothing is written elsewhere." = "Перетащите файлы сюда или нажмите «Импорт». Файлы шифруются в сейф; больше нигде ничего не записывается.";
+"Imported %lld; last error: %@" = "Импортировано %lld; последняя ошибка: %@";
+"Imported 1 file." = "Импортирован 1 файл.";
+"Imported %lld files." = "Импортировано файлов: %lld.";
+"Original securely erased (overwritten %lld× in place on a hard disk)." = "Оригинал надёжно стёрт (перезаписан %lld× на месте на жёстком диске).";
+"Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "Оригинал перезаписан и удалён — но это SSD: из-за выравнивания износа ячейки могут сохраниться. Настоящая защита — это зашифрованный сейф, а не стирание.";
+"Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "Оригинал перезаписан и удалён (тип накопителя неизвестен; рассматривается как флеш — без гарантии физического стирания).";
+
+/* --- File viewer --- */
+"Save" = "Сохранить";
+"Save the changes back into the encrypted vault. Nothing is written to disk." = "Сохранить изменения обратно в зашифрованный сейф. На диск ничего не записывается.";
+"Edit" = "Редактировать";
+"Edit this text file in the app and save it back into the vault. Nothing is written to disk." = "Редактируйте этот текстовый файл в приложении и сохраните его обратно в сейф. На диск ничего не записывается.";
+"Export…" = "Экспорт…";
+"Write a decrypted copy of this file to disk, outside the vault. Shows a warning first." = "Записать расшифрованную копию этого файла на диск, вне сейфа. Сначала показывает предупреждение.";
+"The vault isn’t open." = "Сейф не открыт.";
+
+/* --- Export warning --- */
+"Export a decrypted copy?" = "Экспортировать расшифрованную копию?";
+"You are about to write the decrypted contents of “%@” to a regular file on disk. Once written, that file leaves Farewell's protection:" = "Вы собираетесь записать расшифрованное содержимое « %@ » в обычный файл на диске. После записи этот файл выходит из-под защиты Farewell:";
+"Spotlight will index its contents" = "Spotlight проиндексирует его содержимое";
+"QuickLook will cache a thumbnail" = "QuickLook закеширует миниатюру";
+"Time Machine will back it up (if enabled)" = "Time Machine сделает его резервную копию (если включено)";
+"Apps that open it keep it in Recent Items" = "Приложения, открывающие его, сохранят его в «Недавних»";
+"Farewell can no longer track or recall it" = "Farewell больше не сможет отслеживать или отозвать его";
+"Use the in-app viewer instead unless you genuinely need an external copy. For device-to-device transfer, Farewell-to-Farewell P2P (coming later) never writes cleartext to disk." = "Используйте встроенный просмотрщик, если вам действительно не нужна внешняя копия. Для передачи между устройствами P2P Farewell-к-Farewell (появится позже) никогда не записывает открытый текст на диск.";
+"Export anyway" = "Всё равно экспортировать";
+"This file will be written UNENCRYPTED outside the vault." = "Этот файл будет записан БЕЗ ШИФРОВАНИЯ вне сейфа.";
+
+/* --- Migrate sheet --- */
+"Migrate / rotate vault" = "Перенос / смена ключей сейфа";
+"Re-encrypts everything into a brand-new vault file with fresh keys (the same passphrase). Your files are copied and verified before anything is replaced; nothing is written to disk in the clear. The original is kept until you delete it." = "Перешифровывает всё в совершенно новый файл сейфа с новыми ключами (та же парольная фраза). Ваши файлы копируются и проверяются до замены чего-либо; на диск ничего не пишется в открытом виде. Оригинал сохраняется, пока вы его не удалите.";
+"New size" = "Новый размер";
+"Keep current capacity" = "Сохранить текущий объём";
+"Shrink to fit contents" = "Уменьшить под содержимое";
+"Destination:" = "Назначение:";
+"Needs about %@; %@ free here." = "Требуется около %@; здесь свободно %@.";
+"This vault requires a YubiKey" = "Этот сейф требует YubiKey";
+"Migrate" = "Перенести";
+"Use Folder" = "Использовать папку";
+"Not enough space on %@: the new vault needs about %@ but only %@ is free. Choose “Shrink to fit” or a different drive." = "Недостаточно места на %@: новому сейфу нужно около %@, но свободно только %@. Выберите «Уменьшить под содержимое» или другой диск.";
+"A file named “%@” already exists in that folder. Pick another destination." = "Файл с именем « %@ » уже существует в этой папке. Выберите другое назначение.";
+"Migration failed: %@. Your original vault is unchanged." = "Перенос не удался: %@. Ваш исходный сейф не изменён.";
+"Migrated. The previous vault is kept as “%@” — delete it once you’ve confirmed this one works." = "Перенос выполнен. Предыдущий сейф сохранён как « %@ » — удалите его, как только убедитесь, что этот работает.";
+"Migrated to %@. Your original vault is unchanged — delete it when ready." = "Перенесено в %@. Ваш исходный сейф не изменён — удалите его, когда будете готовы.";
+"Migration verified but the file swap failed: %@. Your original vault is unchanged." = "Перенос проверен, но замена файлов не удалась: %@. Ваш исходный сейф не изменён.";
+
+/* --- Create-vault rename notice --- */
+"“%@” already existed — created “%@” instead. A vault is never overwritten." = "« %@ » уже существовал — вместо него создан « %@ ». Сейф никогда не перезаписывается.";
+
+/* --- Settings / About / auto-lock --- */
+"Auto-lock after inactivity:" = "Автоблокировка после бездействия:";
+"1 minute" = "1 минута";
+"5 minutes" = "5 минут";
+"15 minutes" = "15 минут";
+"30 minutes" = "30 минут";
+"Never" = "Никогда";
+"The vault always locks on system sleep and screen lock. Inactivity is measured system-wide." = "Сейф всегда блокируется при переходе системы в сон и блокировке экрана. Бездействие измеряется в масштабе всей системы.";
+"About Farewell" = "О программе Farewell";
+"sleep" = "сон";
+"screen lock" = "блокировка экрана";
+"inactivity" = "бездействие";
+"Vault locked automatically (%@). Unlock to continue." = "Сейф заблокирован автоматически (%@). Разблокируйте, чтобы продолжить.";
+
+/* --- Import failure reasons --- */
+"vault not open" = "сейф не открыт";
+"empty name" = "пустое имя";
+"cannot stat %@" = "не удаётся получить сведения о %@";
+"cannot read %@" = "не удаётся прочитать %@";
+"“%@” is %@ but only %@ is free in this level." = "« %@ » занимает %@, но на этом уровне свободно только %@.";
+"Not enough space: the edit needs %@ but only %@ is available." = "Недостаточно места: для правки нужно %@, но доступно только %@.";
+
+/* --- Context menus & viewer states --- */
+"Clear search" = "Очистить поиск";
+"Rename…" = "Переименовать…";
+"Rename folder…" = "Переименовать папку…";
+"New subfolder…" = "Новая вложенная папка…";
+"Move to top level" = "Переместить на верхний уровень";
+"Delete folder" = "Удалить папку";
+"Passes" = "Проходы";
+"Select a file to view it." = "Выберите файл для просмотра.";
+"Cannot preview" = "Невозможно предпросмотреть";
+"Failed to load" = "Не удалось загрузить";
+"Fullscreen (Esc to exit)" = "Полноэкранный режим (Esc для выхода)";
+"Copy this Mac’s serial number" = "Скопировать серийный номер этого Mac";
+
+/* --- Clé matérielle initiale + clarté clé de secours (ajout) --- */
+"Adding a backup happens in two steps — and the order matters:" = "Добавление резервного ключа состоит из двух шагов — и порядок важен:";
+"**1.** First insert your **current key** (the one that already opens this vault) and touch it — **not the new key yet**." = "**1.** Сначала вставьте ваш **текущий ключ** (тот, что уже открывает этот сейф) и коснитесь его — **пока не нового ключа**.";
+"**2.** Only then, when asked, swap to the **new backup key** and touch it twice." = "**2.** Только потом, когда попросят, смените на **новый резервный ключ** и коснитесь его дважды.";
+"Either key will then open the vault. Keep the backup somewhere safe and separate — there's no recovery if you lose every key." = "После этого сейф откроет любой из ключей. Храните резервный отдельно и в надёжном месте — восстановления нет, если потеряете все ключи.";
+"Enter your passphrase to add a hardware key." = "Введите парольную фразу, чтобы добавить аппаратный ключ.";
+"Adding your hardware key…" = "Добавление аппаратного ключа…";
+"Enrolling your hardware key…" = "Регистрация аппаратного ключа…";
+"Hardware key enrolled. This vault now needs that key plus your passphrase to open. Enrol a backup key too — lose your only key and the vault is gone, with no recovery." = "Аппаратный ключ зарегистрирован. Теперь для открытия этого сейфа нужен этот ключ и ваша парольная фраза. Зарегистрируйте также резервный ключ — потеряете единственный ключ, и сейф будет потерян без восстановления.";
+"Hardware key enrolled. Unlock again to continue." = "Аппаратный ключ зарегистрирован. Разблокируйте снова, чтобы продолжить.";
+"Could not add the hardware key: %@. Your vault is unchanged." = "Не удалось добавить аппаратный ключ: %@. Ваш сейф не изменён.";
+"Touch your new key now" = "Коснитесь нового ключа сейчас";

@@ -1,0 +1,9 @@
+[package]
+name = "farewell_attest"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "Binary self-attestation and signature verification. v0.1: stub."

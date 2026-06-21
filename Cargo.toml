@@ -1,0 +1,102 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/farewell_crypto",
+    "crates/farewell_format",
+    "crates/farewell_keys",
+    "crates/farewell_fido2",
+    "crates/farewell_p2p",
+    "crates/farewell_attest",
+    "crates/farewell_license",
+    "crates/farewell_mount",
+    "crates/farewell_passphrase",
+    "crates/farewell_audio",
+    "tools/farewell-cli",
+]
+# license-signer (license issuance, SRL-side) is kept out of the public repo.
+exclude = ["tools/license-signer"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/farewell-app/farewell"
+authors = ["Denis Florent Media Group SRL <hello@farewell.pro>"]
+
+[workspace.dependencies]
+# Internal crates
+farewell_crypto = { path = "crates/farewell_crypto", version = "0.1.0" }
+farewell_format = { path = "crates/farewell_format", version = "0.1.0" }
+farewell_keys = { path = "crates/farewell_keys", version = "0.1.0" }
+farewell_fido2 = { path = "crates/farewell_fido2", version = "0.1.0" }
+farewell_p2p = { path = "crates/farewell_p2p", version = "0.1.0" }
+farewell_attest = { path = "crates/farewell_attest", version = "0.1.0" }
+farewell_license = { path = "crates/farewell_license", version = "0.1.0" }
+farewell_mount = { path = "crates/farewell_mount", version = "0.1.0" }
+farewell_passphrase = { path = "crates/farewell_passphrase", version = "0.1.0" }
+farewell_audio = { path = "crates/farewell_audio", version = "0.1.0" }
+
+# FIDO2 / CTAP2 USB HID transport
+ctap-hid-fido2 = "3.5"
+
+# Post-quantum primitives (NIST FIPS 203 / FIPS 204)
+# We use the libcrux family (Cryspen) — formally verified via hax + F*.
+# RustCrypto's ml-kem / ml-dsa are dropped in favor of formal-verification
+# coverage; see THREAT_MODEL §7.
+libcrux-ml-kem = { version = "0.0.9", default-features = false, features = ["mlkem1024"] }
+libcrux-ml-dsa = { version = "0.0.9", default-features = false, features = ["mldsa87"] }
+
+# Crypto primitives
+aes-gcm-siv = "0.11"
+argon2 = "0.5"
+blake3 = "1.5"
+x25519-dalek = { version = "2.0", features = ["static_secrets"] }
+ed25519-dalek = { version = "2.1", features = ["rand_core"] }
+# License signing: ECDSA P-256 / SHA-256, so the key can live in a cloud KMS
+# (we send only the digest, never the readable payload). DER signatures match
+# Google Cloud KMS's output.
+p256 = { version = "0.13", features = ["ecdsa", "pem"] }
+sha2 = "0.10"
+rand = "0.8"
+rand_core = "0.6"
+subtle = "2.5"
+zeroize = { version = "1.7", features = ["derive"] }
+
+# Serialization
+byteorder = "1.5"
+base64 = "0.22"
+
+# Error handling
+thiserror = "1.0"
+
+# CLI
+clap = { version = "4.5", features = ["derive"] }
+# license-signer tool only (SRL-side): talk to Google Cloud KMS over HTTPS.
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ureq = { version = "2", features = ["json"] }
+jsonwebtoken = "9"
+rpassword = "7.3"
+anyhow = "1.0"
+
+# Testing
+hex = "0.4"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+# `unwind` (not `abort`) is REQUIRED for the FFI's `catch_panic` shims to work:
+# they wrap every extern "C" entry point in `catch_unwind`, turning a panic
+# from an untrusted-input parser (e.g. a malformed media file mis-handled by a
+# third-party codec like Symphonia) into a clean error code instead of taking
+# down the whole app — which, with the vault unlocked, would be a real DoS.
+# A panic still never crosses the C ABI boundary (each shim catches it first),
+# so there is no undefined behaviour. `farewell_audio` additionally catches
+# panics at its own public API as defense in depth.
+panic = "unwind"
+strip = "symbols"
+
+[profile.dev]
+opt-level = 1  # KDF tests are unbearable in pure debug

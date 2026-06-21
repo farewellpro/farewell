@@ -1,0 +1,5 @@
+module FarewellMountFFI {
+    header "include/farewell_mount.h"
+    link "farewell_mount"
+    export *
+}

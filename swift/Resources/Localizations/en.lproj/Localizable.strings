@@ -1,0 +1,325 @@
+/* ===================================================================
+   Farewell — English base strings (the development language).
+   Keys are the English source text; values here mirror them.
+   Organised screen by screen as localization rolls out.
+   =================================================================== */
+
+/* --- Open / Create / Unlock screen --- */
+"Open vault" = "Open vault";
+"Create vault" = "Create vault";
+"Licensed to %@" = "Licensed to %@";
+"Not activated" = "Not activated";
+"Manage license…" = "Manage license…";
+
+/* Open form */
+"Vault path" = "Vault path";
+"Choose…" = "Choose…";
+"Passphrase" = "Passphrase";
+"Using a hardware key with a PIN?" = "Using a hardware key with a PIN?";
+"YubiKey PIN" = "YubiKey PIN";
+"Leave the PIN blank if your key has none. You'll be asked to touch the key if this vault requires it." = "Leave the PIN blank if your key has none. You'll be asked to touch the key if this vault requires it.";
+"Unlock" = "Unlock";
+"No vault at this path. Check the location, or use Choose…." = "No vault at this path. Check the location, or use Choose….";
+
+/* --- Manage-license sheet --- */
+"License" = "License";
+"Paste the license key you received by email, then Activate. Everything is verified locally — Farewell never contacts a server." = "Paste the license key you received by email, then Activate. Everything is verified locally — Farewell never contacts a server.";
+"Open file…" = "Open file…";
+"Close" = "Close";
+"Activate" = "Activate";
+"Licensed to %@ — %@" = "Licensed to %@ — %@";
+"Not activated on this Mac" = "Not activated on this Mac";
+
+/* License tiers (typeName) */
+"Standard" = "Standard";
+"Family" = "Family";
+"Education" = "Education";
+"Business" = "Business";
+"At-risk grant" = "At-risk grant";
+
+/* License verdict notes */
+"Paste your license key first." = "Paste your license key first.";
+"Couldn't read the license input." = "Couldn't read the license input.";
+"Activated. Thank you for supporting Farewell." = "Activated. Thank you for supporting Farewell.";
+"No license installed." = "No license installed.";
+"This key isn’t valid for this build (wrong key, or the key was altered)." = "This key isn’t valid for this build (wrong key, or the key was altered).";
+"This license is for a different major version of Farewell." = "This license is for a different major version of Farewell.";
+"This license isn’t authorized for this Mac. A free re-issue is available — see farewell.pro/license-policy." = "This license isn’t authorized for this Mac. A free re-issue is available — see farewell.pro/license-policy.";
+"That doesn’t look like a valid license key." = "That doesn’t look like a valid license key.";
+"Couldn’t verify (couldn’t read this Mac’s serial number)." = "Couldn’t verify (couldn’t read this Mac’s serial number).";
+"Unknown license state." = "Unknown license state.";
+
+/* --- Create-vault form --- */
+"New vault path (…/my.vault)" = "New vault path (…/my.vault)";
+"Capacity" = "Capacity";
+"size" = "size";
+"MB" = "MB";
+"Choose any size you want (e.g. 64, 512, 4096…). The vault file is always exactly this size on disk, no matter how much you store — that's part of the deniability." = "Choose any size you want (e.g. 64, 512, 4096…). The vault file is always exactly this size on disk, no matter how much you store — that's part of the deniability.";
+"Generated (recommended)" = "Generated (recommended)";
+"My own" = "My own";
+"There is no recovery, and there is no self-destruct: the file looks like random data and your passphrase is the ONLY thing protecting it. That is why it must be strong — and why you must not lose it." = "There is no recovery, and there is no self-destruct: the file looks like random data and your passphrase is the ONLY thing protecting it. That is why it must be strong — and why you must not lose it.";
+"Also require a YubiKey (hardware key)" = "Also require a YubiKey (hardware key)";
+"YubiKey PIN (leave blank if none)" = "YubiKey PIN (leave blank if none)";
+"Also enrol a backup key now" = "Also enrol a backup key now";
+"You'll enrol the keys one at a time: insert the first key and touch it, then swap to the second when asked. Either key will open the vault — keep the backup somewhere safe and separate." = "You'll enrol the keys one at a time: insert the first key and touch it, then swap to the second when asked. Either key will open the vault — keep the backup somewhere safe and separate.";
+"You'll be asked to TOUCH the key to enrol it. Then a copy of this vault can't be brute-forced without the physical key. Lose your only key and the vault is gone — there is no recovery, so a backup key is recommended." = "You'll be asked to TOUCH the key to enrol it. Then a copy of this vault can't be brute-forced without the physical key. Lose your only key and the vault is gone — there is no recovery, so a backup key is recommended.";
+"Record my identity in this vault" = "Record my identity in this vault";
+"Stores “%@” inside the encrypted vault — visible only after unlock. ⚠︎ This ATTRIBUTES the vault to you if it is ever decrypted. Leave OFF if you need deniability." = "Stores “%@” inside the encrypted vault — visible only after unlock. ⚠︎ This ATTRIBUTES the vault to you if it is ever decrypted. Leave OFF if you need deniability.";
+"Activate a license first to record your identity." = "Activate a license first to record your identity.";
+"Create and open" = "Create and open";
+"Creating a vault needs an active license. Activate one with “Manage license…” below. (Opening existing vaults always works.)" = "Creating a vault needs an active license. Activate one with “Manage license…” below. (Opening existing vaults always works.)";
+"Choose where to save the vault (Choose…)." = "Choose where to save the vault (Choose…).";
+"Generate a passphrase." = "Generate a passphrase.";
+"Tick the box confirming you saved the passphrase." = "Tick the box confirming you saved the passphrase.";
+"Enter a passphrase." = "Enter a passphrase.";
+"Passphrases don't match." = "Passphrases don't match.";
+"Passphrase must reach “Very strong” (4/4)." = "Passphrase must reach “Very strong” (4/4).";
+"Regenerate" = "Regenerate";
+"≈ 129 bits — 10 random words" = "≈ 129 bits — 10 random words";
+"I have written this passphrase down somewhere safe" = "I have written this passphrase down somewhere safe";
+"Confirm passphrase" = "Confirm passphrase";
+"Must reach “Very strong” (4/4). Tip: 5+ random, unrelated words beat any short clever password." = "Must reach “Very strong” (4/4). Tip: 5+ random, unrelated words beat any short clever password.";
+"Choose Folder" = "Choose Folder";
+"Choose the folder for the new vault. You'll set its name back in the Farewell window. An existing vault is never overwritten." = "Choose the folder for the new vault. You'll set its name back in the Farewell window. An existing vault is never overwritten.";
+
+/* --- Error messages (humanError) --- */
+"OK (unexpected)" = "OK (unexpected)";
+"Invalid argument" = "Invalid argument";
+"Not found" = "Not found";
+"Couldn't read the vault file (missing or unreadable)." = "Couldn't read the vault file (missing or unreadable).";
+"This vault is already open in another window or process." = "This vault is already open in another window or process.";
+"Vault has been wiped — contents unrecoverable" = "Vault has been wiped — contents unrecoverable";
+"Couldn't open it. Check the passphrase — and, if this vault uses a YubiKey, that it's plugged in and you entered its PIN." = "Couldn't open it. Check the passphrase — and, if this vault uses a YubiKey, that it's plugged in and you entered its PIN.";
+"Vault header has been tampered with" = "Vault header has been tampered with";
+"Counter rollback detected" = "Counter rollback detected";
+"Passphrase too weak — use a stronger or generated one" = "Passphrase too weak — use a stronger or generated one";
+"No YubiKey detected — plug it in and try again." = "No YubiKey detected — plug it in and try again.";
+"YubiKey check failed — wrong PIN, or it wasn't touched in time." = "YubiKey check failed — wrong PIN, or it wasn't touched in time.";
+"More than one key is plugged in. With a PIN, please leave only the key you're unlocking with plugged in (trying a PIN on the wrong key can lock it), then try again." = "More than one key is plugged in. With a PIN, please leave only the key you're unlocking with plugged in (trying a PIN on the wrong key can lock it), then try again.";
+"Not a Farewell vault file" = "Not a Farewell vault file";
+"Vault uses a format this build cannot read" = "Vault uses a format this build cannot read";
+
+/* --- Keys-management panel --- */
+"Keys" = "Keys";
+"Hardware-key management." = "Hardware-key management.";
+"Vault passphrase" = "Vault passphrase";
+"Current key's PIN (leave blank if no PIN or no key)" = "Current key's PIN (leave blank if no PIN or no key)";
+"Cancel" = "Cancel";
+"Show keys" = "Show keys";
+"Reading keys…" = "Reading keys…";
+"Done" = "Done";
+"Passphrase-only — no hardware key enrolled." = "Passphrase-only — no hardware key enrolled.";
+"Only one key opens this vault. **Lose it and the vault is gone forever — there is no recovery.** Enrol a backup key below so either key works." = "Only one key opens this vault. **Lose it and the vault is gone forever — there is no recovery.** Enrol a backup key below so either key works.";
+"Key %lld" = "Key %lld";
+"Remove (last)" = "Remove (last)";
+"Revoke" = "Revoke";
+"Revoke this key?" = "Revoke this key?";
+"It will no longer open this vault; the other keys still will. Revoking uses only your passphrase, then you'll touch a remaining key once to reopen the vault." = "It will no longer open this vault; the other keys still will. Revoking uses only your passphrase, then you'll touch a remaining key once to reopen the vault.";
+"Remove your last key?" = "Remove your last key?";
+"Remove last key" = "Remove last key";
+"This turns the vault back into passphrase-only: the passphrase alone will open it, and opening becomes slower again (by design). Insert the key now — you'll touch it once so it can be safely removed." = "This turns the vault back into passphrase-only: the passphrase alone will open it, and opening becomes slower again (by design). Insert the key now — you'll touch it once so it can be safely removed.";
+"Add a hardware key" = "Add a hardware key";
+"Add a backup key" = "Add a backup key";
+"Require a physical key (plus your passphrase) to open this vault. Insert the new key and touch it twice to enrol." = "Require a physical key (plus your passphrase) to open this vault. Insert the new key and touch it twice to enrol.";
+"Enrol another key so any enrolled key opens this vault. Insert your current key and touch it, then swap to the new key and touch it twice. Keep the backup safe and separate — there's no recovery if you lose every key." = "Enrol another key so any enrolled key opens this vault. Insert your current key and touch it, then swap to the new key and touch it twice. Keep the backup safe and separate — there's no recovery if you lose every key.";
+"Set/enter this key's PIN (leave blank if none)" = "Set/enter this key's PIN (leave blank if none)";
+"New key's PIN (leave blank if none)" = "New key's PIN (leave blank if none)";
+"Name (optional)" = "Name (optional)";
+"Add key…" = "Add key…";
+"Add backup…" = "Add backup…";
+"This vault already has the maximum of %lld keys." = "This vault already has the maximum of %lld keys.";
+"Working…" = "Working…";
+"Follow the prompts on your key — insert, swap, and touch as asked. Don't unplug a key unless you're told to." = "Follow the prompts on your key — insert, swap, and touch as asked. Don't unplug a key unless you're told to.";
+
+/* --- Key-operation prompts (insert / remove / touch) --- */
+"Insert your YubiKey…" = "Insert your YubiKey…";
+"Insert your CURRENT key (the one that already opens this vault)…" = "Insert your CURRENT key (the one that already opens this vault)…";
+"Now insert the NEW backup key…" = "Now insert the NEW backup key…";
+"Insert key %lld of %lld…" = "Insert key %lld of %lld…";
+"Insert the key you're removing…" = "Insert the key you're removing…";
+"Remove your current key, then insert the NEW backup key…" = "Remove your current key, then insert the NEW backup key…";
+"Remove that key, then insert the next one…" = "Remove that key, then insert the next one…";
+" — touch %lld of %lld" = " — touch %lld of %lld";
+"Key %lld of %lld: touch it now" = "Key %lld of %lld: touch it now";
+"Touch your YubiKey now" = "Touch your YubiKey now";
+"Touch your CURRENT key now — not the new one yet" = "Touch your CURRENT key now — not the new one yet";
+"Touch the new backup key now" = "Touch the new backup key now";
+"Touch the key to remove it" = "Touch the key to remove it";
+
+/* --- Key-operation status messages --- */
+"Backup key enrolled. Either key now opens this vault — keep the backup somewhere safe and separate. There is still no recovery if you lose both." = "Backup key enrolled. Either key now opens this vault — keep the backup somewhere safe and separate. There is still no recovery if you lose both.";
+"Backup key enrolled. Unlock again to continue." = "Backup key enrolled. Unlock again to continue.";
+"Could not add the backup key: %@. Your vault is unchanged." = "Could not add the backup key: %@. Your vault is unchanged.";
+"Enter your passphrase to add a backup key." = "Enter your passphrase to add a backup key.";
+"Could not read keys: %@." = "Could not read keys: %@.";
+"Key revoked — it no longer opens this vault. Unlock again to continue." = "Key revoked — it no longer opens this vault. Unlock again to continue.";
+"Could not revoke the key: %@. Your vault is unchanged." = "Could not revoke the key: %@. Your vault is unchanged.";
+"Enter your passphrase to remove a key." = "Enter your passphrase to remove a key.";
+"Enter your passphrase to remove the last key." = "Enter your passphrase to remove the last key.";
+"Last key removed. This vault now opens with the passphrase alone — and opening is slower again, by design." = "Last key removed. This vault now opens with the passphrase alone — and opening is slower again, by design.";
+"Last key removed. Unlock again with your passphrase." = "Last key removed. Unlock again with your passphrase.";
+"Could not remove the last key: %@. Your vault is unchanged." = "Could not remove the last key: %@. Your vault is unchanged.";
+
+/* --- Busy / progress messages --- */
+"Copying files into the new vault…" = "Copying files into the new vault…";
+"Verifying the new vault…" = "Verifying the new vault…";
+"Preparing the new vault…" = "Preparing the new vault…";
+"Removing the key — re-securing the vault…" = "Removing the key — re-securing the vault…";
+"Adding your backup key…" = "Adding your backup key…";
+"Creating your Farewell vault…" = "Creating your Farewell vault…";
+"Unlocking…\nThis takes a few seconds." = "Unlocking…\nThis takes a few seconds.";
+"Touch your key now — it should be blinking." = "Touch your key now — it should be blinking.";
+"Enrolling backup key…" = "Enrolling backup key…";
+"Removing the last key…" = "Removing the last key…";
+"Enrolling your key…" = "Enrolling your key…";
+"Creating vault…" = "Creating vault…";
+"Migrating… touch your YubiKey when it blinks." = "Migrating… touch your YubiKey when it blinks.";
+
+/* --- Vault window header / toolbar --- */
+"Migrate…" = "Migrate…";
+"Keys…" = "Keys…";
+"Lock" = "Lock";
+"Discard" = "Discard";
+"Dismiss" = "Dismiss";
+"1 key — add a backup" = "1 key — add a backup";
+"Re-encrypt this vault into a fresh file (new keys, or a smaller size). Used to rotate keys or upgrade the format. The original is kept until you confirm." = "Re-encrypt this vault into a fresh file (new keys, or a smaller size). Used to rotate keys or upgrade the format. The original is kept until you confirm.";
+"Add a hardware key so a physical key is required to open this vault — or just review that it's passphrase-only." = "Add a hardware key so a physical key is required to open this vault — or just review that it's passphrase-only.";
+"Name, add, or revoke the hardware keys that open this vault (%lld of %lld enrolled), or convert back to passphrase-only." = "Name, add, or revoke the hardware keys that open this vault (%lld of %lld enrolled), or convert back to passphrase-only.";
+"This vault has only one hardware key. Lose it and the vault is gone — enrol a backup key." = "This vault has only one hardware key. Lose it and the vault is gone — enrol a backup key.";
+"This vault records its creator's identity (opt-in)." = "This vault records its creator's identity (opt-in).";
+"%@ free of %@" = "%@ free of %@";
+"counter %llu" = "counter %llu";
+"%lld hardware keys" = "%lld hardware keys";
+"created by %@" = "created by %@";
+"An interrupted migration left “%@”. Your vault is intact." = "An interrupted migration left “%@”. Your vault is intact.";
+
+/* --- File list / folders --- */
+"This vault contains no files." = "This vault contains no files.";
+"Drag files here, or use Import below." = "Drag files here, or use Import below.";
+"Search files…" = "Search files…";
+"No file matches “%@”." = "No file matches “%@”.";
+"Drop to import into the vault" = "Drop to import into the vault";
+"New folder" = "New folder";
+"New folder in “%@”" = "New folder in “%@”";
+"Import…" = "Import…";
+"Delete" = "Delete";
+"Rename" = "Rename";
+
+/* --- File / folder dialogs --- */
+"Delete this file?" = "Delete this file?";
+"“%@” will be permanently removed and its encrypted chunks securely shredded. This cannot be undone — there is no recovery, by design." = "“%@” will be permanently removed and its encrypted chunks securely shredded. This cannot be undone — there is no recovery, by design.";
+"Delete this folder?" = "Delete this folder?";
+"“%@” and ALL its contents will be permanently removed and securely shredded. This cannot be undone." = "“%@” and ALL its contents will be permanently removed and securely shredded. This cannot be undone.";
+"Folder name" = "Folder name";
+"Create" = "Create";
+"Rename file" = "Rename file";
+"Renaming “%@”. The encrypted content is unchanged; only the name in the manifest is updated." = "Renaming “%@”. The encrypted content is unchanged; only the name in the manifest is updated.";
+"New name" = "New name";
+
+/* --- Import bar --- */
+"New note" = "New note";
+"Create a new empty note and open it in the editor. It lives only inside the encrypted vault." = "Create a new empty note and open it in the editor. It lives only inside the encrypted vault.";
+"1 pass" = "1 pass";
+"3 passes" = "3 passes";
+"7 passes" = "7 passes";
+"Overwrite passes. 1 is enough on any modern drive; 3/7 exist only for standards that mandate them and add nothing on an SSD." = "Overwrite passes. 1 is enough on any modern drive; 3/7 exist only for standards that mandate them and add nothing on an SSD.";
+"Shred originals" = "Shred originals";
+"After importing, securely overwrite and delete the source file. On a hard disk this physically erases it; on an SSD wear-leveling means it's best-effort only (no guarantee) — the real protection is the encrypted vault." = "After importing, securely overwrite and delete the source file. On a hard disk this physically erases it; on an SSD wear-leveling means it's best-effort only (no guarantee) — the real protection is the encrypted vault.";
+"Drag files here, or click Import. Files are encrypted into the vault; nothing is written elsewhere." = "Drag files here, or click Import. Files are encrypted into the vault; nothing is written elsewhere.";
+"Imported %lld; last error: %@" = "Imported %lld; last error: %@";
+"Imported 1 file." = "Imported 1 file.";
+"Imported %lld files." = "Imported %lld files.";
+"Original securely erased (overwritten %lld× in place on a hard disk)." = "Original securely erased (overwritten %lld× in place on a hard disk).";
+"Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe.";
+"Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee).";
+
+/* --- File viewer --- */
+"Save" = "Save";
+"Save the changes back into the encrypted vault. Nothing is written to disk." = "Save the changes back into the encrypted vault. Nothing is written to disk.";
+"Edit" = "Edit";
+"Edit this text file in the app and save it back into the vault. Nothing is written to disk." = "Edit this text file in the app and save it back into the vault. Nothing is written to disk.";
+"Export…" = "Export…";
+"Write a decrypted copy of this file to disk, outside the vault. Shows a warning first." = "Write a decrypted copy of this file to disk, outside the vault. Shows a warning first.";
+"The vault isn’t open." = "The vault isn’t open.";
+
+/* --- Export warning --- */
+"Export a decrypted copy?" = "Export a decrypted copy?";
+"You are about to write the decrypted contents of “%@” to a regular file on disk. Once written, that file leaves Farewell's protection:" = "You are about to write the decrypted contents of “%@” to a regular file on disk. Once written, that file leaves Farewell's protection:";
+"Spotlight will index its contents" = "Spotlight will index its contents";
+"QuickLook will cache a thumbnail" = "QuickLook will cache a thumbnail";
+"Time Machine will back it up (if enabled)" = "Time Machine will back it up (if enabled)";
+"Apps that open it keep it in Recent Items" = "Apps that open it keep it in Recent Items";
+"Farewell can no longer track or recall it" = "Farewell can no longer track or recall it";
+"Use the in-app viewer instead unless you genuinely need an external copy. For device-to-device transfer, Farewell-to-Farewell P2P (coming later) never writes cleartext to disk." = "Use the in-app viewer instead unless you genuinely need an external copy. For device-to-device transfer, Farewell-to-Farewell P2P (coming later) never writes cleartext to disk.";
+"Export anyway" = "Export anyway";
+"This file will be written UNENCRYPTED outside the vault." = "This file will be written UNENCRYPTED outside the vault.";
+
+/* --- Migrate sheet --- */
+"Migrate / rotate vault" = "Migrate / rotate vault";
+"Re-encrypts everything into a brand-new vault file with fresh keys (the same passphrase). Your files are copied and verified before anything is replaced; nothing is written to disk in the clear. The original is kept until you delete it." = "Re-encrypts everything into a brand-new vault file with fresh keys (the same passphrase). Your files are copied and verified before anything is replaced; nothing is written to disk in the clear. The original is kept until you delete it.";
+"New size" = "New size";
+"Keep current capacity" = "Keep current capacity";
+"Shrink to fit contents" = "Shrink to fit contents";
+"Destination:" = "Destination:";
+"Needs about %@; %@ free here." = "Needs about %@; %@ free here.";
+"This vault requires a YubiKey" = "This vault requires a YubiKey";
+"Migrate" = "Migrate";
+"Use Folder" = "Use Folder";
+"Not enough space on %@: the new vault needs about %@ but only %@ is free. Choose “Shrink to fit” or a different drive." = "Not enough space on %@: the new vault needs about %@ but only %@ is free. Choose “Shrink to fit” or a different drive.";
+"A file named “%@” already exists in that folder. Pick another destination." = "A file named “%@” already exists in that folder. Pick another destination.";
+"Migration failed: %@. Your original vault is unchanged." = "Migration failed: %@. Your original vault is unchanged.";
+"Migrated. The previous vault is kept as “%@” — delete it once you’ve confirmed this one works." = "Migrated. The previous vault is kept as “%@” — delete it once you’ve confirmed this one works.";
+"Migrated to %@. Your original vault is unchanged — delete it when ready." = "Migrated to %@. Your original vault is unchanged — delete it when ready.";
+"Migration verified but the file swap failed: %@. Your original vault is unchanged." = "Migration verified but the file swap failed: %@. Your original vault is unchanged.";
+
+/* --- Create-vault rename notice --- */
+"“%@” already existed — created “%@” instead. A vault is never overwritten." = "“%@” already existed — created “%@” instead. A vault is never overwritten.";
+
+/* --- Settings / About / auto-lock --- */
+"Auto-lock after inactivity:" = "Auto-lock after inactivity:";
+"1 minute" = "1 minute";
+"5 minutes" = "5 minutes";
+"15 minutes" = "15 minutes";
+"30 minutes" = "30 minutes";
+"Never" = "Never";
+"The vault always locks on system sleep and screen lock. Inactivity is measured system-wide." = "The vault always locks on system sleep and screen lock. Inactivity is measured system-wide.";
+"About Farewell" = "About Farewell";
+"sleep" = "sleep";
+"screen lock" = "screen lock";
+"inactivity" = "inactivity";
+"Vault locked automatically (%@). Unlock to continue." = "Vault locked automatically (%@). Unlock to continue.";
+
+/* --- Import failure reasons --- */
+"vault not open" = "vault not open";
+"empty name" = "empty name";
+"cannot stat %@" = "cannot stat %@";
+"cannot read %@" = "cannot read %@";
+"“%@” is %@ but only %@ is free in this level." = "“%@” is %@ but only %@ is free in this level.";
+"Not enough space: the edit needs %@ but only %@ is available." = "Not enough space: the edit needs %@ but only %@ is available.";
+
+/* --- Context menus & viewer states --- */
+"Clear search" = "Clear search";
+"Rename…" = "Rename…";
+"Rename folder…" = "Rename folder…";
+"New subfolder…" = "New subfolder…";
+"Move to top level" = "Move to top level";
+"Delete folder" = "Delete folder";
+"Passes" = "Passes";
+"Select a file to view it." = "Select a file to view it.";
+"Cannot preview" = "Cannot preview";
+"Failed to load" = "Failed to load";
+"Fullscreen (Esc to exit)" = "Fullscreen (Esc to exit)";
+"Copy this Mac’s serial number" = "Copy this Mac’s serial number";
+
+/* --- First-hardware-key + backup-key clarity (added) --- */
+"Adding a backup happens in two steps — and the order matters:" = "Adding a backup happens in two steps — and the order matters:";
+"**1.** First insert your **current key** (the one that already opens this vault) and touch it — **not the new key yet**." = "**1.** First insert your **current key** (the one that already opens this vault) and touch it — **not the new key yet**.";
+"**2.** Only then, when asked, swap to the **new backup key** and touch it twice." = "**2.** Only then, when asked, swap to the **new backup key** and touch it twice.";
+"Either key will then open the vault. Keep the backup somewhere safe and separate — there's no recovery if you lose every key." = "Either key will then open the vault. Keep the backup somewhere safe and separate — there's no recovery if you lose every key.";
+"Enter your passphrase to add a hardware key." = "Enter your passphrase to add a hardware key.";
+"Adding your hardware key…" = "Adding your hardware key…";
+"Enrolling your hardware key…" = "Enrolling your hardware key…";
+"Hardware key enrolled. This vault now needs that key plus your passphrase to open. Enrol a backup key too — lose your only key and the vault is gone, with no recovery." = "Hardware key enrolled. This vault now needs that key plus your passphrase to open. Enrol a backup key too — lose your only key and the vault is gone, with no recovery.";
+"Hardware key enrolled. Unlock again to continue." = "Hardware key enrolled. Unlock again to continue.";
+"Could not add the hardware key: %@. Your vault is unchanged." = "Could not add the hardware key: %@. Your vault is unchanged.";
+"Touch your new key now" = "Touch your new key now";

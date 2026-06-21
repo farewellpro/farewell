@@ -1,0 +1,14 @@
+[package]
+name = "farewell_passphrase"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "Passphrase strength policy (zxcvbn) + EFF diceware generation for Farewell."
+
+[dependencies]
+farewell_crypto.workspace = true
+zxcvbn = "3"
+zeroize.workspace = true

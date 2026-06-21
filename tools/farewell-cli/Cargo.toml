@@ -1,0 +1,25 @@
+[package]
+name = "farewell-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "Command-line tool to exercise the Farewell core. Development aid."
+
+[[bin]]
+name = "farewell"
+path = "src/main.rs"
+
+[dependencies]
+farewell_crypto.workspace = true
+farewell_fido2.workspace = true
+farewell_format.workspace = true
+farewell_keys.workspace = true
+farewell_license.workspace = true
+farewell_passphrase.workspace = true
+clap.workspace = true
+rpassword.workspace = true
+anyhow.workspace = true
+hex.workspace = true

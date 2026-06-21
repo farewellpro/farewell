@@ -1,0 +1,70 @@
+name: Security & supply chain
+
+# Hardening gate (CHARTER §7): every push and PR is checked for
+#   * known vulnerabilities / yanked crates in the dependency tree
+#     (cargo-audit, RustSec advisory DB), and
+#   * license / source / banned-crate policy (cargo-deny, see deny.toml).
+# It also keeps the fuzz targets compiling and smoke-runs the manifest
+# parser so an untrusted-input regression fails CI fast.
+#
+# Supply-chain note: third-party actions are pinned by tag here for
+# readability; before 1.0 they MUST be pinned to a full commit SHA.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Re-run weekly so a newly published advisory against an unchanged
+    # tree is caught even without a code change.
+    - cron: "17 4 * * 1"
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: cargo audit (RustSec)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      # RustSec's own action; honours .cargo/audit.toml ignores.
+      - uses: rustsec/audit-check@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  deny:
+    name: cargo deny (licenses / bans / sources)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      # The cargo-deny authors' own action.
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check
+
+  fuzz-build:
+    name: fuzz targets build + manifest smoke
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install nightly + cargo-fuzz
+        run: |
+          rustup toolchain install nightly --profile minimal
+          cargo install cargo-fuzz --locked
+      - name: Build all fuzz targets
+        run: cargo +nightly fuzz build
+      - name: Smoke-run manifest_parse (60s)
+        run: cargo +nightly fuzz run manifest_parse -- -max_total_time=60 -rss_limit_mb=2048

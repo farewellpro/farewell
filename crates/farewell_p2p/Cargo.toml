@@ -1,0 +1,9 @@
+[package]
+name = "farewell_p2p"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "P2P LAN file transport with Noise XX pairing. v0.1: stub."

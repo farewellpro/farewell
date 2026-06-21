@@ -1,0 +1,93 @@
+# cargo-deny configuration for Farewell.
+#
+# Farewell is GPL-3.0-or-later. This file enforces, in CI and locally:
+#   * no dependency with a known RustSec security advisory,
+#   * no dependency under a license incompatible with GPL-3.0 (or
+#     unknown/proprietary), and
+#   * no crate pulled from a registry other than crates.io.
+#
+# Run with:  cargo deny check
+# (or a single section, e.g.  cargo deny check advisories)
+
+[graph]
+# Check the host target plus the two we actually ship.
+targets = [
+    "x86_64-unknown-linux-gnu",
+    "aarch64-apple-darwin",
+    "x86_64-apple-darwin",
+]
+all-features = true
+
+# ---------------------------------------------------------------------------
+# Security advisories (RustSec). A vulnerable dependency fails the build.
+# ---------------------------------------------------------------------------
+[advisories]
+db-urls = ["https://github.com/rustsec/advisory-db"]
+# Deny everything by default; we add per-advisory `ignore` entries only
+# with a written justification when there is genuinely no fix available.
+yanked = "deny"
+ignore = [
+    # proc-macro-error2 "unmaintained" (informational). Compile-time-only
+    # proc-macro pulled transitively by libcrux's `hax-lib-macros`; absent from
+    # the shipped binary; not under our control. Re-evaluate at each libcrux
+    # bump. (Mirrored in .cargo/audit.toml.)
+    "RUSTSEC-2026-0173",
+]
+
+# ---------------------------------------------------------------------------
+# Licenses. GPL-3.0 is compatible with permissive licenses (MIT, Apache-2.0,
+# BSD, ISC, Zlib, etc.) and with GPL/LGPL. It is NOT compatible with most
+# other copyleft or source-available terms; those must be caught here.
+# ---------------------------------------------------------------------------
+[licenses]
+# Fail if a crate's license cannot be determined.
+confidence-threshold = 0.9
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "Unicode-3.0",
+    "Unicode-DFS-2016",
+    "MPL-2.0",          # file-level copyleft, GPL-compatible
+    "CC0-1.0",
+    "0BSD",
+    "BSL-1.0",
+    "Unlicense",
+    "GPL-3.0",
+    "GPL-3.0-or-later",
+    "LGPL-3.0",
+    "LGPL-3.0-or-later",
+]
+# Crates that ship without SPDX metadata but whose license we have verified
+# by hand get a clarification here rather than a blanket allow.
+exceptions = []
+
+# ---------------------------------------------------------------------------
+# Bans: duplicate versions, wildcard deps, and crates we never want.
+# ---------------------------------------------------------------------------
+[bans]
+multiple-versions = "warn"   # report, don't fail (transitive churn is common)
+wildcards = "deny"
+# Crates we explicitly refuse to depend on, with a reason.
+deny = [
+    # `openssl` would pull a C TLS stack we do not want in a no-call-home,
+    # pure-Rust-crypto product. We use rustls / RustCrypto / libcrux instead.
+    { name = "openssl" },
+    { name = "openssl-sys" },
+]
+# Permit known-benign duplicates here (name + optional version) as the tree
+# evolves, instead of failing the whole build.
+skip = []
+
+# ---------------------------------------------------------------------------
+# Sources: only crates.io. No git or unknown registries (supply-chain).
+# ---------------------------------------------------------------------------
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []

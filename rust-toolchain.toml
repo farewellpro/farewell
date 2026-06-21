@@ -1,0 +1,13 @@
+# Pinned Rust toolchain for reproducible builds.
+#
+# This file pins the EXACT Rust version used to build Farewell. Any
+# divergence — including patch versions — can produce a different
+# binary, breaking the reproducibility guarantee promised in CHARTER §7.2.
+#
+# Bumping this version is a release-grade change: it requires a fresh
+# advisory, a new release tag, and re-verification by ≥ 3 maintainers.
+
+[toolchain]
+channel = "1.95.0"
+profile = "minimal"
+components = ["rustc", "cargo", "rust-std"]

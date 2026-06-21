@@ -1,0 +1,325 @@
+/* ===================================================================
+   Farewell — English base strings (the development language).
+   Keys are the English source text; values here mirror them.
+   Organised screen by screen as localization rolls out.
+   =================================================================== */
+
+/* --- Open / Create / Unlock screen --- */
+"Open vault" = "Abrir caja fuerte";
+"Create vault" = "Crear caja fuerte";
+"Licensed to %@" = "Con licencia para %@";
+"Not activated" = "Sin activar";
+"Manage license…" = "Gestionar licencia…";
+
+/* Open form */
+"Vault path" = "Ruta de la caja fuerte";
+"Choose…" = "Elegir…";
+"Passphrase" = "Frase de contraseña";
+"Using a hardware key with a PIN?" = "¿Usas una llave física con PIN?";
+"YubiKey PIN" = "PIN de la YubiKey";
+"Leave the PIN blank if your key has none. You'll be asked to touch the key if this vault requires it." = "Deja el PIN en blanco si tu llave no tiene. Se te pedirá tocar la llave si esta caja fuerte lo requiere.";
+"Unlock" = "Desbloquear";
+"No vault at this path. Check the location, or use Choose…." = "No hay ninguna caja fuerte en esta ruta. Comprueba la ubicación o usa Elegir….";
+
+/* --- Manage-license sheet --- */
+"License" = "Licencia";
+"Paste the license key you received by email, then Activate. Everything is verified locally — Farewell never contacts a server." = "Pega la clave de licencia que recibiste por correo y pulsa Activar. Todo se verifica localmente: Farewell nunca contacta con ningún servidor.";
+"Open file…" = "Abrir archivo…";
+"Close" = "Cerrar";
+"Activate" = "Activar";
+"Licensed to %@ — %@" = "Con licencia para %@ — %@";
+"Not activated on this Mac" = "Sin activar en este Mac";
+
+/* License tiers (typeName) */
+"Standard" = "Estándar";
+"Family" = "Familia";
+"Education" = "Educación";
+"Business" = "Empresa";
+"At-risk grant" = "Licencia solidaria";
+
+/* License verdict notes */
+"Paste your license key first." = "Pega primero tu clave de licencia.";
+"Couldn't read the license input." = "No se pudo leer la licencia introducida.";
+"Activated. Thank you for supporting Farewell." = "Activada. Gracias por apoyar a Farewell.";
+"No license installed." = "No hay ninguna licencia instalada.";
+"This key isn’t valid for this build (wrong key, or the key was altered)." = "Esta clave no es válida para esta versión (clave incorrecta o alterada).";
+"This license is for a different major version of Farewell." = "Esta licencia es para otra versión principal de Farewell.";
+"This license isn’t authorized for this Mac. A free re-issue is available — see farewell.pro/license-policy." = "Esta licencia no está autorizada para este Mac. Hay una reemisión gratuita disponible: consulta farewell.pro/license-policy.";
+"That doesn’t look like a valid license key." = "Esto no parece una clave de licencia válida.";
+"Couldn’t verify (couldn’t read this Mac’s serial number)." = "No se pudo verificar (no se pudo leer el número de serie de este Mac).";
+"Unknown license state." = "Estado de licencia desconocido.";
+
+/* --- Create-vault form --- */
+"New vault path (…/my.vault)" = "Ruta de la nueva caja fuerte (…/mi.vault)";
+"Capacity" = "Capacidad";
+"size" = "tamaño";
+"MB" = "MB";
+"Choose any size you want (e.g. 64, 512, 4096…). The vault file is always exactly this size on disk, no matter how much you store — that's part of the deniability." = "Elige el tamaño que quieras (p. ej. 64, 512, 4096…). El archivo de la caja fuerte ocupa siempre exactamente este tamaño en el disco, sin importar cuánto guardes; forma parte de la negación plausible.";
+"Generated (recommended)" = "Generada (recomendado)";
+"My own" = "La mía";
+"There is no recovery, and there is no self-destruct: the file looks like random data and your passphrase is the ONLY thing protecting it. That is why it must be strong — and why you must not lose it." = "No hay recuperación ni autodestrucción: el archivo parece datos aleatorios y tu frase de contraseña es lo ÚNICO que lo protege. Por eso debe ser fuerte, y por eso no debes perderla.";
+"Also require a YubiKey (hardware key)" = "Exigir también una YubiKey (llave física)";
+"YubiKey PIN (leave blank if none)" = "PIN de la YubiKey (déjalo en blanco si no tiene)";
+"Also enrol a backup key now" = "Registrar también una llave de respaldo ahora";
+"You'll enrol the keys one at a time: insert the first key and touch it, then swap to the second when asked. Either key will open the vault — keep the backup somewhere safe and separate." = "Registrarás las llaves de una en una: inserta la primera y tócala, luego cambia a la segunda cuando se te indique. Cualquiera de las dos abrirá la caja fuerte; guarda la de respaldo en un lugar seguro y aparte.";
+"You'll be asked to TOUCH the key to enrol it. Then a copy of this vault can't be brute-forced without the physical key. Lose your only key and the vault is gone — there is no recovery, so a backup key is recommended." = "Se te pedirá TOCAR la llave para registrarla. Después, una copia de esta caja fuerte no podrá forzarse sin la llave física. Si pierdes tu única llave, la caja fuerte se pierde: no hay recuperación, por eso se recomienda una llave de respaldo.";
+"Record my identity in this vault" = "Registrar mi identidad en esta caja fuerte";
+"Stores “%@” inside the encrypted vault — visible only after unlock. ⚠︎ This ATTRIBUTES the vault to you if it is ever decrypted. Leave OFF if you need deniability." = "Guarda « %@ » dentro de la caja fuerte cifrada, visible solo tras desbloquear. ⚠︎ Esto te ATRIBUYE la caja fuerte si alguna vez se descifra. Déjalo DESACTIVADO si necesitas negación plausible.";
+"Activate a license first to record your identity." = "Activa primero una licencia para registrar tu identidad.";
+"Create and open" = "Crear y abrir";
+"Creating a vault needs an active license. Activate one with “Manage license…” below. (Opening existing vaults always works.)" = "Crear una caja fuerte requiere una licencia activa. Actívala con « Gestionar licencia… » abajo. (Abrir cajas fuertes existentes funciona siempre.)";
+"Choose where to save the vault (Choose…)." = "Elige dónde guardar la caja fuerte (Elegir…).";
+"Generate a passphrase." = "Genera una frase de contraseña.";
+"Tick the box confirming you saved the passphrase." = "Marca la casilla confirmando que has guardado la frase de contraseña.";
+"Enter a passphrase." = "Introduce una frase de contraseña.";
+"Passphrases don't match." = "Las frases de contraseña no coinciden.";
+"Passphrase must reach “Very strong” (4/4)." = "La frase de contraseña debe alcanzar « Muy fuerte » (4/4).";
+"Regenerate" = "Regenerar";
+"≈ 129 bits — 10 random words" = "≈ 129 bits — 10 palabras aleatorias";
+"I have written this passphrase down somewhere safe" = "He anotado esta frase de contraseña en un lugar seguro";
+"Confirm passphrase" = "Confirma la frase de contraseña";
+"Must reach “Very strong” (4/4). Tip: 5+ random, unrelated words beat any short clever password." = "Debe alcanzar « Muy fuerte » (4/4). Consejo: 5+ palabras aleatorias sin relación superan a cualquier contraseña corta ingeniosa.";
+"Choose Folder" = "Elegir carpeta";
+"Choose the folder for the new vault. You'll set its name back in the Farewell window. An existing vault is never overwritten." = "Elige la carpeta para la nueva caja fuerte. Definirás su nombre en la ventana de Farewell. Nunca se sobrescribe una caja fuerte existente.";
+
+/* --- Error messages (humanError) --- */
+"OK (unexpected)" = "OK (inesperado)";
+"Invalid argument" = "Argumento no válido";
+"Not found" = "No encontrado";
+"Couldn't read the vault file (missing or unreadable)." = "No se pudo leer el archivo de la caja fuerte (falta o es ilegible).";
+"This vault is already open in another window or process." = "Esta caja fuerte ya está abierta en otra ventana o proceso.";
+"Vault has been wiped — contents unrecoverable" = "La caja fuerte se ha borrado: contenido irrecuperable";
+"Couldn't open it. Check the passphrase — and, if this vault uses a YubiKey, that it's plugged in and you entered its PIN." = "No se pudo abrir. Comprueba la frase de contraseña y, si esta caja fuerte usa una YubiKey, que esté conectada y que hayas introducido su PIN.";
+"Vault header has been tampered with" = "La cabecera de la caja fuerte ha sido manipulada";
+"Counter rollback detected" = "Se detectó un retroceso del contador";
+"Passphrase too weak — use a stronger or generated one" = "Frase de contraseña demasiado débil: usa una más fuerte o generada";
+"No YubiKey detected — plug it in and try again." = "No se detectó ninguna YubiKey: conéctala e inténtalo de nuevo.";
+"YubiKey check failed — wrong PIN, or it wasn't touched in time." = "Falló la comprobación de la YubiKey: PIN incorrecto o no se tocó a tiempo.";
+"More than one key is plugged in. With a PIN, please leave only the key you're unlocking with plugged in (trying a PIN on the wrong key can lock it), then try again." = "Hay más de una llave conectada. Con un PIN, deja conectada solo la llave con la que vas a desbloquear (probar un PIN en la llave equivocada puede bloquearla) e inténtalo de nuevo.";
+"Not a Farewell vault file" = "No es un archivo de caja fuerte de Farewell";
+"Vault uses a format this build cannot read" = "La caja fuerte usa un formato que esta versión no puede leer";
+
+/* --- Keys-management panel --- */
+"Keys" = "Llaves";
+"Hardware-key management." = "Gestión de llaves físicas.";
+"Vault passphrase" = "Frase de contraseña de la caja fuerte";
+"Current key's PIN (leave blank if no PIN or no key)" = "PIN de la llave actual (déjalo en blanco si no hay PIN ni llave)";
+"Cancel" = "Cancelar";
+"Show keys" = "Mostrar llaves";
+"Reading keys…" = "Leyendo llaves…";
+"Done" = "Listo";
+"Passphrase-only — no hardware key enrolled." = "Solo frase de contraseña: ninguna llave física registrada.";
+"Only one key opens this vault. **Lose it and the vault is gone forever — there is no recovery.** Enrol a backup key below so either key works." = "Solo una llave abre esta caja fuerte. **Si la pierdes, la caja fuerte se pierde para siempre: no hay recuperación.** Registra abajo una llave de respaldo para que funcionen ambas.";
+"Key %lld" = "Llave %lld";
+"Remove (last)" = "Quitar (última)";
+"Revoke" = "Revocar";
+"Revoke this key?" = "¿Revocar esta llave?";
+"It will no longer open this vault; the other keys still will. Revoking uses only your passphrase, then you'll touch a remaining key once to reopen the vault." = "Dejará de abrir esta caja fuerte; las demás llaves seguirán haciéndolo. La revocación usa solo tu frase de contraseña; después tocarás una vez una llave restante para reabrir la caja fuerte.";
+"Remove your last key?" = "¿Quitar tu última llave?";
+"Remove last key" = "Quitar la última llave";
+"This turns the vault back into passphrase-only: the passphrase alone will open it, and opening becomes slower again (by design). Insert the key now — you'll touch it once so it can be safely removed." = "Esto devuelve la caja fuerte a solo frase de contraseña: la frase de contraseña por sí sola la abrirá, y abrirla vuelve a ser más lento (a propósito). Inserta la llave ahora; la tocarás una vez para poder quitarla de forma segura.";
+"Add a hardware key" = "Añadir una llave física";
+"Add a backup key" = "Añadir una llave de respaldo";
+"Require a physical key (plus your passphrase) to open this vault. Insert the new key and touch it twice to enrol." = "Exige una llave física (además de tu frase de contraseña) para abrir esta caja fuerte. Inserta la nueva llave y tócala dos veces para registrarla.";
+"Enrol another key so any enrolled key opens this vault. Insert your current key and touch it, then swap to the new key and touch it twice. Keep the backup safe and separate — there's no recovery if you lose every key." = "Registra otra llave para que cualquier llave registrada abra esta caja fuerte. Inserta tu llave actual y tócala, luego cambia a la nueva y tócala dos veces. Guarda la de respaldo en lugar seguro y aparte: no hay recuperación si pierdes todas las llaves.";
+"Set/enter this key's PIN (leave blank if none)" = "Define/introduce el PIN de esta llave (déjalo en blanco si no tiene)";
+"New key's PIN (leave blank if none)" = "PIN de la nueva llave (déjalo en blanco si no tiene)";
+"Name (optional)" = "Nombre (opcional)";
+"Add key…" = "Añadir llave…";
+"Add backup…" = "Añadir respaldo…";
+"This vault already has the maximum of %lld keys." = "Esta caja fuerte ya tiene el máximo de %lld llaves.";
+"Working…" = "Trabajando…";
+"Follow the prompts on your key — insert, swap, and touch as asked. Don't unplug a key unless you're told to." = "Sigue las indicaciones de tu llave: inserta, cambia y toca según se te pida. No desconectes ninguna llave salvo que se te indique.";
+
+/* --- Key-operation prompts (insert / remove / touch) --- */
+"Insert your YubiKey…" = "Inserta tu YubiKey…";
+"Insert your CURRENT key (the one that already opens this vault)…" = "Inserta tu llave ACTUAL (la que ya abre esta caja fuerte)…";
+"Now insert the NEW backup key…" = "Ahora inserta la NUEVA llave de respaldo…";
+"Insert key %lld of %lld…" = "Inserta la llave %lld de %lld…";
+"Insert the key you're removing…" = "Inserta la llave que vas a quitar…";
+"Remove your current key, then insert the NEW backup key…" = "Quita tu llave actual y luego inserta la NUEVA llave de respaldo…";
+"Remove that key, then insert the next one…" = "Quita esa llave y luego inserta la siguiente…";
+" — touch %lld of %lld" = " — toque %lld de %lld";
+"Key %lld of %lld: touch it now" = "Llave %lld de %lld: tócala ahora";
+"Touch your YubiKey now" = "Toca tu YubiKey ahora";
+"Touch your CURRENT key now — not the new one yet" = "Toca tu llave ACTUAL ahora, aún no la nueva";
+"Touch the new backup key now" = "Toca la nueva llave de respaldo ahora";
+"Touch the key to remove it" = "Toca la llave para quitarla";
+
+/* --- Key-operation status messages --- */
+"Backup key enrolled. Either key now opens this vault — keep the backup somewhere safe and separate. There is still no recovery if you lose both." = "Llave de respaldo registrada. Ahora cualquiera de las dos abre esta caja fuerte; guarda la de respaldo en lugar seguro y aparte. Sigue sin haber recuperación si pierdes ambas.";
+"Backup key enrolled. Unlock again to continue." = "Llave de respaldo registrada. Vuelve a desbloquear para continuar.";
+"Could not add the backup key: %@. Your vault is unchanged." = "No se pudo añadir la llave de respaldo: %@. Tu caja fuerte no ha cambiado.";
+"Enter your passphrase to add a backup key." = "Introduce tu frase de contraseña para añadir una llave de respaldo.";
+"Could not read keys: %@." = "No se pudieron leer las llaves: %@.";
+"Key revoked — it no longer opens this vault. Unlock again to continue." = "Llave revocada: ya no abre esta caja fuerte. Vuelve a desbloquear para continuar.";
+"Could not revoke the key: %@. Your vault is unchanged." = "No se pudo revocar la llave: %@. Tu caja fuerte no ha cambiado.";
+"Enter your passphrase to remove a key." = "Introduce tu frase de contraseña para quitar una llave.";
+"Enter your passphrase to remove the last key." = "Introduce tu frase de contraseña para quitar la última llave.";
+"Last key removed. This vault now opens with the passphrase alone — and opening is slower again, by design." = "Última llave quitada. Esta caja fuerte ahora se abre solo con la frase de contraseña, y abrirla vuelve a ser más lento, a propósito.";
+"Last key removed. Unlock again with your passphrase." = "Última llave quitada. Vuelve a desbloquear con tu frase de contraseña.";
+"Could not remove the last key: %@. Your vault is unchanged." = "No se pudo quitar la última llave: %@. Tu caja fuerte no ha cambiado.";
+
+/* --- Busy / progress messages --- */
+"Copying files into the new vault…" = "Copiando archivos en la nueva caja fuerte…";
+"Verifying the new vault…" = "Verificando la nueva caja fuerte…";
+"Preparing the new vault…" = "Preparando la nueva caja fuerte…";
+"Removing the key — re-securing the vault…" = "Quitando la llave: volviendo a proteger la caja fuerte…";
+"Adding your backup key…" = "Añadiendo tu llave de respaldo…";
+"Creating your Farewell vault…" = "Creando tu caja fuerte de Farewell…";
+"Unlocking…\nThis takes a few seconds." = "Desbloqueando…\nEsto tarda unos segundos.";
+"Touch your key now — it should be blinking." = "Toca tu llave ahora: debería estar parpadeando.";
+"Enrolling backup key…" = "Registrando la llave de respaldo…";
+"Removing the last key…" = "Quitando la última llave…";
+"Enrolling your key…" = "Registrando tu llave…";
+"Creating vault…" = "Creando la caja fuerte…";
+"Migrating… touch your YubiKey when it blinks." = "Migrando… toca tu YubiKey cuando parpadee.";
+
+/* --- Vault window header / toolbar --- */
+"Migrate…" = "Migrar…";
+"Keys…" = "Llaves…";
+"Lock" = "Bloquear";
+"Discard" = "Descartar";
+"Dismiss" = "Ocultar";
+"1 key — add a backup" = "1 llave — añade un respaldo";
+"Re-encrypt this vault into a fresh file (new keys, or a smaller size). Used to rotate keys or upgrade the format. The original is kept until you confirm." = "Vuelve a cifrar esta caja fuerte en un archivo nuevo (nuevas llaves, o un tamaño menor). Sirve para rotar llaves o actualizar el formato. El original se conserva hasta que confirmes.";
+"Add a hardware key so a physical key is required to open this vault — or just review that it's passphrase-only." = "Añade una llave física para que se requiera una llave física al abrir esta caja fuerte, o simplemente comprueba que es solo de frase de contraseña.";
+"Name, add, or revoke the hardware keys that open this vault (%lld of %lld enrolled), or convert back to passphrase-only." = "Nombra, añade o revoca las llaves físicas que abren esta caja fuerte (%lld de %lld registradas), o vuelve a solo frase de contraseña.";
+"This vault has only one hardware key. Lose it and the vault is gone — enrol a backup key." = "Esta caja fuerte solo tiene una llave física. Si la pierdes, la caja fuerte se pierde: registra una llave de respaldo.";
+"This vault records its creator's identity (opt-in)." = "Esta caja fuerte registra la identidad de su creador (opcional).";
+"%@ free of %@" = "%@ libres de %@";
+"counter %llu" = "contador %llu";
+"%lld hardware keys" = "%lld llaves físicas";
+"created by %@" = "creada por %@";
+"An interrupted migration left “%@”. Your vault is intact." = "Una migración interrumpida dejó « %@ ». Tu caja fuerte está intacta.";
+
+/* --- File list / folders --- */
+"This vault contains no files." = "Esta caja fuerte no contiene archivos.";
+"Drag files here, or use Import below." = "Arrastra archivos aquí, o usa Importar abajo.";
+"Search files…" = "Buscar archivos…";
+"No file matches “%@”." = "Ningún archivo coincide con « %@ ».";
+"Drop to import into the vault" = "Suelta para importar a la caja fuerte";
+"New folder" = "Nueva carpeta";
+"New folder in “%@”" = "Nueva carpeta en « %@ »";
+"Import…" = "Importar…";
+"Delete" = "Eliminar";
+"Rename" = "Renombrar";
+
+/* --- File / folder dialogs --- */
+"Delete this file?" = "¿Eliminar este archivo?";
+"“%@” will be permanently removed and its encrypted chunks securely shredded. This cannot be undone — there is no recovery, by design." = "« %@ » se eliminará de forma permanente y sus fragmentos cifrados se triturarán de forma segura. Esto no se puede deshacer: no hay recuperación, a propósito.";
+"Delete this folder?" = "¿Eliminar esta carpeta?";
+"“%@” and ALL its contents will be permanently removed and securely shredded. This cannot be undone." = "« %@ » y TODO su contenido se eliminarán de forma permanente y se triturarán de forma segura. Esto no se puede deshacer.";
+"Folder name" = "Nombre de la carpeta";
+"Create" = "Crear";
+"Rename file" = "Renombrar archivo";
+"Renaming “%@”. The encrypted content is unchanged; only the name in the manifest is updated." = "Renombrando « %@ ». El contenido cifrado no cambia; solo se actualiza el nombre en el manifiesto.";
+"New name" = "Nuevo nombre";
+
+/* --- Import bar --- */
+"New note" = "Nueva nota";
+"Create a new empty note and open it in the editor. It lives only inside the encrypted vault." = "Crea una nota vacía y ábrela en el editor. Solo existe dentro de la caja fuerte cifrada.";
+"1 pass" = "1 pasada";
+"3 passes" = "3 pasadas";
+"7 passes" = "7 pasadas";
+"Overwrite passes. 1 is enough on any modern drive; 3/7 exist only for standards that mandate them and add nothing on an SSD." = "Pasadas de sobrescritura. 1 basta en cualquier disco moderno; 3/7 solo existen para normas que las exigen y no aportan nada en un SSD.";
+"Shred originals" = "Triturar originales";
+"After importing, securely overwrite and delete the source file. On a hard disk this physically erases it; on an SSD wear-leveling means it's best-effort only (no guarantee) — the real protection is the encrypted vault." = "Tras importar, sobrescribe y elimina de forma segura el archivo de origen. En un disco duro esto lo borra físicamente; en un SSD, el nivelado de desgaste hace que sea solo el mejor intento (sin garantía): la verdadera protección es la caja fuerte cifrada.";
+"Drag files here, or click Import. Files are encrypted into the vault; nothing is written elsewhere." = "Arrastra archivos aquí, o pulsa Importar. Los archivos se cifran en la caja fuerte; no se escribe nada en ningún otro sitio.";
+"Imported %lld; last error: %@" = "Importados %lld; último error: %@";
+"Imported 1 file." = "1 archivo importado.";
+"Imported %lld files." = "%lld archivos importados.";
+"Original securely erased (overwritten %lld× in place on a hard disk)." = "Original borrado de forma segura (sobrescrito %lld× en su sitio en un disco duro).";
+"Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "Original sobrescrito + eliminado, pero es un SSD: el nivelado de desgaste hace que las celdas puedan persistir. La verdadera protección es la caja fuerte cifrada, no el borrado.";
+"Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "Original sobrescrito + eliminado (tipo de almacenamiento desconocido; tratado como flash: sin garantía de borrado físico).";
+
+/* --- File viewer --- */
+"Save" = "Guardar";
+"Save the changes back into the encrypted vault. Nothing is written to disk." = "Guarda los cambios de nuevo en la caja fuerte cifrada. No se escribe nada en el disco.";
+"Edit" = "Editar";
+"Edit this text file in the app and save it back into the vault. Nothing is written to disk." = "Edita este archivo de texto en la app y guárdalo de nuevo en la caja fuerte. No se escribe nada en el disco.";
+"Export…" = "Exportar…";
+"Write a decrypted copy of this file to disk, outside the vault. Shows a warning first." = "Escribe en el disco una copia descifrada de este archivo, fuera de la caja fuerte. Muestra primero una advertencia.";
+"The vault isn’t open." = "La caja fuerte no está abierta.";
+
+/* --- Export warning --- */
+"Export a decrypted copy?" = "¿Exportar una copia descifrada?";
+"You are about to write the decrypted contents of “%@” to a regular file on disk. Once written, that file leaves Farewell's protection:" = "Estás a punto de escribir el contenido descifrado de « %@ » en un archivo normal del disco. Una vez escrito, ese archivo sale de la protección de Farewell:";
+"Spotlight will index its contents" = "Spotlight indexará su contenido";
+"QuickLook will cache a thumbnail" = "Vista rápida guardará una miniatura en caché";
+"Time Machine will back it up (if enabled)" = "Time Machine lo respaldará (si está activado)";
+"Apps that open it keep it in Recent Items" = "Las apps que lo abran lo guardarán en Elementos recientes";
+"Farewell can no longer track or recall it" = "Farewell ya no podrá rastrearlo ni recuperarlo";
+"Use the in-app viewer instead unless you genuinely need an external copy. For device-to-device transfer, Farewell-to-Farewell P2P (coming later) never writes cleartext to disk." = "Usa mejor el visor de la app salvo que realmente necesites una copia externa. Para transferir entre dispositivos, el P2P de Farewell a Farewell (próximamente) nunca escribe texto sin cifrar en el disco.";
+"Export anyway" = "Exportar de todos modos";
+"This file will be written UNENCRYPTED outside the vault." = "Este archivo se escribirá SIN CIFRAR fuera de la caja fuerte.";
+
+/* --- Migrate sheet --- */
+"Migrate / rotate vault" = "Migrar / rotar la caja fuerte";
+"Re-encrypts everything into a brand-new vault file with fresh keys (the same passphrase). Your files are copied and verified before anything is replaced; nothing is written to disk in the clear. The original is kept until you delete it." = "Vuelve a cifrar todo en un archivo de caja fuerte completamente nuevo con nuevas llaves (la misma frase de contraseña). Tus archivos se copian y verifican antes de reemplazar nada; no se escribe nada sin cifrar en el disco. El original se conserva hasta que lo elimines.";
+"New size" = "Nuevo tamaño";
+"Keep current capacity" = "Mantener la capacidad actual";
+"Shrink to fit contents" = "Reducir al tamaño del contenido";
+"Destination:" = "Destino:";
+"Needs about %@; %@ free here." = "Necesita unos %@; %@ libres aquí.";
+"This vault requires a YubiKey" = "Esta caja fuerte requiere una YubiKey";
+"Migrate" = "Migrar";
+"Use Folder" = "Usar esta carpeta";
+"Not enough space on %@: the new vault needs about %@ but only %@ is free. Choose “Shrink to fit” or a different drive." = "Espacio insuficiente en %@: la nueva caja fuerte necesita unos %@ pero solo hay %@ libres. Elige « Reducir al tamaño del contenido » u otro disco.";
+"A file named “%@” already exists in that folder. Pick another destination." = "Ya existe un archivo llamado « %@ » en esa carpeta. Elige otro destino.";
+"Migration failed: %@. Your original vault is unchanged." = "Falló la migración: %@. Tu caja fuerte original no ha cambiado.";
+"Migrated. The previous vault is kept as “%@” — delete it once you’ve confirmed this one works." = "Migrada. La caja fuerte anterior se conserva como « %@ »; elimínala cuando hayas confirmado que esta funciona.";
+"Migrated to %@. Your original vault is unchanged — delete it when ready." = "Migrada a %@. Tu caja fuerte original no ha cambiado; elimínala cuando quieras.";
+"Migration verified but the file swap failed: %@. Your original vault is unchanged." = "Migración verificada pero falló el intercambio de archivos: %@. Tu caja fuerte original no ha cambiado.";
+
+/* --- Create-vault rename notice --- */
+"“%@” already existed — created “%@” instead. A vault is never overwritten." = "« %@ » ya existía; se creó « %@ » en su lugar. Nunca se sobrescribe una caja fuerte.";
+
+/* --- Settings / About / auto-lock --- */
+"Auto-lock after inactivity:" = "Bloqueo automático tras inactividad:";
+"1 minute" = "1 minuto";
+"5 minutes" = "5 minutos";
+"15 minutes" = "15 minutos";
+"30 minutes" = "30 minutos";
+"Never" = "Nunca";
+"The vault always locks on system sleep and screen lock. Inactivity is measured system-wide." = "La caja fuerte siempre se bloquea al suspender el sistema y al bloquear la pantalla. La inactividad se mide en todo el sistema.";
+"About Farewell" = "Acerca de Farewell";
+"sleep" = "suspensión";
+"screen lock" = "bloqueo de pantalla";
+"inactivity" = "inactividad";
+"Vault locked automatically (%@). Unlock to continue." = "Caja fuerte bloqueada automáticamente (%@). Desbloquea para continuar.";
+
+/* --- Import failure reasons --- */
+"vault not open" = "caja fuerte no abierta";
+"empty name" = "nombre vacío";
+"cannot stat %@" = "no se puede analizar %@";
+"cannot read %@" = "no se puede leer %@";
+"“%@” is %@ but only %@ is free in this level." = "« %@ » ocupa %@ pero solo hay %@ libres en este nivel.";
+"Not enough space: the edit needs %@ but only %@ is available." = "Espacio insuficiente: la edición necesita %@ pero solo hay %@ disponibles.";
+
+/* --- Context menus & viewer states --- */
+"Clear search" = "Borrar búsqueda";
+"Rename…" = "Renombrar…";
+"Rename folder…" = "Renombrar carpeta…";
+"New subfolder…" = "Nueva subcarpeta…";
+"Move to top level" = "Mover al nivel superior";
+"Delete folder" = "Eliminar carpeta";
+"Passes" = "Pasadas";
+"Select a file to view it." = "Selecciona un archivo para verlo.";
+"Cannot preview" = "No se puede previsualizar";
+"Failed to load" = "Error al cargar";
+"Fullscreen (Esc to exit)" = "Pantalla completa (Esc para salir)";
+"Copy this Mac’s serial number" = "Copiar el número de serie de este Mac";
+
+/* --- Clé matérielle initiale + clarté clé de secours (ajout) --- */
+"Adding a backup happens in two steps — and the order matters:" = "Añadir una llave de respaldo se hace en dos pasos — y el orden importa:";
+"**1.** First insert your **current key** (the one that already opens this vault) and touch it — **not the new key yet**." = "**1.** Primero inserta tu **llave actual** (la que ya abre esta caja fuerte) y tócala — **aún no la nueva llave**.";
+"**2.** Only then, when asked, swap to the **new backup key** and touch it twice." = "**2.** Solo entonces, cuando se te pida, cambia a la **nueva llave de respaldo** y tócala dos veces.";
+"Either key will then open the vault. Keep the backup somewhere safe and separate — there's no recovery if you lose every key." = "Después, cualquiera de las dos llaves abrirá la caja fuerte. Guarda la de respaldo en un lugar seguro y aparte — no hay recuperación si pierdes todas las llaves.";
+"Enter your passphrase to add a hardware key." = "Introduce tu frase de contraseña para añadir una llave física.";
+"Adding your hardware key…" = "Añadiendo tu llave física…";
+"Enrolling your hardware key…" = "Registrando tu llave física…";
+"Hardware key enrolled. This vault now needs that key plus your passphrase to open. Enrol a backup key too — lose your only key and the vault is gone, with no recovery." = "Llave física registrada. Ahora esta caja fuerte necesita esa llave más tu frase de contraseña para abrirse. Registra también una llave de respaldo — si pierdes tu única llave, la caja fuerte se pierde, sin recuperación.";
+"Hardware key enrolled. Unlock again to continue." = "Llave física registrada. Vuelve a desbloquear para continuar.";
+"Could not add the hardware key: %@. Your vault is unchanged." = "No se pudo añadir la llave física: %@. Tu caja fuerte no ha cambiado.";
+"Touch your new key now" = "Toca tu nueva llave ahora";

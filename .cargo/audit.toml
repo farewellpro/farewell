@@ -1,0 +1,20 @@
+# cargo-audit configuration.
+#
+# Run with:  cargo audit
+#
+# Each ignored advisory MUST carry a written justification. Ignores are for
+# informational advisories (e.g. "unmaintained") on transitive, build-time-only
+# dependencies that we cannot fix ourselves and that do not ship in the binary.
+# A genuine vulnerability is never ignored — it is fixed or the dependency is
+# dropped.
+
+[advisories]
+ignore = [
+    # proc-macro-error2 is "unmaintained" (informational, not a vulnerability).
+    # It is a COMPILE-TIME proc-macro pulled transitively by libcrux's
+    # `hax-lib-macros` (the formally-verified ML-KEM/ML-DSA tooling). It does
+    # not appear in the shipped binary. We do not control libcrux's macro
+    # dependencies; this will clear when libcrux updates its hax toolchain.
+    # Re-evaluate at each libcrux bump.
+    "RUSTSEC-2026-0173",
+]

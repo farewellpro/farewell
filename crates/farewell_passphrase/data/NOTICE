@@ -1,0 +1,18 @@
+eff_large_wordlist.txt
+======================
+
+Derived from the Electronic Frontier Foundation's "EFF Large Wordlist
+for Passphrases" (eff_large_wordlist.txt), published 2016-07-18 at
+https://www.eff.org/dice .
+
+Original work © Electronic Frontier Foundation, licensed under the
+Creative Commons Attribution 3.0 United States license (CC-BY-3.0-US):
+https://creativecommons.org/licenses/by/3.0/us/
+
+Modification: the original file pairs each word with a five-digit dice
+index ("11111<TAB>abacus"); this copy keeps only the word column, one
+word per line, lowercased and de-duplicated.
+
+This NOTICE satisfies the CC-BY attribution requirement. The rest of the
+Farewell project is licensed GPL-3.0-or-later; this third-party data file
+retains its CC-BY-3.0 license.

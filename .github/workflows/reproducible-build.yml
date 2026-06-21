@@ -1,0 +1,103 @@
+name: Reproducible build
+
+# This workflow enforces the reproducibility guarantee promised in
+# CHARTER §7.2: a third party with the same source and the same
+# toolchain MUST be able to obtain a byte-identical binary.
+#
+# It builds the `farewell` CLI twice in two separate working
+# directories with deterministic settings, computes the SHA-256 of
+# each binary, and fails if the two differ.
+#
+# On a tagged release, the resulting hash is published in the release
+# advisory. Anyone can run `scripts/verify-reproducible.sh` locally to
+# reproduce the hash and confirm the official binary is unmodified.
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+# Cancel a running build if a newer commit lands on the same ref.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  reproducible-linux:
+    name: Linux x86_64
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Make sure rust-toolchain.toml + Cargo.lock are present.
+          persist-credentials: false
+
+      - name: Install pinned toolchain
+        # The rust-toolchain.toml file pins the exact version. Just
+        # invoking rustc/cargo here triggers rustup to install it.
+        run: |
+          rustup show active-toolchain || true
+          cargo --version
+          rustc --version
+
+      - name: Run verify-reproducible.sh
+        run: |
+          ./scripts/verify-reproducible.sh
+
+      - name: Publish verified binary + hash as build artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: farewell-linux-x86_64
+          path: |
+            target/release/farewell
+            target/release/farewell.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+  reproducible-macos:
+    name: macOS arm64
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install pinned toolchain
+        run: |
+          rustup show active-toolchain || true
+          cargo --version
+          rustc --version
+
+      - name: Run verify-reproducible.sh
+        run: |
+          ./scripts/verify-reproducible.sh
+
+      - name: Publish verified binary + hash as build artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: farewell-macos-arm64
+          path: |
+            target/release/farewell
+            target/release/farewell.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+  test-suite:
+    name: Test suite (must pass for the release to be cut)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run all tests
+        run: cargo test --workspace --quiet

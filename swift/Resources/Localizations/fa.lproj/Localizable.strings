@@ -1,0 +1,325 @@
+/* ===================================================================
+   Farewell — English base strings (the development language).
+   Keys are the English source text; values here mirror them.
+   Organised screen by screen as localization rolls out.
+   =================================================================== */
+
+/* --- Open / Create / Unlock screen --- */
+"Open vault" = "باز کردن گاوصندوق";
+"Create vault" = "ایجاد گاوصندوق";
+"Licensed to %@" = "دارای مجوز برای %@";
+"Not activated" = "فعال نشده";
+"Manage license…" = "مدیریت مجوز…";
+
+/* Open form */
+"Vault path" = "مسیر گاوصندوق";
+"Choose…" = "انتخاب…";
+"Passphrase" = "عبارت عبور";
+"Using a hardware key with a PIN?" = "از کلید سخت‌افزاری با رمز PIN استفاده می‌کنید؟";
+"YubiKey PIN" = "رمز PIN کلید YubiKey";
+"Leave the PIN blank if your key has none. You'll be asked to touch the key if this vault requires it." = "اگر کلیدتان رمز PIN ندارد، آن را خالی بگذارید. اگر این گاوصندوق نیاز داشته باشد، از شما خواسته می‌شود کلید را لمس کنید.";
+"Unlock" = "باز کردن قفل";
+"No vault at this path. Check the location, or use Choose…." = "هیچ گاوصندوقی در این مسیر نیست. مکان را بررسی کنید، یا از «انتخاب…» استفاده کنید.";
+
+/* --- Manage-license sheet --- */
+"License" = "مجوز";
+"Paste the license key you received by email, then Activate. Everything is verified locally — Farewell never contacts a server." = "کلید مجوزی را که با ایمیل دریافت کرده‌اید بچسبانید، سپس «فعال‌سازی» را بزنید. همه چیز به‌صورت محلی بررسی می‌شود — Farewell هرگز با هیچ سروری تماس نمی‌گیرد.";
+"Open file…" = "باز کردن فایل…";
+"Close" = "بستن";
+"Activate" = "فعال‌سازی";
+"Licensed to %@ — %@" = "دارای مجوز برای %@ — %@";
+"Not activated on this Mac" = "روی این Mac فعال نشده";
+
+/* License tiers (typeName) */
+"Standard" = "استاندارد";
+"Family" = "خانوادگی";
+"Education" = "آموزشی";
+"Business" = "تجاری";
+"At-risk grant" = "مجوز همبستگی";
+
+/* License verdict notes */
+"Paste your license key first." = "ابتدا کلید مجوز خود را بچسبانید.";
+"Couldn't read the license input." = "خواندن ورودی مجوز ممکن نشد.";
+"Activated. Thank you for supporting Farewell." = "فعال شد. از حمایت شما از Farewell سپاسگزاریم.";
+"No license installed." = "هیچ مجوزی نصب نشده است.";
+"This key isn’t valid for this build (wrong key, or the key was altered)." = "این کلید برای این نسخه معتبر نیست (کلید نادرست، یا کلید تغییر داده شده).";
+"This license is for a different major version of Farewell." = "این مجوز برای نسخهٔ اصلی دیگری از Farewell است.";
+"This license isn’t authorized for this Mac. A free re-issue is available — see farewell.pro/license-policy." = "این مجوز برای این Mac مجاز نیست. صدور مجدد رایگان در دسترس است — به farewell.pro/license-policy مراجعه کنید.";
+"That doesn’t look like a valid license key." = "این مانند یک کلید مجوز معتبر به نظر نمی‌رسد.";
+"Couldn’t verify (couldn’t read this Mac’s serial number)." = "تأیید ممکن نشد (خواندن شمارهٔ سریال این Mac ممکن نشد).";
+"Unknown license state." = "وضعیت مجوز ناشناخته.";
+
+/* --- Create-vault form --- */
+"New vault path (…/my.vault)" = "مسیر گاوصندوق جدید (…/my.vault)";
+"Capacity" = "ظرفیت";
+"size" = "اندازه";
+"MB" = "مگابایت";
+"Choose any size you want (e.g. 64, 512, 4096…). The vault file is always exactly this size on disk, no matter how much you store — that's part of the deniability." = "هر اندازه‌ای که می‌خواهید انتخاب کنید (مثلاً ۶۴، ۵۱۲، ۴۰۹۶…). فایل گاوصندوق همیشه دقیقاً همین اندازه روی دیسک جا می‌گیرد، فارغ از مقدار ذخیره‌شده — و این بخشی از انکارپذیری است.";
+"Generated (recommended)" = "تولیدشده (توصیه‌شده)";
+"My own" = "مال خودم";
+"There is no recovery, and there is no self-destruct: the file looks like random data and your passphrase is the ONLY thing protecting it. That is why it must be strong — and why you must not lose it." = "هیچ بازیابی‌ای وجود ندارد و هیچ خود‌نابودسازی‌ای نیست: فایل مانند دادهٔ تصادفی به نظر می‌رسد و عبارت عبور شما تنها چیزی است که از آن محافظت می‌کند. به همین دلیل باید قوی باشد — و به همین دلیل نباید آن را گم کنید.";
+"Also require a YubiKey (hardware key)" = "همچنین یک YubiKey (کلید سخت‌افزاری) لازم باشد";
+"YubiKey PIN (leave blank if none)" = "رمز PIN کلید YubiKey (اگر ندارد خالی بگذارید)";
+"Also enrol a backup key now" = "همچنین اکنون یک کلید پشتیبان ثبت کنید";
+"You'll enrol the keys one at a time: insert the first key and touch it, then swap to the second when asked. Either key will open the vault — keep the backup somewhere safe and separate." = "کلیدها را یکی‌یکی ثبت می‌کنید: کلید اول را وارد کرده و لمس کنید، سپس هنگام درخواست به کلید دوم تغییر دهید. هر یک از دو کلید گاوصندوق را باز می‌کند — کلید پشتیبان را در جایی امن و جدا نگه دارید.";
+"You'll be asked to TOUCH the key to enrol it. Then a copy of this vault can't be brute-forced without the physical key. Lose your only key and the vault is gone — there is no recovery, so a backup key is recommended." = "از شما خواسته می‌شود برای ثبت، کلید را لمس کنید. پس از آن نمی‌توان نسخه‌ای از این گاوصندوق را بدون کلید فیزیکی شکست. اگر تنها کلیدتان را گم کنید، گاوصندوق از دست می‌رود — هیچ بازیابی‌ای نیست، پس داشتن کلید پشتیبان توصیه می‌شود.";
+"Record my identity in this vault" = "هویت من را در این گاوصندوق ثبت کن";
+"Stores “%@” inside the encrypted vault — visible only after unlock. ⚠︎ This ATTRIBUTES the vault to you if it is ever decrypted. Leave OFF if you need deniability." = "« %@ » را داخل گاوصندوق رمزگذاری‌شده ذخیره می‌کند — فقط پس از باز کردن قفل دیده می‌شود. ⚠︎ این کار در صورت رمزگشایی روزی، گاوصندوق را به شما نسبت می‌دهد. اگر به انکارپذیری نیاز دارید، آن را خاموش بگذارید.";
+"Activate a license first to record your identity." = "ابتدا یک مجوز فعال کنید تا هویتتان ثبت شود.";
+"Create and open" = "ایجاد و باز کردن";
+"Creating a vault needs an active license. Activate one with “Manage license…” below. (Opening existing vaults always works.)" = "ایجاد گاوصندوق به یک مجوز فعال نیاز دارد. یکی را از طریق «مدیریت مجوز…» در پایین فعال کنید. (باز کردن گاوصندوق‌های موجود همیشه کار می‌کند.)";
+"Choose where to save the vault (Choose…)." = "انتخاب کنید گاوصندوق کجا ذخیره شود («انتخاب…»).";
+"Generate a passphrase." = "یک عبارت عبور تولید کنید.";
+"Tick the box confirming you saved the passphrase." = "کادر را علامت بزنید تا تأیید کنید عبارت عبور را ذخیره کرده‌اید.";
+"Enter a passphrase." = "یک عبارت عبور وارد کنید.";
+"Passphrases don't match." = "عبارت‌های عبور با هم مطابقت ندارند.";
+"Passphrase must reach “Very strong” (4/4)." = "عبارت عبور باید به «بسیار قوی» (۴/۴) برسد.";
+"Regenerate" = "تولید مجدد";
+"≈ 129 bits — 10 random words" = "≈ ۱۲۹ بیت — ۱۰ واژهٔ تصادفی";
+"I have written this passphrase down somewhere safe" = "این عبارت عبور را در جایی امن نوشته‌ام";
+"Confirm passphrase" = "عبارت عبور را تأیید کنید";
+"Must reach “Very strong” (4/4). Tip: 5+ random, unrelated words beat any short clever password." = "باید به «بسیار قوی» (۴/۴) برسد. نکته: ۵ واژهٔ تصادفی و بی‌ارتباط یا بیشتر، بهتر از هر گذرواژهٔ کوتاه و باهوشانه است.";
+"Choose Folder" = "انتخاب پوشه";
+"Choose the folder for the new vault. You'll set its name back in the Farewell window. An existing vault is never overwritten." = "پوشهٔ گاوصندوق جدید را انتخاب کنید. نام آن را در پنجرهٔ Farewell تعیین می‌کنید. هیچ گاوصندوق موجودی هرگز بازنویسی نمی‌شود.";
+
+/* --- Error messages (humanError) --- */
+"OK (unexpected)" = "تأیید (غیرمنتظره)";
+"Invalid argument" = "آرگومان نامعتبر";
+"Not found" = "یافت نشد";
+"Couldn't read the vault file (missing or unreadable)." = "خواندن فایل گاوصندوق ممکن نشد (موجود نیست یا قابل خواندن نیست).";
+"This vault is already open in another window or process." = "این گاوصندوق هم‌اکنون در پنجره یا فرایند دیگری باز است.";
+"Vault has been wiped — contents unrecoverable" = "گاوصندوق پاک شده است — محتوا غیرقابل بازیابی است";
+"Couldn't open it. Check the passphrase — and, if this vault uses a YubiKey, that it's plugged in and you entered its PIN." = "باز کردن آن ممکن نشد. عبارت عبور را بررسی کنید — و اگر این گاوصندوق از YubiKey استفاده می‌کند، مطمئن شوید متصل است و رمز PIN آن را وارد کرده‌اید.";
+"Vault header has been tampered with" = "سرآیند گاوصندوق دستکاری شده است";
+"Counter rollback detected" = "بازگشت شمارنده شناسایی شد";
+"Passphrase too weak — use a stronger or generated one" = "عبارت عبور بسیار ضعیف است — از یکی قوی‌تر یا تولیدشده استفاده کنید";
+"No YubiKey detected — plug it in and try again." = "هیچ YubiKey شناسایی نشد — آن را متصل کنید و دوباره تلاش کنید.";
+"YubiKey check failed — wrong PIN, or it wasn't touched in time." = "بررسی YubiKey ناموفق بود — رمز PIN نادرست، یا به‌موقع لمس نشد.";
+"More than one key is plugged in. With a PIN, please leave only the key you're unlocking with plugged in (trying a PIN on the wrong key can lock it), then try again." = "بیش از یک کلید متصل است. هنگام استفاده از رمز PIN، لطفاً فقط همان کلیدی را که با آن قفل را باز می‌کنید متصل بگذارید (آزمودن رمز PIN روی کلید نادرست می‌تواند آن را قفل کند)، سپس دوباره تلاش کنید.";
+"Not a Farewell vault file" = "فایل گاوصندوق Farewell نیست";
+"Vault uses a format this build cannot read" = "گاوصندوق از قالبی استفاده می‌کند که این نسخه نمی‌تواند بخواند";
+
+/* --- Keys-management panel --- */
+"Keys" = "کلیدها";
+"Hardware-key management." = "مدیریت کلیدهای سخت‌افزاری.";
+"Vault passphrase" = "عبارت عبور گاوصندوق";
+"Current key's PIN (leave blank if no PIN or no key)" = "رمز PIN کلید کنونی (اگر رمز PIN یا کلیدی ندارید خالی بگذارید)";
+"Cancel" = "لغو";
+"Show keys" = "نمایش کلیدها";
+"Reading keys…" = "در حال خواندن کلیدها…";
+"Done" = "انجام شد";
+"Passphrase-only — no hardware key enrolled." = "فقط عبارت عبور — هیچ کلید سخت‌افزاری ثبت نشده است.";
+"Only one key opens this vault. **Lose it and the vault is gone forever — there is no recovery.** Enrol a backup key below so either key works." = "فقط یک کلید این گاوصندوق را باز می‌کند. **آن را گم کنید و گاوصندوق برای همیشه از دست می‌رود — هیچ بازیابی‌ای نیست.** در پایین یک کلید پشتیبان ثبت کنید تا هر دو کار کنند.";
+"Key %lld" = "کلید %lld";
+"Remove (last)" = "حذف (آخرین)";
+"Revoke" = "ابطال";
+"Revoke this key?" = "این کلید ابطال شود؟";
+"It will no longer open this vault; the other keys still will. Revoking uses only your passphrase, then you'll touch a remaining key once to reopen the vault." = "دیگر این گاوصندوق را باز نخواهد کرد؛ کلیدهای دیگر همچنان باز می‌کنند. ابطال فقط از عبارت عبور شما استفاده می‌کند، سپس یک‌بار یک کلید باقی‌مانده را لمس می‌کنید تا گاوصندوق دوباره باز شود.";
+"Remove your last key?" = "آخرین کلید خود را حذف می‌کنید؟";
+"Remove last key" = "حذف آخرین کلید";
+"This turns the vault back into passphrase-only: the passphrase alone will open it, and opening becomes slower again (by design). Insert the key now — you'll touch it once so it can be safely removed." = "این گاوصندوق را به حالت فقط‌عبارت‌عبور بازمی‌گرداند: تنها عبارت عبور آن را باز می‌کند، و باز کردن دوباره کندتر می‌شود (به‌عمد). اکنون کلید را وارد کنید — یک‌بار آن را لمس می‌کنید تا بتوان آن را با ایمنی حذف کرد.";
+"Add a hardware key" = "افزودن کلید سخت‌افزاری";
+"Add a backup key" = "افزودن کلید پشتیبان";
+"Require a physical key (plus your passphrase) to open this vault. Insert the new key and touch it twice to enrol." = "برای باز کردن این گاوصندوق یک کلید فیزیکی (به‌علاوهٔ عبارت عبور) لازم بدار. کلید جدید را وارد کنید و دوبار لمس کنید تا ثبت شود.";
+"Enrol another key so any enrolled key opens this vault. Insert your current key and touch it, then swap to the new key and touch it twice. Keep the backup safe and separate — there's no recovery if you lose every key." = "کلید دیگری ثبت کنید تا هر کلید ثبت‌شده این گاوصندوق را باز کند. کلید کنونی را وارد کرده و لمس کنید، سپس به کلید جدید تغییر دهید و دوبار لمس کنید. کلید پشتیبان را امن و جدا نگه دارید — اگر همهٔ کلیدها را گم کنید هیچ بازیابی‌ای نیست.";
+"Set/enter this key's PIN (leave blank if none)" = "رمز PIN این کلید را تنظیم/وارد کنید (اگر ندارد خالی بگذارید)";
+"New key's PIN (leave blank if none)" = "رمز PIN کلید جدید (اگر ندارد خالی بگذارید)";
+"Name (optional)" = "نام (اختیاری)";
+"Add key…" = "افزودن کلید…";
+"Add backup…" = "افزودن پشتیبان…";
+"This vault already has the maximum of %lld keys." = "این گاوصندوق هم‌اکنون بیشینهٔ تعداد کلیدها یعنی %lld را دارد.";
+"Working…" = "در حال انجام…";
+"Follow the prompts on your key — insert, swap, and touch as asked. Don't unplug a key unless you're told to." = "دستورهای روی کلید خود را دنبال کنید — طبق درخواست وارد کنید، تغییر دهید و لمس کنید. تا زمانی که گفته نشده، هیچ کلیدی را جدا نکنید.";
+
+/* --- Key-operation prompts (insert / remove / touch) --- */
+"Insert your YubiKey…" = "کلید YubiKey خود را وارد کنید…";
+"Insert your CURRENT key (the one that already opens this vault)…" = "کلید کنونی خود را وارد کنید (همانی که هم‌اکنون این گاوصندوق را باز می‌کند)…";
+"Now insert the NEW backup key…" = "اکنون کلید پشتیبان جدید را وارد کنید…";
+"Insert key %lld of %lld…" = "کلید %lld از %lld را وارد کنید…";
+"Insert the key you're removing…" = "کلیدی را که حذف می‌کنید وارد کنید…";
+"Remove your current key, then insert the NEW backup key…" = "کلید کنونی خود را جدا کنید، سپس کلید پشتیبان جدید را وارد کنید…";
+"Remove that key, then insert the next one…" = "آن کلید را جدا کنید، سپس کلید بعدی را وارد کنید…";
+" — touch %lld of %lld" = " — لمس %lld از %lld";
+"Key %lld of %lld: touch it now" = "کلید %lld از %lld: اکنون آن را لمس کنید";
+"Touch your YubiKey now" = "اکنون YubiKey خود را لمس کنید";
+"Touch your CURRENT key now — not the new one yet" = "اکنون کلید کنونی خود را لمس کنید — نه کلید جدید را";
+"Touch the new backup key now" = "اکنون کلید پشتیبان جدید را لمس کنید";
+"Touch the key to remove it" = "کلید را لمس کنید تا حذف شود";
+
+/* --- Key-operation status messages --- */
+"Backup key enrolled. Either key now opens this vault — keep the backup somewhere safe and separate. There is still no recovery if you lose both." = "کلید پشتیبان ثبت شد. اکنون هر یک از دو کلید این گاوصندوق را باز می‌کند — کلید پشتیبان را امن و جدا نگه دارید. اگر هر دو را گم کنید، همچنان هیچ بازیابی‌ای نیست.";
+"Backup key enrolled. Unlock again to continue." = "کلید پشتیبان ثبت شد. برای ادامه دوباره قفل را باز کنید.";
+"Could not add the backup key: %@. Your vault is unchanged." = "افزودن کلید پشتیبان ممکن نشد: %@. گاوصندوق شما تغییری نکرده است.";
+"Enter your passphrase to add a backup key." = "برای افزودن کلید پشتیبان، عبارت عبور خود را وارد کنید.";
+"Could not read keys: %@." = "خواندن کلیدها ممکن نشد: %@.";
+"Key revoked — it no longer opens this vault. Unlock again to continue." = "کلید ابطال شد — دیگر این گاوصندوق را باز نمی‌کند. برای ادامه دوباره قفل را باز کنید.";
+"Could not revoke the key: %@. Your vault is unchanged." = "ابطال کلید ممکن نشد: %@. گاوصندوق شما تغییری نکرده است.";
+"Enter your passphrase to remove a key." = "برای حذف یک کلید، عبارت عبور خود را وارد کنید.";
+"Enter your passphrase to remove the last key." = "برای حذف آخرین کلید، عبارت عبور خود را وارد کنید.";
+"Last key removed. This vault now opens with the passphrase alone — and opening is slower again, by design." = "آخرین کلید حذف شد. اکنون این گاوصندوق فقط با عبارت عبور باز می‌شود — و باز کردن دوباره کندتر است، به‌عمد.";
+"Last key removed. Unlock again with your passphrase." = "آخرین کلید حذف شد. دوباره با عبارت عبور خود قفل را باز کنید.";
+"Could not remove the last key: %@. Your vault is unchanged." = "حذف آخرین کلید ممکن نشد: %@. گاوصندوق شما تغییری نکرده است.";
+
+/* --- Busy / progress messages --- */
+"Copying files into the new vault…" = "در حال کپی فایل‌ها در گاوصندوق جدید…";
+"Verifying the new vault…" = "در حال بررسی گاوصندوق جدید…";
+"Preparing the new vault…" = "در حال آماده‌سازی گاوصندوق جدید…";
+"Removing the key — re-securing the vault…" = "در حال حذف کلید — در حال ایمن‌سازی دوبارهٔ گاوصندوق…";
+"Adding your backup key…" = "در حال افزودن کلید پشتیبان شما…";
+"Creating your Farewell vault…" = "در حال ایجاد گاوصندوق Farewell شما…";
+"Unlocking…\nThis takes a few seconds." = "در حال باز کردن قفل…\nاین چند ثانیه طول می‌کشد.";
+"Touch your key now — it should be blinking." = "اکنون کلید خود را لمس کنید — باید در حال چشمک زدن باشد.";
+"Enrolling backup key…" = "در حال ثبت کلید پشتیبان…";
+"Removing the last key…" = "در حال حذف آخرین کلید…";
+"Enrolling your key…" = "در حال ثبت کلید شما…";
+"Creating vault…" = "در حال ایجاد گاوصندوق…";
+"Migrating… touch your YubiKey when it blinks." = "در حال انتقال… هنگامی که YubiKey چشمک زد آن را لمس کنید.";
+
+/* --- Vault window header / toolbar --- */
+"Migrate…" = "انتقال…";
+"Keys…" = "کلیدها…";
+"Lock" = "قفل کردن";
+"Discard" = "دور انداختن";
+"Dismiss" = "پنهان کردن";
+"1 key — add a backup" = "۱ کلید — یک پشتیبان اضافه کنید";
+"Re-encrypt this vault into a fresh file (new keys, or a smaller size). Used to rotate keys or upgrade the format. The original is kept until you confirm." = "این گاوصندوق را در فایلی تازه دوباره رمزگذاری می‌کند (کلیدهای جدید، یا اندازهٔ کوچک‌تر). برای چرخش کلیدها یا ارتقای قالب استفاده می‌شود. نسخهٔ اصلی تا زمان تأیید شما نگه داشته می‌شود.";
+"Add a hardware key so a physical key is required to open this vault — or just review that it's passphrase-only." = "یک کلید سخت‌افزاری اضافه کنید تا برای باز کردن این گاوصندوق یک کلید فیزیکی لازم شود — یا فقط بررسی کنید که فقط با عبارت عبور است.";
+"Name, add, or revoke the hardware keys that open this vault (%lld of %lld enrolled), or convert back to passphrase-only." = "کلیدهای سخت‌افزاری‌ای را که این گاوصندوق را باز می‌کنند نام‌گذاری، اضافه یا ابطال کنید (%lld از %lld ثبت‌شده)، یا به حالت فقط‌عبارت‌عبور بازگردید.";
+"This vault has only one hardware key. Lose it and the vault is gone — enrol a backup key." = "این گاوصندوق فقط یک کلید سخت‌افزاری دارد. آن را گم کنید و گاوصندوق از دست می‌رود — یک کلید پشتیبان ثبت کنید.";
+"This vault records its creator's identity (opt-in)." = "این گاوصندوق هویت سازندهٔ خود را ثبت می‌کند (اختیاری).";
+"%@ free of %@" = "%@ آزاد از %@";
+"counter %llu" = "شمارنده %llu";
+"%lld hardware keys" = "%lld کلید سخت‌افزاری";
+"created by %@" = "ساخته‌شده توسط %@";
+"An interrupted migration left “%@”. Your vault is intact." = "یک انتقال نیمه‌تمام « %@ » را باقی گذاشت. گاوصندوق شما سالم است.";
+
+/* --- File list / folders --- */
+"This vault contains no files." = "این گاوصندوق هیچ فایلی ندارد.";
+"Drag files here, or use Import below." = "فایل‌ها را به اینجا بکشید، یا از «وارد کردن» در پایین استفاده کنید.";
+"Search files…" = "جستجوی فایل‌ها…";
+"No file matches “%@”." = "هیچ فایلی با « %@ » مطابقت ندارد.";
+"Drop to import into the vault" = "برای وارد کردن به گاوصندوق رها کنید";
+"New folder" = "پوشهٔ جدید";
+"New folder in “%@”" = "پوشهٔ جدید در « %@ »";
+"Import…" = "وارد کردن…";
+"Delete" = "حذف";
+"Rename" = "تغییر نام";
+
+/* --- File / folder dialogs --- */
+"Delete this file?" = "این فایل حذف شود؟";
+"“%@” will be permanently removed and its encrypted chunks securely shredded. This cannot be undone — there is no recovery, by design." = "« %@ » برای همیشه حذف و قطعه‌های رمزگذاری‌شدهٔ آن با ایمنی خرد می‌شوند. این عمل بازگشت‌پذیر نیست — هیچ بازیابی‌ای نیست، به‌عمد.";
+"Delete this folder?" = "این پوشه حذف شود؟";
+"“%@” and ALL its contents will be permanently removed and securely shredded. This cannot be undone." = "« %@ » و همهٔ محتوای آن برای همیشه حذف و با ایمنی خرد می‌شوند. این عمل بازگشت‌پذیر نیست.";
+"Folder name" = "نام پوشه";
+"Create" = "ایجاد";
+"Rename file" = "تغییر نام فایل";
+"Renaming “%@”. The encrypted content is unchanged; only the name in the manifest is updated." = "در حال تغییر نام « %@ ». محتوای رمزگذاری‌شده تغییر نمی‌کند؛ فقط نام در فهرست به‌روزرسانی می‌شود.";
+"New name" = "نام جدید";
+
+/* --- Import bar --- */
+"New note" = "یادداشت جدید";
+"Create a new empty note and open it in the editor. It lives only inside the encrypted vault." = "یک یادداشت خالی جدید بسازید و در ویرایشگر باز کنید. فقط درون گاوصندوق رمزگذاری‌شده وجود دارد.";
+"1 pass" = "۱ گذر";
+"3 passes" = "۳ گذر";
+"7 passes" = "۷ گذر";
+"Overwrite passes. 1 is enough on any modern drive; 3/7 exist only for standards that mandate them and add nothing on an SSD." = "گذرهای بازنویسی. روی هر دیسک امروزی ۱ گذر کافی است؛ ۳/۷ فقط برای استانداردهایی وجود دارند که آن‌ها را الزامی می‌کنند و روی SSD چیزی نمی‌افزایند.";
+"Shred originals" = "خرد کردن نسخه‌های اصلی";
+"After importing, securely overwrite and delete the source file. On a hard disk this physically erases it; on an SSD wear-leveling means it's best-effort only (no guarantee) — the real protection is the encrypted vault." = "پس از وارد کردن، فایل مبدأ را با ایمنی بازنویسی و حذف کن. روی دیسک سخت این کار آن را به‌صورت فیزیکی پاک می‌کند؛ روی SSD به‌دلیل توزیع فرسایش، فقط بهترین تلاش است (بدون تضمین) — محافظت واقعی همان گاوصندوق رمزگذاری‌شده است.";
+"Drag files here, or click Import. Files are encrypted into the vault; nothing is written elsewhere." = "فایل‌ها را به اینجا بکشید، یا «وارد کردن» را بزنید. فایل‌ها درون گاوصندوق رمزگذاری می‌شوند؛ هیچ چیز جای دیگری نوشته نمی‌شود.";
+"Imported %lld; last error: %@" = "%lld مورد وارد شد؛ آخرین خطا: %@";
+"Imported 1 file." = "۱ فایل وارد شد.";
+"Imported %lld files." = "%lld فایل وارد شد.";
+"Original securely erased (overwritten %lld× in place on a hard disk)." = "نسخهٔ اصلی با ایمنی پاک شد (روی دیسک سخت %lld× در جای خود بازنویسی شد).";
+"Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "نسخهٔ اصلی بازنویسی + حذف شد — اما این یک SSD است: به‌دلیل توزیع فرسایش ممکن است سلول‌ها باقی بمانند. محافظت واقعی همان گاوصندوق رمزگذاری‌شده است، نه پاک کردن.";
+"Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "نسخهٔ اصلی بازنویسی + حذف شد (نوع حافظه ناشناخته؛ به‌عنوان فلش در نظر گرفته شد — بدون تضمین پاک‌سازی فیزیکی).";
+
+/* --- File viewer --- */
+"Save" = "ذخیره";
+"Save the changes back into the encrypted vault. Nothing is written to disk." = "تغییرات را دوباره در گاوصندوق رمزگذاری‌شده ذخیره کن. هیچ چیز روی دیسک نوشته نمی‌شود.";
+"Edit" = "ویرایش";
+"Edit this text file in the app and save it back into the vault. Nothing is written to disk." = "این فایل متنی را در برنامه ویرایش کنید و دوباره در گاوصندوق ذخیره کنید. هیچ چیز روی دیسک نوشته نمی‌شود.";
+"Export…" = "برون‌بری…";
+"Write a decrypted copy of this file to disk, outside the vault. Shows a warning first." = "یک نسخهٔ رمزگشایی‌شده از این فایل را روی دیسک، بیرون از گاوصندوق بنویس. ابتدا یک هشدار نشان می‌دهد.";
+"The vault isn’t open." = "گاوصندوق باز نیست.";
+
+/* --- Export warning --- */
+"Export a decrypted copy?" = "یک نسخهٔ رمزگشایی‌شده برون‌بری شود؟";
+"You are about to write the decrypted contents of “%@” to a regular file on disk. Once written, that file leaves Farewell's protection:" = "شما در آستانهٔ نوشتن محتوای رمزگشایی‌شدهٔ « %@ » در یک فایل عادی روی دیسک هستید. پس از نوشتن، آن فایل از محافظت Farewell خارج می‌شود:";
+"Spotlight will index its contents" = "Spotlight محتوای آن را فهرست می‌کند";
+"QuickLook will cache a thumbnail" = "QuickLook یک تصویر بندانگشتی را موقتاً ذخیره می‌کند";
+"Time Machine will back it up (if enabled)" = "Time Machine از آن نسخهٔ پشتیبان می‌گیرد (اگر فعال باشد)";
+"Apps that open it keep it in Recent Items" = "برنامه‌هایی که آن را باز می‌کنند، آن را در «موارد اخیر» نگه می‌دارند";
+"Farewell can no longer track or recall it" = "Farewell دیگر نمی‌تواند آن را ردیابی یا بازفراخوانی کند";
+"Use the in-app viewer instead unless you genuinely need an external copy. For device-to-device transfer, Farewell-to-Farewell P2P (coming later) never writes cleartext to disk." = "به‌جای آن از نمایشگر درون‌برنامه‌ای استفاده کنید مگر اینکه واقعاً به یک نسخهٔ بیرونی نیاز داشته باشید. برای انتقال دستگاه‌به‌دستگاه، قابلیت همتا‌به‌همتای Farewell-به-Farewell (به‌زودی) هرگز متن رمزگشایی‌نشده را روی دیسک نمی‌نویسد.";
+"Export anyway" = "به‌هرحال برون‌بری کن";
+"This file will be written UNENCRYPTED outside the vault." = "این فایل به‌صورت رمزگذاری‌نشده بیرون از گاوصندوق نوشته خواهد شد.";
+
+/* --- Migrate sheet --- */
+"Migrate / rotate vault" = "انتقال / چرخش کلیدهای گاوصندوق";
+"Re-encrypts everything into a brand-new vault file with fresh keys (the same passphrase). Your files are copied and verified before anything is replaced; nothing is written to disk in the clear. The original is kept until you delete it." = "همه چیز را در یک فایل گاوصندوق کاملاً جدید با کلیدهای تازه دوباره رمزگذاری می‌کند (همان عبارت عبور). فایل‌های شما پیش از جایگزینی هر چیز کپی و بررسی می‌شوند؛ هیچ چیز به‌صورت آشکار روی دیسک نوشته نمی‌شود. نسخهٔ اصلی تا زمانی که آن را حذف کنید نگه داشته می‌شود.";
+"New size" = "اندازهٔ جدید";
+"Keep current capacity" = "حفظ ظرفیت کنونی";
+"Shrink to fit contents" = "کوچک کردن متناسب با محتوا";
+"Destination:" = "مقصد:";
+"Needs about %@; %@ free here." = "به حدود %@ نیاز دارد؛ %@ اینجا آزاد است.";
+"This vault requires a YubiKey" = "این گاوصندوق به یک YubiKey نیاز دارد";
+"Migrate" = "انتقال";
+"Use Folder" = "استفاده از این پوشه";
+"Not enough space on %@: the new vault needs about %@ but only %@ is free. Choose “Shrink to fit” or a different drive." = "فضای کافی روی %@ نیست: گاوصندوق جدید به حدود %@ نیاز دارد اما فقط %@ آزاد است. «کوچک کردن متناسب با محتوا» یا یک دیسک دیگر را انتخاب کنید.";
+"A file named “%@” already exists in that folder. Pick another destination." = "فایلی با نام « %@ » هم‌اکنون در آن پوشه وجود دارد. مقصد دیگری انتخاب کنید.";
+"Migration failed: %@. Your original vault is unchanged." = "انتقال ناموفق بود: %@. گاوصندوق اصلی شما تغییری نکرده است.";
+"Migrated. The previous vault is kept as “%@” — delete it once you’ve confirmed this one works." = "انتقال انجام شد. گاوصندوق پیشین با نام « %@ » نگه داشته شد — پس از اطمینان از کارکرد این یکی، آن را حذف کنید.";
+"Migrated to %@. Your original vault is unchanged — delete it when ready." = "به %@ منتقل شد. گاوصندوق اصلی شما تغییری نکرده است — هر زمان آماده بودید آن را حذف کنید.";
+"Migration verified but the file swap failed: %@. Your original vault is unchanged." = "انتقال بررسی شد اما جابجایی فایل‌ها ناموفق بود: %@. گاوصندوق اصلی شما تغییری نکرده است.";
+
+/* --- Create-vault rename notice --- */
+"“%@” already existed — created “%@” instead. A vault is never overwritten." = "« %@ » از پیش وجود داشت — به‌جای آن « %@ » ساخته شد. هیچ گاوصندوقی هرگز بازنویسی نمی‌شود.";
+
+/* --- Settings / About / auto-lock --- */
+"Auto-lock after inactivity:" = "قفل خودکار پس از بی‌فعالیتی:";
+"1 minute" = "۱ دقیقه";
+"5 minutes" = "۵ دقیقه";
+"15 minutes" = "۱۵ دقیقه";
+"30 minutes" = "۳۰ دقیقه";
+"Never" = "هرگز";
+"The vault always locks on system sleep and screen lock. Inactivity is measured system-wide." = "گاوصندوق همیشه هنگام خواب سیستم و قفل صفحه قفل می‌شود. بی‌فعالیتی در سطح کل سیستم سنجیده می‌شود.";
+"About Farewell" = "دربارهٔ Farewell";
+"sleep" = "خواب";
+"screen lock" = "قفل صفحه";
+"inactivity" = "بی‌فعالیتی";
+"Vault locked automatically (%@). Unlock to continue." = "گاوصندوق به‌صورت خودکار قفل شد (%@). برای ادامه قفل را باز کنید.";
+
+/* --- Import failure reasons --- */
+"vault not open" = "گاوصندوق باز نیست";
+"empty name" = "نام خالی";
+"cannot stat %@" = "امکان دریافت اطلاعات %@ نیست";
+"cannot read %@" = "امکان خواندن %@ نیست";
+"“%@” is %@ but only %@ is free in this level." = "« %@ » برابر %@ است اما فقط %@ در این سطح آزاد است.";
+"Not enough space: the edit needs %@ but only %@ is available." = "فضای کافی نیست: ویرایش به %@ نیاز دارد اما فقط %@ در دسترس است.";
+
+/* --- Context menus & viewer states --- */
+"Clear search" = "پاک کردن جستجو";
+"Rename…" = "تغییر نام…";
+"Rename folder…" = "تغییر نام پوشه…";
+"New subfolder…" = "زیرپوشهٔ جدید…";
+"Move to top level" = "انتقال به سطح بالا";
+"Delete folder" = "حذف پوشه";
+"Passes" = "گذرها";
+"Select a file to view it." = "برای دیدن یک فایل، آن را انتخاب کنید.";
+"Cannot preview" = "پیش‌نمایش ممکن نیست";
+"Failed to load" = "بارگیری ناموفق بود";
+"Fullscreen (Esc to exit)" = "تمام‌صفحه (Esc برای خروج)";
+"Copy this Mac’s serial number" = "کپی شماره سریال این مک";
+
+/* --- Clé matérielle initiale + clarté clé de secours (ajout) --- */
+"Adding a backup happens in two steps — and the order matters:" = "افزودن کلید پشتیبان در دو مرحله انجام می‌شود — و ترتیب مهم است:";
+"**1.** First insert your **current key** (the one that already opens this vault) and touch it — **not the new key yet**." = "**1.** ابتدا **کلید کنونی** خود را (همانی که هم‌اکنون این گاوصندوق را باز می‌کند) وارد کنید و آن را لمس کنید — **هنوز نه کلید جدید را**.";
+"**2.** Only then, when asked, swap to the **new backup key** and touch it twice." = "**2.** تنها پس از آن، هنگامی که خواسته شد، به **کلید پشتیبان جدید** تعویض کنید و آن را دو بار لمس کنید.";
+"Either key will then open the vault. Keep the backup somewhere safe and separate — there's no recovery if you lose every key." = "پس از آن هر یک از دو کلید گاوصندوق را باز می‌کند. کلید پشتیبان را امن و جدا نگه دارید — اگر همه کلیدها را گم کنید، هیچ بازیابی‌ای نیست.";
+"Enter your passphrase to add a hardware key." = "برای افزودن کلید سخت‌افزاری، عبارت عبور خود را وارد کنید.";
+"Adding your hardware key…" = "در حال افزودن کلید سخت‌افزاری شما…";
+"Enrolling your hardware key…" = "در حال ثبت کلید سخت‌افزاری شما…";
+"Hardware key enrolled. This vault now needs that key plus your passphrase to open. Enrol a backup key too — lose your only key and the vault is gone, with no recovery." = "کلید سخت‌افزاری ثبت شد. اکنون برای باز کردن این گاوصندوق به آن کلید به‌علاوه عبارت عبور شما نیاز است. یک کلید پشتیبان هم ثبت کنید — اگر تنها کلیدتان را گم کنید، گاوصندوق از دست می‌رود، بدون بازیابی.";
+"Hardware key enrolled. Unlock again to continue." = "کلید سخت‌افزاری ثبت شد. برای ادامه دوباره قفل را باز کنید.";
+"Could not add the hardware key: %@. Your vault is unchanged." = "افزودن کلید سخت‌افزاری ممکن نشد: %@. گاوصندوق شما تغییری نکرده است.";
+"Touch your new key now" = "اکنون کلید جدید خود را لمس کنید";

@@ -1,0 +1,37 @@
+[package]
+name = "farewell_format"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "Farewell `.vault` file format: header, slots, chunks, manifest."
+
+[features]
+# Use the fast Argon2id DEV_PARAMS instead of the 1 GiB PRODUCTION_PARAMS.
+# For tests ONLY (the format crate's own tests get it via cfg(test);
+# downstream test crates enable it as a dev-dependency feature). NEVER
+# enable in a shipping build.
+dev-kdf = []
+
+[dependencies]
+farewell_crypto.workspace = true
+farewell_keys.workspace = true
+farewell_fido2.workspace = true
+byteorder.workspace = true
+thiserror.workspace = true
+zeroize.workspace = true
+rand.workspace = true
+blake3.workspace = true
+
+# Used for advisory flock(2) on the vault file (Unix only).
+# Windows is not a supported target; on non-Unix the lock module
+# compiles to a no-op so the rest of the crate still builds.
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[dev-dependencies]
+hex.workspace = true
+tempfile = "3.10"
+proptest = "1.4"

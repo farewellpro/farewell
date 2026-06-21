@@ -1,0 +1,17 @@
+[package]
+name = "farewell_keys"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "Secure in-memory key handling for Farewell. mlock + zeroize + guard pages."
+
+[dependencies]
+farewell_crypto.workspace = true
+zeroize.workspace = true
+thiserror.workspace = true
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"

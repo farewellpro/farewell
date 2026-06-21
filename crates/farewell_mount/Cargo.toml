@@ -1,0 +1,33 @@
+[package]
+name = "farewell_mount"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "C ABI shim exposing farewell_format to Swift (FSKit) and other native callers."
+
+[lib]
+# `staticlib` produces the `.a` linked into the Swift app / FSKit module.
+# `rlib`     keeps the crate usable from inner Rust code if useful later
+#            (CLI tools, integration tests).
+name = "farewell_mount"
+crate-type = ["staticlib", "rlib"]
+
+[dependencies]
+farewell_crypto.workspace = true
+farewell_format.workspace = true
+farewell_fido2.workspace = true
+farewell_passphrase.workspace = true
+farewell_audio.workspace = true
+farewell_license.workspace = true
+
+[dev-dependencies]
+tempfile = "3.10"
+farewell_passphrase.workspace = true
+# Tests create/open many vaults via the FFI -> farewell_format. Enable
+# the fast Argon2id so the suite doesn't spend ~2 s per vault. This
+# feature is dev-only; the shipped staticlib (a normal `cargo build`)
+# never compiles dev-dependencies, so it gets PRODUCTION_PARAMS.
+farewell_format = { workspace = true, features = ["dev-kdf"] }
