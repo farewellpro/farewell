@@ -60,6 +60,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Install Linux build deps (libudev for hidapi)
+        run: sudo apt-get update && sudo apt-get install -y libudev-dev pkg-config
       - name: Install nightly + cargo-fuzz
         run: |
           rustup toolchain install nightly --profile minimal

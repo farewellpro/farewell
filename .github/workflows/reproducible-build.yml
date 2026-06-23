@@ -39,6 +39,11 @@ jobs:
           # Make sure rust-toolchain.toml + Cargo.lock are present.
           persist-credentials: false
 
+      - name: Install Linux build deps (libudev for hidapi)
+        # hidapi (via ctap-hid-fido2) uses the hidraw backend on Linux, which
+        # needs libudev's pkg-config files. macOS uses IOKit and needs none.
+        run: sudo apt-get update && sudo apt-get install -y libudev-dev pkg-config
+
       - name: Install pinned toolchain
         # The rust-toolchain.toml file pins the exact version. Just
         # invoking rustc/cargo here triggers rustup to install it.
@@ -99,5 +104,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Install Linux build deps (libudev for hidapi)
+        run: sudo apt-get update && sudo apt-get install -y libudev-dev pkg-config
       - name: Run all tests
         run: cargo test --workspace --quiet
