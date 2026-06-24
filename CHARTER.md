@@ -179,7 +179,6 @@ The "≥ 3 independent maintainers sign each release" model planned for the Foun
 - **Reproducible builds** (cf. §7.2): recompilation from source verifies the sold binary bit-for-bit. Cornerstone that makes the publisher non-load-bearing for security.
 - **Source GPL-3.0 fully public** (cf. §10.1): no proprietary blob.
 - **Annual external audit** by recognized firm (Cure53, NCC Group, Trail of Bits — cf. §11.1), public report.
-- **Permanent bug bounty** (cf. §11.2).
 - **Multi-signature releases — Phase 3+ objective**: transition to ≥ 3 external co-signers contractually engaged when Farewell reaches financial maturity allowing compensation.
 
 No multi-maintainer claim not delivered. Sustainability comes through verifiability of code and binary, not through jurisdictional diversity of signers.
@@ -301,11 +300,10 @@ This posture reconciles technical enforcement (real device limit) with respect f
 - **Ad-hoc audit** on each major release or cryptographic change.
 - Audit reports published in full, redacted only for still-unpatched vulnerabilities.
 
-### 11.2 Bug bounty
+### 11.2 Coordinated disclosure
 
-- Public program, significantly funded (€10k-€50k per critical vulnerability based on impact).
-- Hall of Fame for contributors.
-- Responsible disclosure with standard 90-day delay, documented exceptions.
+- Security reports are handled per [SECURITY.md](SECURITY.md): coordinated disclosure with a standard 90-day delay, documented exceptions.
+- **No money, no bug-bounty program**: we do not pay for findings. We do recognise valid, in-scope reports — public credit, a Hall of Fame, and a free Farewell licence (one Mac). See [SECURITY.md](SECURITY.md).
 
 ### 11.3 Release transparency log
 

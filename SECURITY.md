@@ -25,7 +25,7 @@ Once we cut 2.0, the previous major version receives security fixes for 12 month
 **Please do not**:
 - Open a public GitHub issue for a security-relevant finding before we have published a fix.
 - Test your finding against any vault you do not own.
-- Demand bounty before disclosure — see "Bug bounty" below for the policy.
+- Demand payment in exchange for disclosing the issue. We do not run a bug-bounty program and do not pay for reports.
 
 ## Our commitments
 
@@ -55,24 +55,13 @@ Out of scope:
 
 If you are unsure whether a finding is in scope, send it anyway — we will be honest about our assessment.
 
-## Bug bounty
+## Recognition
 
-A formal bug-bounty program will launch with 1.0. Until then, we cannot pay for findings — but we will:
+We do not run a bug-bounty program and do not pay for findings. We do recognise valid, in-scope reports:
 
-1. Credit you publicly in the advisory and release notes.
-2. Add you to a "Hall of Fame" page on `farewell.pro` once it exists.
-3. Provide a free Farewell license (any plan — up to Quintet) for life across all major versions.
-
-When the formal program launches, expected brackets are:
-
-| Severity | Range |
-|---|---|
-| Critical (cryptographic break, sandbox escape, RCE) | €2,000 – €20,000 |
-| High (data leak, privilege escalation, auth bypass) | €500 – €3,000 |
-| Medium (information disclosure, parser DoS) | €100 – €700 |
-| Low (minor info leak, hardening opportunities) | swag / credit |
-
-Exact amounts will be set when the SRL has revenue history. Numbers above are planning estimates, not commitments.
+1. Public credit in the advisory and release notes, unless you prefer to remain anonymous.
+2. A spot on a "Hall of Fame" page on `farewell.pro`, once it exists.
+3. A free Farewell licence for one Mac.
 
 ## Cryptographic break disclosure
 
