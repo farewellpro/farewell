@@ -32,6 +32,11 @@ jobs:
   audit:
     name: cargo audit (RustSec)
     runs-on: ubuntu-24.04
+    # audit-check files/updates a tracking issue when an advisory is found,
+    # which needs issues:write (else "Resource not accessible by integration").
+    permissions:
+      contents: read
+      issues: write
     steps:
       - uses: actions/checkout@v4
         with:
