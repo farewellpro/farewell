@@ -41,6 +41,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      # Pre-install cargo-audit as a prebuilt binary: audit-check otherwise
+      # compiles it from source under the repo's pinned toolchain
+      # (rust-toolchain.toml), which breaks whenever a cargo-audit dependency
+      # raises its MSRV past the pin.
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-audit
       # RustSec's own action; honours .cargo/audit.toml ignores.
       - uses: rustsec/audit-check@v2
         with:

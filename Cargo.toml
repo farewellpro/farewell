@@ -44,8 +44,8 @@ ctap-hid-fido2 = "3.5"
 # We use the libcrux family (Cryspen) — formally verified via hax + F*.
 # RustCrypto's ml-kem / ml-dsa are dropped in favor of formal-verification
 # coverage; see THREAT_MODEL §7.
-libcrux-ml-kem = { version = "0.0.9", default-features = false, features = ["mlkem1024"] }
-libcrux-ml-dsa = { version = "0.0.9", default-features = false, features = ["mldsa87"] }
+libcrux-ml-kem = { version = "0.0.10", default-features = false, features = ["mlkem1024"] }
+libcrux-ml-dsa = { version = "0.0.10", default-features = false, features = ["mldsa87"] }
 
 # Crypto primitives
 aes-gcm-siv = "0.11"
