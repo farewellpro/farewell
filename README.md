@@ -10,11 +10,11 @@
 
 ## Status
 
-**Pre-1.0, but available.** The macOS app is built, notarized, and on sale (v0.22); the Rust core (`crates/`) is feature-rich and tested. It remains pre-1.0 — actively evolving toward a 1.0 backed by external audits.
+**Pre-1.0, but available.** The macOS app is built, notarized, and on sale (v0.22.1); the Rust core (`crates/`) is feature-rich and tested. It remains pre-1.0 — actively evolving toward a 1.0 backed by external audits.
 
 | Component | Status |
 |---|---|
-| macOS app (windowed, in-app viewer) | **shipping** — v0.22, notarized, on sale |
+| macOS app (windowed, in-app viewer) | **shipping** — v0.22.1, notarized, on sale |
 | Vault format (Rust core, v6) | read/write/truncate, indistinguishable from random, POSIX-shaped FFI |
 | Encryption at rest | AES-256-GCM-SIV + Argon2id (1 GiB) + BLAKE3 |
 | Post-quantum integrity | one-shot ML-DSA-87 attestation in encrypted metadata (libcrux, formally verified) |

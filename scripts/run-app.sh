@@ -173,8 +173,8 @@ cat > "$APP_BUNDLE/Contents/Info.plist" <<'PLIST'
         <string>zh-Hant</string>
     </array>
     <key>CFBundleIdentifier</key>         <string>app.farewell.dev</string>
-    <key>CFBundleVersion</key>            <string>0.22</string>
-    <key>CFBundleShortVersionString</key> <string>0.22</string>
+    <key>CFBundleVersion</key>            <string>0.22.1</string>
+    <key>CFBundleShortVersionString</key> <string>0.22.1</string>
     <key>CFBundleExecutable</key>         <string>FarewellApp</string>
     <key>CFBundleIconFile</key>           <string>AppIcon</string>
     <key>NSHumanReadableCopyright</key>   <string>© Denis Florent Media Group SRL</string>

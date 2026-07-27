@@ -25,7 +25,7 @@ cd "$(dirname "$0")/.."
 
 APP_NAME="Farewell"
 BUNDLE_ID="app.farewell"
-VERSION="0.22"
+VERSION="0.22.1"
 MIN_MACOS="15.0"
 DIST="dist"
 APP="$DIST/$APP_NAME.app"

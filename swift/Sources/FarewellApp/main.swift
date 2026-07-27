@@ -5178,7 +5178,7 @@ struct FarewellAppMain: App {
 
     /// Version string for the About panel — the bundle's, with a fallback.
     static var appVersion: String {
-        (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String) ?? "0.22"
+        (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String) ?? "0.22.1"
     }
 
     static func showAboutPanel() {
