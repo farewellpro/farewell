@@ -268,6 +268,14 @@ pub enum FarewellStatus {
     /// that key's limited CTAP2 PIN-retry counter (and could lock it). The
     /// caller should ask the user to leave only the key they're using.
     HwMultipleKeys = 18,
+    /// Exclusive creation refused: a file with that name already exists
+    /// (only from `farewell_create_exclusive`; `farewell_create` stays
+    /// idempotent).
+    AlreadyExists = 19,
+    /// A previous mutation failed mid-write and the session's durable
+    /// state is uncertain. Mutations are refused; close and reopen the
+    /// vault to resynchronize with the on-disk truth.
+    SessionPoisoned = 20,
     /// A Rust panic was caught at the FFI boundary. This indicates a
     /// bug in the Rust code; report it.
     Internal = 100,
@@ -286,6 +294,9 @@ impl FarewellStatus {
             FormatError::Full => Self::Full,
             FormatError::FileNotFound(_) => Self::NotFound,
             FormatError::InvalidName => Self::InvalidName,
+            FormatError::AlreadyExists(_) => Self::AlreadyExists,
+            FormatError::Overflow => Self::InvalidArgument,
+            FormatError::SessionPoisoned => Self::SessionPoisoned,
             FormatError::ManifestOverflow => Self::Manifest,
             FormatError::Wiped => Self::Wiped,
             FormatError::HeaderSignatureInvalid => Self::HeaderSignatureInvalid,
@@ -1748,6 +1759,38 @@ pub unsafe extern "C" fn farewell_create(
         // SAFETY: handle non-null per contract.
         let vault = unsafe { &mut (*handle).inner };
         match vault.create_file(name) {
+            Ok(()) => FarewellStatus::Ok,
+            Err(e) => FarewellStatus::from_format_error(&e),
+        }
+    })
+}
+
+/// POSIX `open(O_CREAT | O_EXCL)` equivalent: create an empty file,
+/// **failing with `FAREWELL_ALREADY_EXISTS`** if `name_utf8` is already
+/// present. Importers must use this instead of [`farewell_create`] so a
+/// name collision can never silently reuse (and then truncate) an
+/// existing entry.
+///
+/// # Safety
+///
+/// `handle` must be a valid open vault; `name_utf8` a valid NUL-
+/// terminated C string.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn farewell_create_exclusive(
+    handle: *mut FarewellVault,
+    name_utf8: *const c_char,
+) -> i32 {
+    catch_panic(|| {
+        if handle.is_null() || name_utf8.is_null() {
+            return FarewellStatus::InvalidArgument;
+        }
+        let name = match cstr_to_str(name_utf8) {
+            Some(s) => s,
+            None => return FarewellStatus::InvalidArgument,
+        };
+        // SAFETY: handle non-null per contract.
+        let vault = unsafe { &mut (*handle).inner };
+        match vault.create_file_exclusive(name) {
             Ok(()) => FarewellStatus::Ok,
             Err(e) => FarewellStatus::from_format_error(&e),
         }

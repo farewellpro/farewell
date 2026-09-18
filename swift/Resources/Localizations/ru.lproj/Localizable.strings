@@ -229,7 +229,6 @@
 "Imported %lld; last error: %@" = "Импортировано %lld; последняя ошибка: %@";
 "Imported 1 file." = "Импортирован 1 файл.";
 "Imported %lld files." = "Импортировано файлов: %lld.";
-"Original securely erased (overwritten %lld× in place on a hard disk)." = "Оригинал надёжно стёрт (перезаписан %lld× на месте на жёстком диске).";
 "Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "Оригинал перезаписан и удалён — но это SSD: из-за выравнивания износа ячейки могут сохраниться. Настоящая защита — это зашифрованный сейф, а не стирание.";
 "Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "Оригинал перезаписан и удалён (тип накопителя неизвестен; рассматривается как флеш — без гарантии физического стирания).";
 
@@ -292,7 +291,6 @@
 /* --- Import failure reasons --- */
 "vault not open" = "сейф не открыт";
 "empty name" = "пустое имя";
-"cannot stat %@" = "не удаётся получить сведения о %@";
 "cannot read %@" = "не удаётся прочитать %@";
 "“%@” is %@ but only %@ is free in this level." = "« %@ » занимает %@, но на этом уровне свободно только %@.";
 "Not enough space: the edit needs %@ but only %@ is available." = "Недостаточно места: для правки нужно %@, но доступно только %@.";
@@ -323,3 +321,20 @@
 "Hardware key enrolled. Unlock again to continue." = "Аппаратный ключ зарегистрирован. Разблокируйте снова, чтобы продолжить.";
 "Could not add the hardware key: %@. Your vault is unchanged." = "Не удалось добавить аппаратный ключ: %@. Ваш сейф не изменён.";
 "Touch your new key now" = "Коснитесь нового ключа сейчас";
+
+// Import safety & honest shredding (v0.23 — audit tasks 03/04)
+"A file with that name already exists." = "Файл с таким именем уже существует.";
+"A write failed and this session is no longer safe — close and reopen the vault." = "Запись не удалась, и эта сессия больше не безопасна — закройте и снова откройте сейф.";
+"cannot import %@: no valid vault name fits" = "не удаётся импортировать %@: не подходит ни одно допустимое имя";
+"%@ is not a regular file" = "%@ не является обычным файлом";
+"Cannot read %@: %@.%@" = "Не удаётся прочитать %@: %@.%@";
+"A partial copy “%@” could not be removed: %@" = "Не удалось удалить частичную копию «%@»: %@";
+"%@ changed size during import; the original was kept." = "%@ изменил размер во время импорта; оригинал сохранён.";
+"Verification failed for %@; the original was kept." = "Проверка %@ не удалась; оригинал сохранён.";
+"could not open the original for overwrite" = "не удалось открыть оригинал для перезаписи";
+"the file changed after import — not erased" = "файл изменился после импорта — не стёрт";
+"random generator failed during overwrite" = "сбой генератора случайных чисел во время перезаписи";
+"overwrite failed: %@" = "перезапись не удалась: %@";
+"overwritten, but could not delete: %@" = "перезаписан, но удалить не удалось: %@";
+"The original was NOT securely erased (%@) — it is still on disk." = "Оригинал НЕ был надёжно стёрт (%@) — он всё ещё на диске.";
+"Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "Оригинал перезаписан %lld× на месте и удалён. Примечание: снимки и файловые системы с копированием при записи могут сохранять старые копии даже на жёстком диске.";

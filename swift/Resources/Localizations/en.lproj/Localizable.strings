@@ -229,7 +229,6 @@
 "Imported %lld; last error: %@" = "Imported %lld; last error: %@";
 "Imported 1 file." = "Imported 1 file.";
 "Imported %lld files." = "Imported %lld files.";
-"Original securely erased (overwritten %lld× in place on a hard disk)." = "Original securely erased (overwritten %lld× in place on a hard disk).";
 "Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe.";
 "Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee).";
 
@@ -292,7 +291,6 @@
 /* --- Import failure reasons --- */
 "vault not open" = "vault not open";
 "empty name" = "empty name";
-"cannot stat %@" = "cannot stat %@";
 "cannot read %@" = "cannot read %@";
 "“%@” is %@ but only %@ is free in this level." = "“%@” is %@ but only %@ is free in this level.";
 "Not enough space: the edit needs %@ but only %@ is available." = "Not enough space: the edit needs %@ but only %@ is available.";
@@ -323,3 +321,20 @@
 "Hardware key enrolled. Unlock again to continue." = "Hardware key enrolled. Unlock again to continue.";
 "Could not add the hardware key: %@. Your vault is unchanged." = "Could not add the hardware key: %@. Your vault is unchanged.";
 "Touch your new key now" = "Touch your new key now";
+
+// Import safety & honest shredding (v0.23 — audit tasks 03/04)
+"A file with that name already exists." = "A file with that name already exists.";
+"A write failed and this session is no longer safe — close and reopen the vault." = "A write failed and this session is no longer safe — close and reopen the vault.";
+"cannot import %@: no valid vault name fits" = "cannot import %@: no valid vault name fits";
+"%@ is not a regular file" = "%@ is not a regular file";
+"Cannot read %@: %@.%@" = "Cannot read %@: %@.%@";
+"A partial copy “%@” could not be removed: %@" = "A partial copy “%@” could not be removed: %@";
+"%@ changed size during import; the original was kept." = "%@ changed size during import; the original was kept.";
+"Verification failed for %@; the original was kept." = "Verification failed for %@; the original was kept.";
+"could not open the original for overwrite" = "could not open the original for overwrite";
+"the file changed after import — not erased" = "the file changed after import — not erased";
+"random generator failed during overwrite" = "random generator failed during overwrite";
+"overwrite failed: %@" = "overwrite failed: %@";
+"overwritten, but could not delete: %@" = "overwritten, but could not delete: %@";
+"The original was NOT securely erased (%@) — it is still on disk." = "The original was NOT securely erased (%@) — it is still on disk.";
+"Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk.";

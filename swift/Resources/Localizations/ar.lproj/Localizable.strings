@@ -229,7 +229,6 @@
 "Imported %lld; last error: %@" = "تم استيراد %lld؛ آخر خطأ: %@";
 "Imported 1 file." = "تم استيراد ملف واحد.";
 "Imported %lld files." = "تم استيراد %lld ملفات.";
-"Original securely erased (overwritten %lld× in place on a hard disk)." = "تم محو الأصل بأمان (كُتب فوقه %lld× في مكانه على قرص صلب).";
 "Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "كُتب فوق الأصل + حُذف — لكن هذا قرص SSD: تعني موازنة التآكل أن الخلايا قد تبقى. الحماية الحقيقية هي الخزنة المُشفَّرة، وليس المحو.";
 "Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "كُتب فوق الأصل + حُذف (نوع التخزين غير معروف؛ يُعامَل كذاكرة فلاش — دون ضمان محو فيزيائي).";
 
@@ -292,7 +291,6 @@
 /* --- Import failure reasons --- */
 "vault not open" = "الخزنة غير مفتوحة";
 "empty name" = "اسم فارغ";
-"cannot stat %@" = "تعذّر فحص %@";
 "cannot read %@" = "تعذّرت قراءة %@";
 "“%@” is %@ but only %@ is free in this level." = "حجم « %@ » هو %@ لكن المتاح %@ فقط في هذا المستوى.";
 "Not enough space: the edit needs %@ but only %@ is available." = "لا توجد مساحة كافية: يحتاج التعديل إلى %@ لكن المتاح %@ فقط.";
@@ -323,3 +321,20 @@
 "Hardware key enrolled. Unlock again to continue." = "تم تسجيل المفتاح المادي. افتح القفل مجدداً للمتابعة.";
 "Could not add the hardware key: %@. Your vault is unchanged." = "تعذّرت إضافة المفتاح المادي: %@. خزنتك لم تتغير.";
 "Touch your new key now" = "المس مفتاحك الجديد الآن";
+
+// Import safety & honest shredding (v0.23 — audit tasks 03/04)
+"A file with that name already exists." = "يوجد ملف بهذا الاسم بالفعل.";
+"A write failed and this session is no longer safe — close and reopen the vault." = "فشلت عملية كتابة ولم تعد هذه الجلسة آمنة — أغلق الخزنة ثم أعد فتحها.";
+"cannot import %@: no valid vault name fits" = "تعذّر استيراد %@: لا يوجد اسم صالح مناسب";
+"%@ is not a regular file" = "%@ ليس ملفًا عاديًا";
+"Cannot read %@: %@.%@" = "تعذّرت قراءة %@: %@.%@";
+"A partial copy “%@” could not be removed: %@" = "تعذّر حذف نسخة جزئية «%@»: %@";
+"%@ changed size during import; the original was kept." = "تغيّر حجم %@ أثناء الاستيراد؛ تم الاحتفاظ بالأصل.";
+"Verification failed for %@; the original was kept." = "فشل التحقق من %@؛ تم الاحتفاظ بالأصل.";
+"could not open the original for overwrite" = "تعذّر فتح الأصل للكتابة فوقه";
+"the file changed after import — not erased" = "تغيّر الملف بعد الاستيراد — لم يُمحَ";
+"random generator failed during overwrite" = "فشل مولِّد الأرقام العشوائية أثناء الكتابة فوق الملف";
+"overwrite failed: %@" = "فشلت الكتابة فوق الملف: %@";
+"overwritten, but could not delete: %@" = "كُتب فوقه، لكن تعذّر حذفه: %@";
+"The original was NOT securely erased (%@) — it is still on disk." = "لم يُمحَ الأصل بأمان (%@) — ما يزال على القرص.";
+"Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "كُتب فوق الأصل %lld× في مكانه ثم حُذف. ملاحظة: قد تحتفظ اللقطات أو أنظمة الملفات ذات النسخ عند الكتابة بنسخ قديمة حتى على قرص صلب دوّار.";

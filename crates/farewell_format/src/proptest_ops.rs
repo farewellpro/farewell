@@ -34,25 +34,49 @@ const TOTAL_CHUNKS: u64 = 96;
 #[derive(Debug, Clone)]
 enum Op {
     Create { name: String },
+    CreateExclusive { name: String },
     Write { name: String, offset: u64, data: Vec<u8> },
     Truncate { name: String, size: u64 },
     Rename { old: String, new: String },
     Delete { name: String },
+    /// Operations that MUST be refused before any commit: the model is
+    /// deliberately left untouched, and `apply_and_verify` then checks
+    /// the vault still matches it (a refused op that mutated anything —
+    /// or poisoned the session for the following ops — fails the
+    /// property).
+    CreateInvalidName { name: String },
+    RenameToInvalidName { old: String },
+    WriteAtOverflowOffset { name: String },
 }
 
 fn arb_name() -> impl Strategy<Value = String> {
     proptest::sample::select(NAMES).prop_map(|s| s.to_string())
 }
 
+/// An invalid file name: over-long (bytes, not chars) or containing a
+/// control character.
+fn arb_invalid_name() -> impl Strategy<Value = String> {
+    prop_oneof![
+        Just("x".repeat(256)),
+        Just("é".repeat(128)), // 256 bytes of two-byte chars
+        Just("bad\nname".to_string()),
+        Just(String::new()),
+    ]
+}
+
 fn arb_op() -> impl Strategy<Value = Op> {
     prop_oneof![
         2 => arb_name().prop_map(|name| Op::Create { name }),
+        1 => arb_name().prop_map(|name| Op::CreateExclusive { name }),
         4 => (arb_name(), 0u64..(3 * CHUNK_PLAINTEXT_LEN as u64), vec(any::<u8>(), 0..(CHUNK_PLAINTEXT_LEN + 50)))
                 .prop_map(|(name, offset, data)| Op::Write { name, offset, data }),
         2 => (arb_name(), 0u64..(3 * CHUNK_PLAINTEXT_LEN as u64))
                 .prop_map(|(name, size)| Op::Truncate { name, size }),
         1 => (arb_name(), arb_name()).prop_map(|(old, new)| Op::Rename { old, new }),
         1 => arb_name().prop_map(|name| Op::Delete { name }),
+        1 => arb_invalid_name().prop_map(|name| Op::CreateInvalidName { name }),
+        1 => arb_name().prop_map(|old| Op::RenameToInvalidName { old }),
+        1 => arb_name().prop_map(|name| Op::WriteAtOverflowOffset { name }),
     ]
 }
 
@@ -67,8 +91,55 @@ fn apply_and_verify(
             vault.create_file(name).expect("create_file");
             model.entry(name.clone()).or_insert_with(Vec::new);
         }
+        Op::CreateExclusive { name } => {
+            if model.contains_key(name) {
+                // Must refuse and leave the existing entry untouched.
+                let r = vault.create_file_exclusive(name);
+                prop_assert!(
+                    matches!(r, Err(crate::FormatError::AlreadyExists(_))),
+                    "exclusive create on existing {:?} returned {:?}",
+                    name,
+                    r
+                );
+            } else {
+                vault.create_file_exclusive(name).expect("create_file_exclusive");
+                model.entry(name.clone()).or_insert_with(Vec::new);
+            }
+        }
+        Op::CreateInvalidName { name } => {
+            let r = vault.create_file(name);
+            prop_assert!(r.is_err(), "invalid name {:?} was accepted", name);
+        }
+        Op::RenameToInvalidName { old } => {
+            if !model.contains_key(old) {
+                return Ok(());
+            }
+            let r = vault.rename_file(old, &"x".repeat(256));
+            prop_assert!(
+                matches!(r, Err(crate::FormatError::InvalidName)),
+                "over-long rename target returned {:?}",
+                r
+            );
+        }
+        Op::WriteAtOverflowOffset { name } => {
+            if !model.contains_key(name) {
+                return Ok(());
+            }
+            let r = vault.write_file_range(name, u64::MAX - 1, b"xx");
+            prop_assert!(
+                matches!(r, Err(crate::FormatError::Overflow)),
+                "overflow offset returned {:?}",
+                r
+            );
+        }
         Op::Write { name, offset, data } => {
             if !model.contains_key(name) {
+                return Ok(());
+            }
+            // An empty write is a no-op in the vault (it does NOT extend
+            // the file, whatever the offset); mirror that in the model.
+            if data.is_empty() {
+                vault.write_file_range(name, *offset, data).expect("empty write");
                 return Ok(());
             }
             let expected = model.get_mut(name).expect("present");

@@ -20,6 +20,7 @@
 
 import AppKit
 import AVFoundation
+import CryptoKit
 import IOKit
 import IOKit.storage
 import PDFKit
@@ -59,6 +60,8 @@ func humanError(status: Int32) -> String {
     case Int32(FAREWELL_HW_NOT_PRESENT.rawValue):            return String(localized: "No YubiKey detected — plug it in and try again.")
     case Int32(FAREWELL_HW_AUTH_FAILED.rawValue):            return String(localized: "YubiKey check failed — wrong PIN, or it wasn't touched in time.")
     case Int32(FAREWELL_HW_MULTIPLE_KEYS.rawValue):          return String(localized: "More than one key is plugged in. With a PIN, please leave only the key you're unlocking with plugged in (trying a PIN on the wrong key can lock it), then try again.")
+    case Int32(FAREWELL_ALREADY_EXISTS.rawValue):            return String(localized: "A file with that name already exists.")
+    case Int32(FAREWELL_SESSION_POISONED.rawValue):          return String(localized: "A write failed and this session is no longer safe — close and reopen the vault.")
     case Int32(FAREWELL_NOT_A_VAULT.rawValue):               return String(localized: "Not a Farewell vault file")
     case Int32(FAREWELL_UNSUPPORTED_VERSION.rawValue):       return String(localized: "Vault uses a format this build cannot read")
     default:                                                  return "Failed (status \(status))"
@@ -1549,14 +1552,30 @@ final class VaultModel: ObservableObject {
         guard handle != nil else { return }
         var imported = 0
         var lastError: String?
-        var shredMedium: StorageMedium?
+        var lastShred: ShredOutcome?
+
+        // Names reserved for THIS batch: everything already in the vault
+        // plus every destination chosen so far. `files` only refreshes
+        // after the batch, so relying on it alone let two same-named
+        // sources in one batch pick the SAME destination — and the
+        // second import then destroyed the first.
+        var reserved = Set(files.map { $0.name })
 
         for url in urls {
-            switch importOne(url) {
-            case .success:
+            let base = url.lastPathComponent
+            guard !base.isEmpty, let dest = Self.uniqueName(for: base, existing: reserved) else {
+                lastError = String(localized: "cannot import \(url.lastPathComponent): no valid vault name fits")
+                continue
+            }
+            // Reserve BEFORE importing. On failure the name stays
+            // reserved: an unused name costs nothing, while releasing it
+            // without a confirmed rollback could collide.
+            reserved.insert(dest)
+            switch importOne(url, destinationName: dest) {
+            case .success(let source):
                 imported += 1
                 if shredOriginalsAfterImport {
-                    shredMedium = secureShred(url)
+                    lastShred = secureShred(url, expected: source)
                 }
             case .failure(let msg):
                 lastError = msg
@@ -1574,33 +1593,60 @@ final class VaultModel: ObservableObject {
         } else if imported > 1 {
             importStatus = String(localized: "Imported \(imported) files.")
         }
-        // Append an honest note about what shredding the originals achieved on
-        // this storage medium.
-        if let m = shredMedium {
-            let note = shredNote(for: m, passes: max(1, shredPasses))
+        // Append an honest note about what shredding the originals achieved
+        // (or explicitly failed to achieve) on this storage medium.
+        if let outcome = lastShred {
+            let note = shredNote(for: outcome, passes: max(1, shredPasses))
             importStatus = [importStatus, note].compactMap { $0 }.joined(separator: " ")
         }
     }
 
+    /// Identity + freshness of an import source, captured from the OPEN
+    /// file descriptor (`fstat`) — never from the path, which can be
+    /// swapped underneath us between two looks.
+    struct SourceFingerprint {
+        let deviceID: UInt64
+        let inode: UInt64
+        let size: UInt64
+        let mtimeSec: Int
+        let mtimeNS: Int
+    }
+
     private enum ImportResult {
-        case success
+        case success(SourceFingerprint)
         case failure(String)
     }
 
-    private func importOne(_ url: URL) -> ImportResult {
+    /// `fstat` the open descriptor; `nil` unless it's a regular file
+    /// (directories, sockets, devices are refused up front).
+    private static func fingerprint(of fd: Int32) -> SourceFingerprint? {
+        var st = stat()
+        guard fstat(fd, &st) == 0 else { return nil }
+        guard (st.st_mode & S_IFMT) == S_IFREG, st.st_size >= 0 else { return nil }
+        return SourceFingerprint(
+            deviceID: UInt64(bitPattern: Int64(st.st_dev)),
+            inode: UInt64(st.st_ino),
+            size: UInt64(st.st_size),
+            mtimeSec: st.st_mtimespec.tv_sec,
+            mtimeNS: st.st_mtimespec.tv_nsec
+        )
+    }
+
+    private func importOne(_ url: URL, destinationName name: String) -> ImportResult {
         guard let h = handle else { return .failure(String(localized: "vault not open")) }
-
         let base = url.lastPathComponent
-        guard !base.isEmpty else { return .failure(String(localized: "empty name")) }
 
-        // Determine the source size for a pre-flight capacity check.
-        let fileSize: UInt64
-        do {
-            let attrs = try FileManager.default.attributesOfItem(atPath: url.path)
-            fileSize = (attrs[.size] as? NSNumber)?.uint64Value ?? 0
-        } catch {
-            return .failure(String(localized: "cannot stat \(base)"))
+        // Open FIRST, then take identity and size from the open
+        // descriptor: a path can be swapped between a stat and the
+        // open; a descriptor cannot.
+        guard let fh = try? FileHandle(forReadingFrom: url) else {
+            return .failure(String(localized: "cannot read \(base)"))
         }
+        defer { try? fh.close() }
+        guard let source = Self.fingerprint(of: fh.fileDescriptor) else {
+            return .failure(String(localized: "\(base) is not a regular file"))
+        }
+        let fileSize = source.size
 
         // Pre-flight: refuse the WHOLE file up front if it doesn't fit,
         // rather than writing a partial, truncated copy. Re-read free
@@ -1614,38 +1660,88 @@ final class VaultModel: ObservableObject {
             )
         }
 
-        let name = uniqueName(for: base)
+        // Exclusive creation: a name collision is an ERROR, never a
+        // silent reuse (and truncation) of an existing entry.
+        let createStatus = farewell_create_exclusive(h, name)
+        guard createStatus == .ffi_ok else { return .failure(humanError(status: createStatus)) }
 
-        guard let fh = try? FileHandle(forReadingFrom: url) else {
-            return .failure(String(localized: "cannot read \(base)"))
-        }
-        defer { try? fh.close() }
-
-        var st = farewell_create(h, name)
-        guard st == .ffi_ok else { return .failure(humanError(status: st)) }
-        st = farewell_truncate(h, name, 0)
-        guard st == .ffi_ok else { return .failure(humanError(status: st)) }
-
+        var hasher = SHA256()
         var offset: UInt64 = 0
         let chunkSize = 64 * 1024
         while true {
-            let data = (try? fh.read(upToCount: chunkSize)) ?? Data()
+            let data: Data
+            do {
+                data = try fh.read(upToCount: chunkSize) ?? Data()
+            } catch {
+                // A read ERROR is not an EOF. The old code collapsed the
+                // two and silently imported a truncated copy — then
+                // shredded the only good original.
+                let cleanup = removePartial(name, from: h)
+                return .failure(String(localized: "Cannot read \(base): \(error.localizedDescription).\(cleanup)"))
+            }
             if data.isEmpty { break }
+            hasher.update(data: data)
             let writeStatus = data.withUnsafeBytes { raw -> Int32 in
                 let ptr = raw.bindMemory(to: UInt8.self).baseAddress
                 return farewell_write_range(h, name, offset, ptr, UInt64(data.count))
             }
             guard writeStatus == .ffi_ok else {
-                // Mid-write failure (should be rare after the pre-flight,
-                // but possible on edge cases). Roll back the partial
-                // file so we never leave a truncated import behind.
-                _ = name.withCString { farewell_delete(h, $0) }
-                return .failure(humanError(status: writeStatus))
+                let cleanup = removePartial(name, from: h)
+                return .failure(humanError(status: writeStatus) + cleanup)
             }
             offset += UInt64(data.count)
         }
 
-        return .success
+        // A stream shorter or longer than the measured size means the
+        // source is not the stable file we opened — refuse rather than
+        // publish a partial copy as if it were complete.
+        guard offset == fileSize else {
+            let cleanup = removePartial(name, from: h)
+            return .failure(String(localized: "\(base) changed size during import; the original was kept.") + cleanup)
+        }
+        let sourceDigest = hasher.finalize()
+
+        // Verify the encrypted copy (size + SHA-256, streamed back out
+        // of the vault) BEFORE reporting success — and therefore before
+        // any shred of the original is even considered.
+        guard let stored = digestOfVaultFile(name, expectedSize: fileSize, on: h),
+              stored == sourceDigest else {
+            let cleanup = removePartial(name, from: h)
+            return .failure(String(localized: "Verification failed for \(base); the original was kept.") + cleanup)
+        }
+        return .success(source)
+    }
+
+    /// Best-effort removal of a partially-imported destination. The
+    /// returned suffix (empty on success) is appended to the failure
+    /// message so the user knows whether a partial copy remains.
+    private func removePartial(_ name: String, from h: OpaquePointer) -> String {
+        let st = name.withCString { farewell_delete(h, $0) }
+        if st == .ffi_ok { return "" }
+        return " " + String(localized: "A partial copy “\(name)” could not be removed: \(humanError(status: st))")
+    }
+
+    /// SHA-256 of a vault file's decrypted content, streamed in 64 KiB
+    /// windows; `nil` on any read error or size mismatch.
+    private func digestOfVaultFile(_ name: String, expectedSize: UInt64, on h: OpaquePointer) -> SHA256.Digest? {
+        var st = FarewellStat(size: 0)
+        guard farewell_stat(h, name, &st) == .ffi_ok, st.size == expectedSize else { return nil }
+        var hasher = SHA256()
+        var offset: UInt64 = 0
+        let window: UInt64 = 64 * 1024
+        var buf = [UInt8](repeating: 0, count: Int(window))
+        defer { secureZeroLocal(&buf) }
+        while offset < expectedSize {
+            let want = min(window, expectedSize - offset)
+            var actual: UInt64 = 0
+            let s = buf.withUnsafeMutableBufferPointer { p in
+                farewell_read_range(h, name, offset, want, p.baseAddress, &actual)
+            }
+            guard s == .ffi_ok, actual > 0 else { return nil }
+            buf[0..<Int(actual)].withUnsafeBytes { hasher.update(bufferPointer: $0) }
+            offset += actual
+        }
+        return hasher.finalize()
     }
 
     /// Overwrite an existing vault file with new UTF-8 `content` (the in-app
@@ -1704,7 +1800,7 @@ final class VaultModel: ObservableObject {
     func newNote() {
         guard let h = handle else { return }
         let name = uniqueName(for: "Untitled.md")
-        let st = farewell_create(h, name)
+        let st = farewell_create_exclusive(h, name)
         guard st == .ffi_ok else {
             importStatus = "Couldn’t create a note: \(humanError(status: st))"
             return
@@ -1717,43 +1813,115 @@ final class VaultModel: ObservableObject {
         selectedFileID = name
     }
 
-    /// Return `base` if no vault file has that name, else `base` with
-    /// " 2", " 3", … inserted before the extension.
-    private func uniqueName(for base: String) -> String {
-        let existing = Set(files.map { $0.name })
-        if !existing.contains(base) { return base }
+    /// The manifest's hard limit on a file name, in UTF-8 BYTES.
+    static let maxNameBytes = 255
 
-        let ns = base as NSString
-        let ext = ns.pathExtension
-        let stem = ns.deletingPathExtension
-        var n = 2
-        while true {
-            let candidate = ext.isEmpty ? "\(stem) \(n)" : "\(stem) \(n).\(ext)"
-            if !existing.contains(candidate) { return candidate }
-            n += 1
+    /// Truncate `s` to at most `maxBytes` UTF-8 bytes, only ever on a
+    /// character boundary — a byte-level cut could split a multi-byte
+    /// character and produce a name the engine (rightly) refuses.
+    static func truncatedToBytes(_ s: String, _ maxBytes: Int) -> String {
+        guard s.utf8.count > maxBytes else { return s }
+        var out = ""
+        var used = 0
+        for ch in s {
+            let n = String(ch).utf8.count
+            if used + n > maxBytes { break }
+            out.append(ch)
+            used += n
         }
+        return out
     }
 
-    /// Securely delete a source file, returning the storage medium so the
-    /// caller can be honest about what the erase actually achieves.
+    /// Return a destination name derived from `base` that is NOT in
+    /// `existing`, fits the 255-byte manifest limit (suffix and
+    /// extension included), and never cuts a character in half.
+    /// Collisions get " 2", " 3", … before the extension. `nil` only in
+    /// the pathological case where nothing can fit.
     ///
-    /// - **Rotational (HDD):** `shredPasses` random-overwrite passes, each
-    ///   forced to durable media with `F_FULLFSYNC`. The original bytes are
-    ///   physically destroyed.
-    /// - **Solid state / unknown (SSD/flash):** the overwrite is *best-effort*
-    ///   — wear-leveling means the controller may write the random bytes to a
-    ///   fresh page and leave the old cells intact. We still overwrite, force
-    ///   it durable, and punch-hole the file (a TRIM hint) before unlinking,
-    ///   but make **no guarantee**. The real protection is never having written
-    ///   the plaintext original (keep content in the vault / in-app viewer).
-    @discardableResult
-    private func secureShred(_ url: URL) -> StorageMedium {
+    /// Pure function of its inputs: the caller supplies the reserved
+    /// set. During a batch import that set MUST include the
+    /// destinations already chosen for the batch — the `files` array
+    /// only refreshes afterwards.
+    static func uniqueName(for base: String, existing: Set<String>) -> String? {
+        let ns = base as NSString
+        let ext = ns.pathExtension
+        let stem0 = ns.deletingPathExtension
+
+        func candidate(_ n: Int) -> String? {
+            let suffix = n <= 1 ? "" : " \(n)"
+            let tail = ext.isEmpty ? "" : ".\(ext)"
+            let budget = maxNameBytes - suffix.utf8.count - tail.utf8.count
+            guard budget > 0 else { return nil }
+            var stem = truncatedToBytes(stem0, budget)
+            if stem.isEmpty { stem = truncatedToBytes(base, budget) }
+            guard !stem.isEmpty else { return nil }
+            return "\(stem)\(suffix)\(tail)"
+        }
+
+        var n = 1
+        while n < 100_000 {
+            if let c = candidate(n), !existing.contains(c) { return c }
+            n += 1
+        }
+        return nil
+    }
+
+    /// Instance convenience over the current `files` list (single
+    /// creations like `newNote`; batch imports build their own set).
+    private func uniqueName(for base: String) -> String {
+        Self.uniqueName(for: base, existing: Set(files.map { $0.name })) ?? base
+    }
+
+    /// Outcome of a shred attempt: the medium, whether every step
+    /// actually succeeded, and a short reason when it did not.
+    struct ShredOutcome {
+        let medium: StorageMedium
+        let ok: Bool
+        let reason: String?
+    }
+
+    /// Securely delete a source file. Every step reports failure
+    /// honestly — an unopenable, swapped, or partially-overwritten
+    /// original is returned as `ok == false`, never announced as
+    /// "erased".
+    ///
+    /// - **Rotational (HDD):** `shredPasses` random-overwrite passes,
+    ///   each forced to durable media with `F_FULLFSYNC`.
+    /// - **Solid state / unknown (SSD/flash):** the overwrite is
+    ///   *best-effort* — wear-leveling means the controller may write
+    ///   the random bytes to a fresh page and leave the old cells
+    ///   intact. We still overwrite, force it durable, and punch-hole
+    ///   the file (a TRIM hint) before unlinking, but make **no
+    ///   guarantee**.
+    ///
+    /// On ANY medium, snapshots and copy-on-write filesystems (APFS)
+    /// can retain older copies; the honest wording lives in
+    /// `shredNote(for:passes:)`. The real protection is never having
+    /// written the plaintext original (keep content in the vault).
+    private func secureShred(_ url: URL, expected: SourceFingerprint) -> ShredOutcome {
         let medium = detectStorageMedium(for: url)
         let passes = max(1, shredPasses)
 
-        guard let fh = try? FileHandle(forUpdating: url) else { return medium }
+        guard let fh = try? FileHandle(forUpdating: url) else {
+            return ShredOutcome(medium: medium, ok: false,
+                                reason: String(localized: "could not open the original for overwrite"))
+        }
+        var closed = false
+        defer { if !closed { try? fh.close() } }
         let fd = fh.fileDescriptor
-        let size = (try? fh.seekToEnd()) ?? 0
+
+        // The file we are about to destroy must still be the file we
+        // imported and verified: same device + inode, same size, same
+        // mtime. A file swapped in behind the same path is NOT erased.
+        guard let now = Self.fingerprint(of: fd),
+              now.deviceID == expected.deviceID, now.inode == expected.inode,
+              now.size == expected.size,
+              now.mtimeSec == expected.mtimeSec, now.mtimeNS == expected.mtimeNS
+        else {
+            return ShredOutcome(medium: medium, ok: false,
+                                reason: String(localized: "the file changed after import — not erased"))
+        }
+        let size = expected.size
 
         var blockSize: UInt64 = 4096
         var fs = statfs()
@@ -1762,22 +1930,30 @@ final class VaultModel: ObservableObject {
         }
 
         for _ in 0..<passes {
-            try? fh.seek(toOffset: 0)
-            var remaining = size
-            let chunkSize = 1 << 20  // 1 MiB
-            while remaining > 0 {
-                let n = Int(min(UInt64(chunkSize), remaining))
-                var random = Data(count: n)
-                let ok = random.withUnsafeMutableBytes { raw -> Bool in
-                    guard let base = raw.baseAddress else { return false }
-                    return SecRandomCopyBytes(kSecRandomDefault, n, base) == errSecSuccess
+            do {
+                try fh.seek(toOffset: 0)
+                var remaining = size
+                let chunkSize = 1 << 20  // 1 MiB
+                while remaining > 0 {
+                    let n = Int(min(UInt64(chunkSize), remaining))
+                    var random = Data(count: n)
+                    let ok = random.withUnsafeMutableBytes { raw -> Bool in
+                        guard let base = raw.baseAddress else { return false }
+                        return SecRandomCopyBytes(kSecRandomDefault, n, base) == errSecSuccess
+                    }
+                    guard ok else {
+                        return ShredOutcome(medium: medium, ok: false,
+                                            reason: String(localized: "random generator failed during overwrite"))
+                    }
+                    try fh.write(contentsOf: random)
+                    remaining -= UInt64(n)
                 }
-                if !ok { break }
-                fh.write(random)
-                remaining -= UInt64(n)
+            } catch {
+                return ShredOutcome(medium: medium, ok: false,
+                                    reason: String(localized: "overwrite failed: \(error.localizedDescription)"))
             }
-            // Force this pass to durable media (F_FULLFSYNC) before the next
-            // pass / before we consider the original overwritten.
+            // Force this pass to durable media (F_FULLFSYNC) before the
+            // next pass / before we consider the original overwritten.
             fullFsync(fd)
         }
 
@@ -1788,15 +1964,24 @@ final class VaultModel: ObservableObject {
         }
 
         try? fh.close()
-        try? FileManager.default.removeItem(at: url)
-        return medium
+        closed = true
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            return ShredOutcome(medium: medium, ok: false,
+                                reason: String(localized: "overwritten, but could not delete: \(error.localizedDescription)"))
+        }
+        return ShredOutcome(medium: medium, ok: true, reason: nil)
     }
 
-    /// An honest one-line summary of what a shred achieved, per medium.
-    private func shredNote(for medium: StorageMedium, passes: Int) -> String {
-        switch medium {
+    /// An honest one-line summary of what a shred achieved (or didn't).
+    private func shredNote(for outcome: ShredOutcome, passes: Int) -> String {
+        guard outcome.ok else {
+            return String(localized: "The original was NOT securely erased (\(outcome.reason ?? "unknown error")) — it is still on disk.")
+        }
+        switch outcome.medium {
         case .rotational:
-            return String(localized: "Original securely erased (overwritten \(passes)× in place on a hard disk).")
+            return String(localized: "Original overwritten \(passes)× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk.")
         case .solidState:
             return String(localized: "Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe.")
         case .unknown:

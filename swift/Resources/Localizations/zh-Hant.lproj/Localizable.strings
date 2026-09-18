@@ -229,7 +229,6 @@
 "Imported %lld; last error: %@" = "已匯入 %lld 個；最後一個錯誤：%@";
 "Imported 1 file." = "已匯入 1 個檔案。";
 "Imported %lld files." = "已匯入 %lld 個檔案。";
-"Original securely erased (overwritten %lld× in place on a hard disk)." = "原件已安全擦除（在硬碟上原地覆寫 %lld 次）。";
 "Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "原件已覆寫並刪除——但這是 SSD：磨損均衡意味著單元可能仍然殘留。真正的保護是加密保險庫，而非擦除。";
 "Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "原件已覆寫並刪除（儲存型別未知；按快閃記憶體處理——不保證物理擦除）。";
 
@@ -292,7 +291,6 @@
 /* --- Import failure reasons --- */
 "vault not open" = "保險庫未開啟";
 "empty name" = "名稱為空";
-"cannot stat %@" = "無法獲取 %@ 的狀態";
 "cannot read %@" = "無法讀取 %@";
 "“%@” is %@ but only %@ is free in this level." = "「%@」為 %@，但此層級僅有 %@ 可用。";
 "Not enough space: the edit needs %@ but only %@ is available." = "空間不足：此次編輯需要 %@，但僅有 %@ 可用。";
@@ -323,3 +321,20 @@
 "Hardware key enrolled. Unlock again to continue." = "硬體金鑰已註冊。請重新解鎖以繼續。";
 "Could not add the hardware key: %@. Your vault is unchanged." = "無法新增硬體金鑰：%@。你的保險庫未更改。";
 "Touch your new key now" = "現在輕觸你的新金鑰";
+
+// Import safety & honest shredding (v0.23 — audit tasks 03/04)
+"A file with that name already exists." = "已存在同名檔案。";
+"A write failed and this session is no longer safe — close and reopen the vault." = "一次寫入失敗，此工作階段不再安全——請關閉並重新開啟保險庫。";
+"cannot import %@: no valid vault name fits" = "無法匯入 %@：沒有可用的有效名稱";
+"%@ is not a regular file" = "%@ 不是普通檔案";
+"Cannot read %@: %@.%@" = "無法讀取 %@：%@。%@";
+"A partial copy “%@” could not be removed: %@" = "無法刪除部分副本「%@」：%@";
+"%@ changed size during import; the original was kept." = "%@ 在匯入期間大小發生變化；已保留原件。";
+"Verification failed for %@; the original was kept." = "%@ 驗證失敗；已保留原件。";
+"could not open the original for overwrite" = "無法開啟原件進行覆寫";
+"the file changed after import — not erased" = "檔案在匯入後發生了變化——未擦除";
+"random generator failed during overwrite" = "覆寫期間隨機數產生器發生錯誤";
+"overwrite failed: %@" = "覆寫失敗：%@";
+"overwritten, but could not delete: %@" = "已覆寫，但無法刪除：%@";
+"The original was NOT securely erased (%@) — it is still on disk." = "原件未被安全擦除（%@）——仍在磁碟上。";
+"Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "原件已就地覆寫 %lld× 並刪除。注意：快照或寫入時複製檔案系統可能保留舊副本，即使在機械硬碟上也是如此。";

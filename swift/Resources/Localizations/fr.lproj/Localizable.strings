@@ -229,7 +229,6 @@
 "Imported %lld; last error: %@" = "%lld importé(s) ; dernière erreur : %@";
 "Imported 1 file." = "1 fichier importé.";
 "Imported %lld files." = "%lld fichiers importés.";
-"Original securely erased (overwritten %lld× in place on a hard disk)." = "Original effacé de façon sécurisée (écrasé %lld× sur place sur un disque dur).";
 "Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "Original écrasé + supprimé — mais c’est un SSD : la répartition d’usure fait que les cellules peuvent persister. La vraie protection est le coffre chiffré, pas l’effacement.";
 "Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "Original écrasé + supprimé (type de stockage inconnu ; traité comme du flash — aucune garantie d’effacement physique).";
 
@@ -292,7 +291,6 @@
 /* --- Raisons d'échec d'import --- */
 "vault not open" = "coffre non ouvert";
 "empty name" = "nom vide";
-"cannot stat %@" = "impossible d’analyser %@";
 "cannot read %@" = "impossible de lire %@";
 "“%@” is %@ but only %@ is free in this level." = "« %@ » fait %@ mais seulement %@ sont libres dans ce niveau.";
 "Not enough space: the edit needs %@ but only %@ is available." = "Espace insuffisant : la modification nécessite %@ mais seulement %@ sont disponibles.";
@@ -323,3 +321,20 @@
 "Hardware key enrolled. Unlock again to continue." = "Clé matérielle enrôlée. Déverrouillez à nouveau pour continuer.";
 "Could not add the hardware key: %@. Your vault is unchanged." = "Impossible d’ajouter la clé matérielle : %@. Votre coffre est inchangé.";
 "Touch your new key now" = "Touchez votre nouvelle clé maintenant";
+
+// Import safety & honest shredding (v0.23 — audit tasks 03/04)
+"A file with that name already exists." = "Un fichier portant ce nom existe déjà.";
+"A write failed and this session is no longer safe — close and reopen the vault." = "Une écriture a échoué et cette session n’est plus sûre — fermez puis rouvrez le coffre.";
+"cannot import %@: no valid vault name fits" = "impossible d’importer %@ : aucun nom valide ne convient";
+"%@ is not a regular file" = "%@ n’est pas un fichier ordinaire";
+"Cannot read %@: %@.%@" = "Impossible de lire %@ : %@.%@";
+"A partial copy “%@” could not be removed: %@" = "Une copie partielle « %@ » n’a pas pu être supprimée : %@";
+"%@ changed size during import; the original was kept." = "%@ a changé de taille pendant l’import ; l’original a été conservé.";
+"Verification failed for %@; the original was kept." = "Échec de la vérification de %@ ; l’original a été conservé.";
+"could not open the original for overwrite" = "impossible d’ouvrir l’original pour l’écraser";
+"the file changed after import — not erased" = "le fichier a changé après l’import — non effacé";
+"random generator failed during overwrite" = "le générateur aléatoire a échoué pendant l’écrasement";
+"overwrite failed: %@" = "écrasement échoué : %@";
+"overwritten, but could not delete: %@" = "écrasé, mais suppression impossible : %@";
+"The original was NOT securely erased (%@) — it is still on disk." = "L’original n’a PAS été effacé de façon sûre (%@) — il est toujours sur le disque.";
+"Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "Original écrasé %lld× sur place puis supprimé. Remarque : les instantanés ou les systèmes de fichiers en copie sur écriture peuvent conserver d’anciennes copies, même sur un disque dur.";

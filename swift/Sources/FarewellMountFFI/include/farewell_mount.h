@@ -100,6 +100,13 @@ typedef enum FarewellStatus {
     FAREWELL_HW_NOT_PRESENT           = 16,
     FAREWELL_HW_AUTH_FAILED           = 17,
     FAREWELL_HW_MULTIPLE_KEYS         = 18,
+    /* Exclusive creation refused: a file with that name already exists
+     * (only from farewell_create_exclusive; farewell_create stays
+     * idempotent). */
+    FAREWELL_ALREADY_EXISTS           = 19,
+    /* A previous mutation failed mid-write; the session's durable state
+     * is uncertain. Mutations are refused — close and reopen the vault. */
+    FAREWELL_SESSION_POISONED         = 20,
     FAREWELL_INTERNAL                 = 100,
 } FarewellStatus;
 
@@ -398,6 +405,14 @@ int32_t farewell_read_range(
  * existing content alone if present. Idempotent.
  */
 int32_t farewell_create(FarewellVault *handle, const char *name_utf8);
+
+/*
+ * POSIX O_CREAT | O_EXCL: create the file, failing with
+ * FAREWELL_ALREADY_EXISTS if the name is already present. Importers
+ * must use this (never farewell_create + farewell_truncate) so a name
+ * collision can never truncate an existing entry.
+ */
+int32_t farewell_create_exclusive(FarewellVault *handle, const char *name_utf8);
 
 /*
  * POSIX pwrite + automatic extension. Writes data_len bytes at

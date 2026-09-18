@@ -43,7 +43,9 @@ mod proptest_ops;
 
 pub use chunk::{ChunkIndex, CHUNK_PLAINTEXT_LEN, CHUNK_STORED_LEN};
 pub use error::FormatError;
-pub use manifest::{FileEntry, FileStat, Manifest};
+pub use manifest::{
+    validate_folder_path, validate_name, validate_owner, FileEntry, FileStat, Manifest,
+};
 pub use metadata::{
     fingerprint_from_vk, signed_metadata_message, Metadata, FORMAT_VERSION, METADATA_BLOB_LEN,
     MLDSA_VK_LEN, SALT_LEN,

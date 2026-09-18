@@ -46,6 +46,50 @@ const MAX_NAME_LEN: usize = 255;
 const MAX_FOLDER_PATH_LEN: usize = 1024;
 const MAX_OWNER_LEN: usize = 256;
 
+/// The single shared rule for a file name (a flat, possibly
+/// slash-separated path in the manifest): non-empty, at most
+/// [`MAX_NAME_LEN`] UTF-8 **bytes**, no ASCII control characters.
+///
+/// This is THE rule — `serialize` enforces it as defense in depth, but
+/// every public mutation validates through here BEFORE touching any
+/// state, so an invalid name can never poison a session or reach the
+/// destructive I/O phase.
+pub fn validate_name(name: &str) -> Result<()> {
+    let bytes = name.as_bytes();
+    if bytes.is_empty() || bytes.len() > MAX_NAME_LEN {
+        return Err(FormatError::InvalidName);
+    }
+    if bytes.iter().any(|b| b.is_ascii_control()) {
+        return Err(FormatError::InvalidName);
+    }
+    Ok(())
+}
+
+/// Shared rule for an explicit folder path (normalized, no
+/// leading/trailing slash): non-empty, at most [`MAX_FOLDER_PATH_LEN`]
+/// UTF-8 bytes, no ASCII control characters.
+pub fn validate_folder_path(path: &str) -> Result<()> {
+    let bytes = path.as_bytes();
+    if bytes.is_empty() || bytes.len() > MAX_FOLDER_PATH_LEN {
+        return Err(FormatError::InvalidName);
+    }
+    if bytes.iter().any(|b| b.is_ascii_control()) {
+        return Err(FormatError::InvalidName);
+    }
+    Ok(())
+}
+
+/// Shared rule for the opt-in owner string: at most [`MAX_OWNER_LEN`]
+/// UTF-8 bytes. Enforced at the entry points (builder, migration) so
+/// `serialize` never has to truncate — a truncation could split a
+/// multi-byte UTF-8 character and corrupt the field.
+pub fn validate_owner(owner: &str) -> Result<()> {
+    if owner.len() > MAX_OWNER_LEN {
+        return Err(FormatError::InvalidName);
+    }
+    Ok(())
+}
+
 /// One file entry in the manifest.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FileEntry {
@@ -162,13 +206,8 @@ impl Manifest {
         out.extend_from_slice(&tmp4);
 
         for e in &self.entries {
+            validate_name(&e.name)?;
             let name_bytes = e.name.as_bytes();
-            if name_bytes.is_empty() || name_bytes.len() > MAX_NAME_LEN {
-                return Err(FormatError::InvalidName);
-            }
-            if name_bytes.iter().any(|b| b.is_ascii_control()) {
-                return Err(FormatError::InvalidName);
-            }
             out.push(name_bytes.len() as u8);
             out.extend_from_slice(name_bytes);
             LittleEndian::write_u64(&mut tmp8, e.size);
@@ -189,24 +228,25 @@ impl Manifest {
         LittleEndian::write_u16(&mut tmp2, self.folders.len() as u16);
         out.extend_from_slice(&tmp2);
         for f in &self.folders {
+            validate_folder_path(f)?;
             let fb = f.as_bytes();
-            if fb.is_empty() || fb.len() > MAX_FOLDER_PATH_LEN {
-                return Err(FormatError::InvalidName);
-            }
-            if fb.iter().any(|b| b.is_ascii_control()) {
-                return Err(FormatError::InvalidName);
-            }
             LittleEndian::write_u16(&mut tmp2, fb.len() as u16);
             out.extend_from_slice(&tmp2);
             out.extend_from_slice(fb);
         }
 
         // owner (v4): u16 byte-length + UTF-8 (length 0 = not recorded).
+        // Refuse an over-long owner rather than truncating: a byte
+        // truncation could split a multi-byte UTF-8 character and corrupt
+        // the field (entry points validate via `validate_owner`; this is
+        // defense in depth).
         let owner_bytes = self.owner.as_deref().unwrap_or("").as_bytes();
-        let olen = owner_bytes.len().min(MAX_OWNER_LEN);
-        LittleEndian::write_u16(&mut tmp2, olen as u16);
+        if owner_bytes.len() > MAX_OWNER_LEN {
+            return Err(FormatError::InvalidName);
+        }
+        LittleEndian::write_u16(&mut tmp2, owner_bytes.len() as u16);
         out.extend_from_slice(&tmp2);
-        out.extend_from_slice(&owner_bytes[..olen]);
+        out.extend_from_slice(owner_bytes);
 
         if out.len() > CHUNK_PLAINTEXT_LEN {
             return Err(FormatError::ManifestOverflow);

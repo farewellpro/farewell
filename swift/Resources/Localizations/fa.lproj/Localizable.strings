@@ -229,7 +229,6 @@
 "Imported %lld; last error: %@" = "%lld مورد وارد شد؛ آخرین خطا: %@";
 "Imported 1 file." = "۱ فایل وارد شد.";
 "Imported %lld files." = "%lld فایل وارد شد.";
-"Original securely erased (overwritten %lld× in place on a hard disk)." = "نسخهٔ اصلی با ایمنی پاک شد (روی دیسک سخت %lld× در جای خود بازنویسی شد).";
 "Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "نسخهٔ اصلی بازنویسی + حذف شد — اما این یک SSD است: به‌دلیل توزیع فرسایش ممکن است سلول‌ها باقی بمانند. محافظت واقعی همان گاوصندوق رمزگذاری‌شده است، نه پاک کردن.";
 "Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "نسخهٔ اصلی بازنویسی + حذف شد (نوع حافظه ناشناخته؛ به‌عنوان فلش در نظر گرفته شد — بدون تضمین پاک‌سازی فیزیکی).";
 
@@ -292,7 +291,6 @@
 /* --- Import failure reasons --- */
 "vault not open" = "گاوصندوق باز نیست";
 "empty name" = "نام خالی";
-"cannot stat %@" = "امکان دریافت اطلاعات %@ نیست";
 "cannot read %@" = "امکان خواندن %@ نیست";
 "“%@” is %@ but only %@ is free in this level." = "« %@ » برابر %@ است اما فقط %@ در این سطح آزاد است.";
 "Not enough space: the edit needs %@ but only %@ is available." = "فضای کافی نیست: ویرایش به %@ نیاز دارد اما فقط %@ در دسترس است.";
@@ -323,3 +321,20 @@
 "Hardware key enrolled. Unlock again to continue." = "کلید سخت‌افزاری ثبت شد. برای ادامه دوباره قفل را باز کنید.";
 "Could not add the hardware key: %@. Your vault is unchanged." = "افزودن کلید سخت‌افزاری ممکن نشد: %@. گاوصندوق شما تغییری نکرده است.";
 "Touch your new key now" = "اکنون کلید جدید خود را لمس کنید";
+
+// Import safety & honest shredding (v0.23 — audit tasks 03/04)
+"A file with that name already exists." = "فایلی با این نام از قبل وجود دارد.";
+"A write failed and this session is no longer safe — close and reopen the vault." = "یک نوشتن ناموفق بود و این نشست دیگر امن نیست — گاوصندوق را ببندید و دوباره باز کنید.";
+"cannot import %@: no valid vault name fits" = "امکان وارد کردن %@ نیست: هیچ نام معتبری جا نمی‌شود";
+"%@ is not a regular file" = "%@ یک فایل معمولی نیست";
+"Cannot read %@: %@.%@" = "امکان خواندن %@ نیست: %@.%@";
+"A partial copy “%@” could not be removed: %@" = "حذف نسخهٔ ناقص «%@» ممکن نشد: %@";
+"%@ changed size during import; the original was kept." = "اندازهٔ %@ در حین وارد کردن تغییر کرد؛ نسخهٔ اصلی نگه داشته شد.";
+"Verification failed for %@; the original was kept." = "راستی‌آزمایی %@ ناموفق بود؛ نسخهٔ اصلی نگه داشته شد.";
+"could not open the original for overwrite" = "باز کردن نسخهٔ اصلی برای بازنویسی ممکن نشد";
+"the file changed after import — not erased" = "فایل پس از وارد کردن تغییر کرد — پاک نشد";
+"random generator failed during overwrite" = "مولد تصادفی هنگام بازنویسی خطا داد";
+"overwrite failed: %@" = "بازنویسی ناموفق بود: %@";
+"overwritten, but could not delete: %@" = "بازنویسی شد، اما حذف ممکن نشد: %@";
+"The original was NOT securely erased (%@) — it is still on disk." = "نسخهٔ اصلی به‌طور امن پاک نشد (%@) — هنوز روی دیسک است.";
+"Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "نسخهٔ اصلی %lld× در جای خود بازنویسی و سپس حذف شد. توجه: عکس‌های لحظه‌ای یا سیستم‌های فایل copy-on-write ممکن است نسخه‌های قدیمی را حتی روی دیسک سخت نگه دارند.";

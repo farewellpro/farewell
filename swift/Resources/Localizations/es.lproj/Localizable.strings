@@ -229,7 +229,6 @@
 "Imported %lld; last error: %@" = "Importados %lld; último error: %@";
 "Imported 1 file." = "1 archivo importado.";
 "Imported %lld files." = "%lld archivos importados.";
-"Original securely erased (overwritten %lld× in place on a hard disk)." = "Original borrado de forma segura (sobrescrito %lld× en su sitio en un disco duro).";
 "Original overwritten + deleted — but this is an SSD: wear-leveling means the cells may persist. The real protection is the encrypted vault, not the wipe." = "Original sobrescrito + eliminado, pero es un SSD: el nivelado de desgaste hace que las celdas puedan persistir. La verdadera protección es la caja fuerte cifrada, no el borrado.";
 "Original overwritten + deleted (storage type unknown; treated as flash — no physical-erase guarantee)." = "Original sobrescrito + eliminado (tipo de almacenamiento desconocido; tratado como flash: sin garantía de borrado físico).";
 
@@ -292,7 +291,6 @@
 /* --- Import failure reasons --- */
 "vault not open" = "caja fuerte no abierta";
 "empty name" = "nombre vacío";
-"cannot stat %@" = "no se puede analizar %@";
 "cannot read %@" = "no se puede leer %@";
 "“%@” is %@ but only %@ is free in this level." = "« %@ » ocupa %@ pero solo hay %@ libres en este nivel.";
 "Not enough space: the edit needs %@ but only %@ is available." = "Espacio insuficiente: la edición necesita %@ pero solo hay %@ disponibles.";
@@ -323,3 +321,20 @@
 "Hardware key enrolled. Unlock again to continue." = "Llave física registrada. Vuelve a desbloquear para continuar.";
 "Could not add the hardware key: %@. Your vault is unchanged." = "No se pudo añadir la llave física: %@. Tu caja fuerte no ha cambiado.";
 "Touch your new key now" = "Toca tu nueva llave ahora";
+
+// Import safety & honest shredding (v0.23 — audit tasks 03/04)
+"A file with that name already exists." = "Ya existe un archivo con ese nombre.";
+"A write failed and this session is no longer safe — close and reopen the vault." = "Una escritura falló y esta sesión ya no es segura: cierra y vuelve a abrir la caja fuerte.";
+"cannot import %@: no valid vault name fits" = "no se puede importar %@: ningún nombre válido cabe";
+"%@ is not a regular file" = "%@ no es un archivo normal";
+"Cannot read %@: %@.%@" = "No se puede leer %@: %@.%@";
+"A partial copy “%@” could not be removed: %@" = "No se pudo eliminar una copia parcial «%@»: %@";
+"%@ changed size during import; the original was kept." = "%@ cambió de tamaño durante la importación; se conservó el original.";
+"Verification failed for %@; the original was kept." = "Falló la verificación de %@; se conservó el original.";
+"could not open the original for overwrite" = "no se pudo abrir el original para sobrescribirlo";
+"the file changed after import — not erased" = "el archivo cambió después de la importación — no se borró";
+"random generator failed during overwrite" = "el generador aleatorio falló durante la sobrescritura";
+"overwrite failed: %@" = "falló la sobrescritura: %@";
+"overwritten, but could not delete: %@" = "sobrescrito, pero no se pudo eliminar: %@";
+"The original was NOT securely erased (%@) — it is still on disk." = "El original NO se borró de forma segura (%@): sigue en el disco.";
+"Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "Original sobrescrito %lld× en el sitio y eliminado. Nota: las instantáneas o los sistemas de archivos de copia en escritura pueden conservar copias antiguas, incluso en un disco duro.";

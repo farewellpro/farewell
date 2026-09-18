@@ -417,17 +417,21 @@ pub fn migrate_vault<A: Authenticator>(
     //    opt-in creator identity (a migrated vault keeps its original owner).
     let want_counter = old_counter.saturating_add(1);
     let src_owner = src.owner().map(str::to_string);
-    {
-        let m = dst
-            .mounted
-            .as_mut()
-            .ok_or_else(|| FormatError::Manifest("destination not mounted".into()))?;
-        if m.manifest.counter < want_counter {
-            m.manifest.counter = want_counter;
-        }
-        m.manifest.owner = src_owner;
+    if let Some(o) = src_owner.as_deref() {
+        // Validate before mutation: `serialize` refuses over-long owners
+        // instead of truncating (parse guarantees ≤ 256 for a vault-born
+        // owner, so this only guards exotic callers).
+        crate::manifest::validate_owner(o)?;
     }
-    dst.commit_manifest()?;
+    {
+        let mut candidate = dst.candidate_manifest()?;
+        if candidate.counter < want_counter {
+            candidate.counter = want_counter;
+        }
+        candidate.owner = src_owner;
+        let cand_bytes = candidate.serialize()?;
+        dst.destructive_phase(|v| v.publish_manifest(candidate, &cand_bytes, false))?;
+    }
 
     // 10. Verify: re-read the destination and compare to the source hashes.
     if dst.list().len() != files.len() {
@@ -541,6 +545,13 @@ impl VaultBuilder {
     /// can drive a real progress bar — the chunk fill (random CSPRNG, for
     /// deniability) dominates creation time for large vaults.
     pub fn build_with_progress<F: FnMut(u64, u64)>(mut self, mut progress: F) -> Result<Vault> {
+        // Validate the opt-in owner BEFORE any disk work: `serialize`
+        // refuses over-long owners instead of truncating them (a byte
+        // truncation could split a UTF-8 character), so catch it here
+        // where nothing has been written yet.
+        if let Some(o) = self.owner.as_deref() {
+            crate::manifest::validate_owner(o)?;
+        }
         // The only plaintext field: a uniform-random salt.
         let salt: [u8; SALT_LEN] = match self.explicit_salt.take() {
             Some(s) => s,
@@ -631,6 +642,7 @@ impl VaultBuilder {
             metadata,
             mounted: None,
             hw_key_count: None,
+            poisoned: false,
         };
         // The opt-in owner is recorded only on the PRIMARY level's manifest.
         for (i, (slot, master)) in active.iter().enumerate() {
@@ -684,6 +696,14 @@ pub struct Vault {
     /// passphrase-only). `None` until mounted. Lets callers show how many
     /// keys open the vault and cap further enrollment.
     hw_key_count: Option<usize>,
+    /// Set when a mutation failed at a point where the durable on-disk
+    /// state is uncertain (destructive chunk I/O already started, or a
+    /// manifest write / sync whose outcome is ambiguous). While set,
+    /// every further mutation is refused with
+    /// [`FormatError::SessionPoisoned`]; reads remain available. The
+    /// only recovery is closing and reopening the vault, which
+    /// resynchronizes the in-memory state with the on-disk truth.
+    poisoned: bool,
 }
 
 struct MountedLevel {
@@ -815,6 +835,7 @@ impl Vault {
                 metadata,
                 mounted: None,
                 hw_key_count: Some(primary.num_hw_keys),
+                poisoned: false,
             };
 
             // Mount the (single) content tree.
@@ -961,20 +982,43 @@ impl Vault {
     }
 
     /// Add (or replace) a file in the mounted level.
+    ///
+    /// Ordering: everything that can fail for a *caller* reason (bad
+    /// name, manifest capacity, allocation) is checked before any
+    /// destructive I/O, so those errors leave the vault byte-for-byte
+    /// untouched. Writing the fresh chunks is also non-destructive
+    /// (they were free). Only the shred of the replaced file's old
+    /// chunks and the manifest write are destructive; an error there
+    /// poisons the session (see [`FormatError::SessionPoisoned`]).
     pub fn add_file(&mut self, name: &str, mut plaintext: Vec<u8>) -> Result<()> {
-        if name.is_empty() {
-            return Err(FormatError::InvalidName);
-        }
+        self.ensure_mutable()?;
+        crate::manifest::validate_name(name)?;
 
         let existing_chunks: Vec<ChunkIndex> = self
             .mounted
             .as_ref()
-            .and_then(|m| m.manifest.find(name).map(|e| e.chunks.clone()))
+            .ok_or_else(|| FormatError::Manifest("no level mounted".into()))?
+            .manifest
+            .find(name)
+            .map(|e| e.chunks.clone())
             .unwrap_or_default();
 
         let needed = plaintext.len().div_ceil(CHUNK_PLAINTEXT_LEN).max(1);
         let mut allocated = self.allocate_chunks(needed, &existing_chunks)?;
 
+        // Pre-validate the candidate manifest (name rule, single-chunk
+        // capacity) BEFORE touching the disk.
+        let mut candidate = self.candidate_manifest()?;
+        candidate.upsert(FileEntry {
+            name: name.to_string(),
+            size: plaintext.len() as u64,
+            chunks: allocated.clone(),
+        });
+        let cand_bytes = candidate.serialize()?;
+
+        // Non-destructive phase: fresh chunks were free; on error the
+        // old state is fully intact (dangling fresh chunks are
+        // indistinguishable from unused random fill).
         let master_key = self.master_key_view()?;
         for (i, chunk_idx) in allocated.iter().copied().enumerate() {
             let start = i * CHUNK_PLAINTEXT_LEN;
@@ -984,25 +1028,18 @@ impl Vault {
             let stored = encrypt_chunk(&chunk_key, chunk_idx, slice)?;
             self.write_chunk_raw(chunk_idx, &stored)?;
         }
-
-        for old in &existing_chunks {
-            if !allocated.contains(old) {
-                self.write_chunk_raw(*old, &random_chunk()?)?;
-            }
-        }
-
-        let entry = FileEntry {
-            name: name.to_string(),
-            size: plaintext.len() as u64,
-            chunks: std::mem::take(&mut allocated),
-        };
         plaintext.zeroize();
+        let allocated = std::mem::take(&mut allocated);
 
-        let m = self.mounted.as_mut().expect("mounted ensured");
-        m.manifest.upsert(entry);
-        self.commit_manifest()?;
-        self.file.sync_all()?;
-        Ok(())
+        // Destructive phase: shred the replaced chunks, publish.
+        self.destructive_phase(|v| {
+            for old in &existing_chunks {
+                if !allocated.contains(old) {
+                    v.write_chunk_raw(*old, &random_chunk()?)?;
+                }
+            }
+            v.publish_manifest(candidate, &cand_bytes, false)
+        })
     }
 
     /// Read a file's plaintext from the mounted level.
@@ -1162,24 +1199,48 @@ impl Vault {
     /// `O_EXCL`). Empty file = zero size, zero chunks; the manifest is
     /// committed but no chunk I/O happens.
     pub fn create_file(&mut self, name: &str) -> Result<()> {
-        if name.is_empty() {
-            return Err(FormatError::InvalidName);
-        }
+        self.ensure_mutable()?;
+        crate::manifest::validate_name(name)?;
         let m = self
             .mounted
-            .as_mut()
+            .as_ref()
             .ok_or_else(|| FormatError::Manifest("no level mounted".into()))?;
         if m.manifest.find(name).is_some() {
             return Ok(());
         }
-        m.manifest.upsert(FileEntry {
+        self.create_empty_entry(name)
+    }
+
+    /// Create an empty file, **failing** if `name` already exists —
+    /// POSIX `O_CREAT | O_EXCL`. This is the primitive an importer must
+    /// use: the idempotent [`Self::create_file`] cannot distinguish
+    /// "created" from "already there", which is exactly how an import
+    /// batch ends up truncating a homonymous file it just wrote.
+    pub fn create_file_exclusive(&mut self, name: &str) -> Result<()> {
+        self.ensure_mutable()?;
+        crate::manifest::validate_name(name)?;
+        let m = self
+            .mounted
+            .as_ref()
+            .ok_or_else(|| FormatError::Manifest("no level mounted".into()))?;
+        if m.manifest.find(name).is_some() {
+            return Err(FormatError::AlreadyExists(name.to_string()));
+        }
+        self.create_empty_entry(name)
+    }
+
+    /// Shared tail of the two `create_file*` flavors: validated name,
+    /// known absent. No chunk I/O — only the manifest write is
+    /// destructive.
+    fn create_empty_entry(&mut self, name: &str) -> Result<()> {
+        let mut candidate = self.candidate_manifest()?;
+        candidate.upsert(FileEntry {
             name: name.to_string(),
             size: 0,
             chunks: Vec::new(),
         });
-        self.commit_manifest()?;
-        self.file.sync_all()?;
-        Ok(())
+        let cand_bytes = candidate.serialize()?;
+        self.destructive_phase(|v| v.publish_manifest(candidate, &cand_bytes, false))
     }
 
     /// Write `data` into `name` at byte `offset`, growing the file if
@@ -1212,9 +1273,8 @@ impl Vault {
     /// matches the existing behavior of `add_file`; a journaling layer
     /// can be added later if real deployments hit this window.
     pub fn write_file_range(&mut self, name: &str, offset: u64, data: &[u8]) -> Result<()> {
-        if name.is_empty() {
-            return Err(FormatError::InvalidName);
-        }
+        self.ensure_mutable()?;
+        crate::manifest::validate_name(name)?;
         if data.is_empty() {
             return Ok(());
         }
@@ -1232,11 +1292,25 @@ impl Vault {
         };
 
         let data_len = data.len();
-        let end_byte = offset + data_len as u64;
+        // Checked arithmetic: a hostile/buggy offset near u64::MAX must
+        // be rejected before any allocation or write, not wrap around.
+        let end_byte = offset
+            .checked_add(data_len as u64)
+            .ok_or(FormatError::Overflow)?;
         let new_size = end_byte.max(current_size);
 
         let cp_len = CHUNK_PLAINTEXT_LEN as u64;
-        let new_chunk_count = ((new_size + cp_len - 1) / cp_len) as usize;
+        let new_chunk_count_u64 = new_size
+            .checked_add(cp_len - 1)
+            .ok_or(FormatError::Overflow)?
+            / cp_len;
+        let new_chunk_count =
+            usize::try_from(new_chunk_count_u64).map_err(|_| FormatError::Overflow)?;
+        // A chunk index is a u32: reject byte ranges the format cannot
+        // address before allocating anything.
+        if new_chunk_count_u64 > u32::MAX as u64 {
+            return Err(FormatError::Overflow);
+        }
 
         // The first chunk we must re-encrypt:
         //   - normal in-range write: the chunk containing `offset`
@@ -1261,9 +1335,20 @@ impl Vault {
 
         // The new chunks list, length = new_chunk_count.
         let mut new_chunks_list: Vec<ChunkIndex> = Vec::with_capacity(new_chunk_count);
-        new_chunks_list.extend_from_slice(&current_chunks[..first_dirty]);
+        new_chunks_list.extend_from_slice(&current_chunks[..first_dirty.min(current_chunks.len())]);
         new_chunks_list.extend_from_slice(&fresh);
         debug_assert_eq!(new_chunks_list.len(), new_chunk_count);
+
+        // Pre-validate the candidate manifest BEFORE any disk write, so
+        // a manifest-capacity overflow (too many chunk references) can
+        // never fire after the destructive phase started.
+        let mut candidate = self.candidate_manifest()?;
+        candidate.upsert(FileEntry {
+            name: name.to_string(),
+            size: new_size,
+            chunks: new_chunks_list.clone(),
+        });
+        let cand_bytes = candidate.serialize()?;
 
         // Chunks displaced by the write that must be random-filled
         // after we have written the fresh replacements.
@@ -1316,21 +1401,14 @@ impl Vault {
             self.write_chunk_raw(fresh_idx, &stored)?;
         }
 
-        // Random-fill displaced chunks.
-        for old in to_free {
-            self.write_chunk_raw(old, &random_chunk()?)?;
-        }
-
-        // Update manifest atomically.
-        let m = self.mounted.as_mut().expect("mounted ensured");
-        m.manifest.upsert(FileEntry {
-            name: name.to_string(),
-            size: new_size,
-            chunks: new_chunks_list,
-        });
-        self.commit_manifest()?;
-        self.file.sync_all()?;
-        Ok(())
+        // Destructive phase: random-fill displaced chunks, publish the
+        // pre-validated candidate. An error here poisons the session.
+        self.destructive_phase(|v| {
+            for old in to_free {
+                v.write_chunk_raw(old, &random_chunk()?)?;
+            }
+            v.publish_manifest(candidate, &cand_bytes, false)
+        })
     }
 
     /// Truncate or extend `name` to exactly `new_size` bytes.
@@ -1347,9 +1425,8 @@ impl Vault {
     ///    length — every new chunk is zero-filled and the previous
     ///    final chunk has its real_len extended.
     pub fn truncate_file(&mut self, name: &str, new_size: u64) -> Result<()> {
-        if name.is_empty() {
-            return Err(FormatError::InvalidName);
-        }
+        self.ensure_mutable()?;
+        crate::manifest::validate_name(name)?;
 
         let (current_size, current_chunks) = {
             let m = self
@@ -1368,11 +1445,25 @@ impl Vault {
         }
 
         if new_size > current_size {
-            // Grow path: delegate to write_file_range with zero bytes.
-            // We rely on its hole-fill logic for the gap.
-            let extra = (new_size - current_size) as usize;
-            let zeros = vec![0u8; extra];
-            return self.write_file_range(name, current_size, &zeros);
+            // Grow path: delegate to write_file_range with zero bytes,
+            // in bounded windows — never materialize the whole
+            // extension as one Vec (a multi-GiB grow must not OOM).
+            // Capacity pre-flight first, so an impossible grow is
+            // refused before the first window is committed.
+            if let Some((_, free)) = self.space() {
+                if new_size - current_size > free {
+                    return Err(FormatError::Full);
+                }
+            }
+            const GROW_WINDOW: usize = 64 * CHUNK_PLAINTEXT_LEN; // 4 MiB
+            let zeros = vec![0u8; GROW_WINDOW.min((new_size - current_size) as usize)];
+            let mut cursor = current_size;
+            while cursor < new_size {
+                let n = zeros.len().min((new_size - cursor) as usize);
+                self.write_file_range(name, cursor, &zeros[..n])?;
+                cursor += n as u64;
+            }
+            return Ok(());
         }
 
         // Shrink path.
@@ -1418,20 +1509,23 @@ impl Vault {
             }
         }
 
-        for old in to_free {
-            self.write_chunk_raw(old, &random_chunk()?)?;
-        }
-
-        let m = self.mounted.as_mut().expect("mounted ensured");
-        m.manifest.upsert(FileEntry {
+        // Pre-validate the candidate manifest before shredding anything.
+        let mut candidate = self.candidate_manifest()?;
+        candidate.upsert(FileEntry {
             name: name.to_string(),
             size: new_size,
             chunks: new_chunks_list,
         });
-        self.commit_manifest()?;
-        // Shrinking frees + shreds chunks; force that overwrite to durable media.
-        self.durable_sync()?;
-        Ok(())
+        let cand_bytes = candidate.serialize()?;
+
+        // Destructive phase: shred the dropped chunks, publish, and
+        // force the shred to durable media.
+        self.destructive_phase(|v| {
+            for old in to_free {
+                v.write_chunk_raw(old, &random_chunk()?)?;
+            }
+            v.publish_manifest(candidate, &cand_bytes, true)
+        })
     }
 
     /// Rename `old_name` to `new_name` in the mounted level.
@@ -1452,7 +1546,13 @@ impl Vault {
     /// unchanged). A file's chunk indices only change when its
     /// content is modified (cf. [`Self::write_file_range`]).
     pub fn rename_file(&mut self, old_name: &str, new_name: &str) -> Result<()> {
-        if old_name.is_empty() || new_name.is_empty() {
+        self.ensure_mutable()?;
+        // The FULL name rule (byte length, control chars) runs before
+        // any state is read or touched: an over-long new name must be a
+        // clean refusal, never a half-applied rename that poisons the
+        // next operation.
+        crate::manifest::validate_name(new_name)?;
+        if old_name.is_empty() {
             return Err(FormatError::InvalidName);
         }
         if old_name == new_name {
@@ -1481,21 +1581,23 @@ impl Vault {
             (renamed, displaced)
         };
 
-        // Mutate the manifest: drop old_name, drop any existing
-        // new_name, insert the renamed entry.
-        let m = self.mounted.as_mut().expect("mounted ensured");
-        m.manifest.remove(old_name);
-        m.manifest.remove(new_name);
-        m.manifest.upsert(renamed);
+        // Build + pre-validate the candidate: drop old_name, drop any
+        // existing new_name, insert the renamed entry. The live
+        // manifest is untouched until the candidate is fully validated.
+        let mut candidate = self.candidate_manifest()?;
+        candidate.remove(old_name);
+        candidate.remove(new_name);
+        candidate.upsert(renamed);
+        let cand_bytes = candidate.serialize()?;
 
-        // Shred the displaced destination's chunks (if any).
-        for old_idx in displaced_chunks {
-            self.write_chunk_raw(old_idx, &random_chunk()?)?;
-        }
-
-        self.commit_manifest()?;
-        self.file.sync_all()?;
-        Ok(())
+        // Destructive phase: shred the displaced destination's chunks
+        // (if any), then publish.
+        self.destructive_phase(|v| {
+            for old_idx in displaced_chunks {
+                v.write_chunk_raw(old_idx, &random_chunk()?)?;
+            }
+            v.publish_manifest(candidate, &cand_bytes, false)
+        })
     }
 
     /// Flush all the way to **durable media**, for secure-delete paths.
@@ -1726,24 +1828,20 @@ impl Vault {
 
     /// Securely delete a file from the mounted level.
     pub fn delete_file(&mut self, name: &str) -> Result<()> {
-        let entry = {
-            let m = self
-                .mounted
-                .as_mut()
-                .ok_or_else(|| FormatError::Manifest("no level mounted".into()))?;
-            m.manifest
-                .remove(name)
-                .ok_or_else(|| FormatError::FileNotFound(name.into()))?
-        };
+        self.ensure_mutable()?;
+        let mut candidate = self.candidate_manifest()?;
+        let entry = candidate
+            .remove(name)
+            .ok_or_else(|| FormatError::FileNotFound(name.into()))?;
+        let cand_bytes = candidate.serialize()?;
 
-        for chunk_idx in entry.chunks {
-            self.write_chunk_raw(chunk_idx, &random_chunk()?)?;
-        }
-
-        self.commit_manifest()?;
-        // Force the random overwrite to durable media (not just the OS cache).
-        self.durable_sync()?;
-        Ok(())
+        // Destructive phase: shred, publish, force to durable media.
+        self.destructive_phase(|v| {
+            for chunk_idx in entry.chunks {
+                v.write_chunk_raw(chunk_idx, &random_chunk()?)?;
+            }
+            v.publish_manifest(candidate, &cand_bytes, true)
+        })
     }
 
     // ---- folders (organizational; names are slash-separated paths) ----
@@ -1777,67 +1875,64 @@ impl Vault {
     /// Create an (initially empty) folder at `path`. Idempotent.
     /// Normalizes the path; rejects empty or control-char paths.
     pub fn create_folder(&mut self, path: &str) -> Result<()> {
+        self.ensure_mutable()?;
         let norm = normalize_folder(path).ok_or(FormatError::InvalidName)?;
+        crate::manifest::validate_folder_path(&norm)?;
         let m = self
             .mounted
-            .as_mut()
+            .as_ref()
             .ok_or_else(|| FormatError::Manifest("no level mounted".into()))?;
-        if !m.manifest.folders.contains(&norm) {
-            m.manifest.folders.push(norm);
-            m.manifest.counter += 1;
-            self.commit_manifest()?;
-            self.file.sync_all()?;
+        if m.manifest.folders.contains(&norm) {
+            return Ok(());
         }
-        Ok(())
+        let mut candidate = self.candidate_manifest()?;
+        candidate.folders.push(norm);
+        candidate.counter += 1;
+        let cand_bytes = candidate.serialize()?;
+        self.destructive_phase(|v| v.publish_manifest(candidate, &cand_bytes, false))
     }
 
     /// Delete a folder and everything under it: every file whose name
     /// is under `path/` is securely shredded, and the folder (plus any
     /// descendant explicit folders) is removed from the folder list.
     pub fn delete_folder(&mut self, path: &str) -> Result<()> {
+        self.ensure_mutable()?;
         let norm = normalize_folder(path).ok_or(FormatError::InvalidName)?;
+        crate::manifest::validate_folder_path(&norm)?;
         let prefix = format!("{norm}/");
 
-        // Collect the files to remove (names under the folder).
-        let victims: Vec<String> = {
-            let m = self
-                .mounted
-                .as_ref()
-                .ok_or_else(|| FormatError::Manifest("no level mounted".into()))?;
-            m.manifest
+        // Build + pre-validate the candidate: every file under the
+        // folder removed, the folder and its descendants dropped. The
+        // live manifest is untouched until publication.
+        let mut candidate = self.candidate_manifest()?;
+        let victims: Vec<FileEntry> = {
+            let names: Vec<String> = candidate
                 .entries
                 .iter()
                 .filter(|e| e.name.starts_with(&prefix))
                 .map(|e| e.name.clone())
+                .collect();
+            names
+                .iter()
+                .filter_map(|n| candidate.remove(n))
                 .collect()
         };
+        candidate
+            .folders
+            .retain(|f| f != &norm && !f.starts_with(&prefix));
+        candidate.counter += 1;
+        let cand_bytes = candidate.serialize()?;
 
-        // Shred + remove each file's chunks.
-        for name in &victims {
-            let entry = {
-                let m = self.mounted.as_mut().expect("mounted");
-                m.manifest.remove(name)
-            };
-            if let Some(entry) = entry {
+        // Destructive phase: shred every victim's chunks, publish,
+        // force the shreds to durable media.
+        self.destructive_phase(|v| {
+            for entry in victims {
                 for chunk_idx in entry.chunks {
-                    self.write_chunk_raw(chunk_idx, &random_chunk()?)?;
+                    v.write_chunk_raw(chunk_idx, &random_chunk()?)?;
                 }
             }
-        }
-
-        // Drop the folder and its descendant explicit folders.
-        {
-            let m = self.mounted.as_mut().expect("mounted");
-            m.manifest
-                .folders
-                .retain(|f| f != &norm && !f.starts_with(&prefix));
-            m.manifest.counter += 1;
-        }
-
-        self.commit_manifest()?;
-        // Every victim file's chunks were shredded above; make it durable.
-        self.durable_sync()?;
-        Ok(())
+            v.publish_manifest(candidate, &cand_bytes, true)
+        })
     }
 
     /// Rename a folder: every file under `old/` is re-prefixed to
@@ -1845,23 +1940,29 @@ impl Vault {
     /// entries are updated. Refuses if the new path would collide with
     /// an existing file name.
     pub fn rename_folder(&mut self, old: &str, new: &str) -> Result<()> {
+        self.ensure_mutable()?;
         let old_n = normalize_folder(old).ok_or(FormatError::InvalidName)?;
         let new_n = normalize_folder(new).ok_or(FormatError::InvalidName)?;
+        crate::manifest::validate_folder_path(&new_n)?;
         if old_n == new_n {
             return Ok(());
         }
         let old_prefix = format!("{old_n}/");
         let new_prefix = format!("{new_n}/");
 
-        let m = self
-            .mounted
-            .as_mut()
-            .ok_or_else(|| FormatError::Manifest("no level mounted".into()))?;
+        // Build + validate the whole rename on a candidate; the live
+        // manifest is untouched until the candidate serializes cleanly
+        // (this also catches a re-prefixed file name exceeding the
+        // 255-byte limit — previously a poisoned half-rename).
+        let mut candidate = self.candidate_manifest()?;
 
         // Collision check: no existing file already at a target name.
-        let existing: std::collections::BTreeSet<&str> =
-            m.manifest.entries.iter().map(|e| e.name.as_str()).collect();
-        for e in &m.manifest.entries {
+        let existing: std::collections::BTreeSet<&str> = candidate
+            .entries
+            .iter()
+            .map(|e| e.name.as_str())
+            .collect();
+        for e in &candidate.entries {
             if let Some(rest) = e.name.strip_prefix(&old_prefix) {
                 let target = format!("{new_prefix}{rest}");
                 if existing.contains(target.as_str()) {
@@ -1872,25 +1973,30 @@ impl Vault {
             }
         }
 
-        // Re-prefix file names (metadata only).
-        for e in m.manifest.entries.iter_mut() {
+        // Re-prefix file names (metadata only) — validated before any
+        // mutation of the candidate is published.
+        for e in candidate.entries.iter_mut() {
             if let Some(rest) = e.name.strip_prefix(&old_prefix) {
-                e.name = format!("{new_prefix}{rest}");
+                let target = format!("{new_prefix}{rest}");
+                crate::manifest::validate_name(&target)?;
+                e.name = target;
             }
         }
         // Update explicit folder entries.
-        for f in m.manifest.folders.iter_mut() {
+        for f in candidate.folders.iter_mut() {
             if *f == old_n {
                 *f = new_n.clone();
             } else if let Some(rest) = f.strip_prefix(&old_prefix) {
-                *f = format!("{new_prefix}{rest}");
+                let target = format!("{new_prefix}{rest}");
+                crate::manifest::validate_folder_path(&target)?;
+                *f = target;
             }
         }
-        m.manifest.counter += 1;
+        candidate.counter += 1;
+        let cand_bytes = candidate.serialize()?;
 
-        self.commit_manifest()?;
-        self.file.sync_all()?;
-        Ok(())
+        // No chunk I/O — only the manifest write is destructive.
+        self.destructive_phase(|v| v.publish_manifest(candidate, &cand_bytes, false))
     }
 
     // ---- internals ----
@@ -1905,15 +2011,81 @@ impl Vault {
         Ok(k)
     }
 
-    fn commit_manifest(&mut self) -> Result<()> {
-        let master_key = self.master_key_view()?;
-        let m = self.mounted.as_ref().expect("mounted ensured");
-        let mc = m.manifest_chunk;
-        let bytes = m.manifest.serialize()?;
-        let chunk_key = derive_chunk_key(&master_key, mc);
-        let stored = encrypt_chunk(&chunk_key, mc, &bytes)?;
-        self.write_chunk_raw(mc, &stored)?;
+    /// Refuse mutations on a poisoned session (see [`Vault::poisoned`]).
+    /// Every public mutation calls this FIRST, before validation and
+    /// before reading any state.
+    fn ensure_mutable(&self) -> Result<()> {
+        if self.poisoned {
+            return Err(FormatError::SessionPoisoned);
+        }
         Ok(())
+    }
+
+    /// Run the destructive phase of a mutation (chunk shredding, the
+    /// manifest-chunk write, the final sync). Any error inside marks the
+    /// session poisoned: destructive I/O has started, so "nothing
+    /// changed" can no longer be honestly claimed, and the in-memory
+    /// state may no longer match the disk. Reads survive; further
+    /// mutations require a reopen.
+    fn destructive_phase<T>(
+        &mut self,
+        f: impl FnOnce(&mut Self) -> Result<T>,
+    ) -> Result<T> {
+        match f(self) {
+            Ok(v) => Ok(v),
+            Err(e) => {
+                self.poisoned = true;
+                Err(e)
+            }
+        }
+    }
+
+    /// Encrypt + write pre-serialized manifest `bytes` into the mounted
+    /// level's manifest chunk. Pure I/O: the caller decides when the
+    /// in-memory manifest is updated.
+    fn write_manifest_chunk(&mut self, bytes: &[u8]) -> Result<()> {
+        let master_key = self.master_key_view()?;
+        let mc = self.mounted.as_ref().expect("mounted ensured").manifest_chunk;
+        let chunk_key = derive_chunk_key(&master_key, mc);
+        let stored = encrypt_chunk(&chunk_key, mc, bytes)?;
+        self.write_chunk_raw(mc, &stored)
+    }
+
+    /// Publish a fully-validated candidate manifest: write its
+    /// pre-serialized `bytes` to disk, only then install `candidate` as
+    /// the live manifest, then sync (durably when the mutation shredded
+    /// chunks). Called from inside [`Self::destructive_phase`] — the
+    /// in-memory manifest is never ahead of a failed disk write, and a
+    /// sync failure (ambiguous durable state) poisons the session
+    /// instead of pretending nothing happened.
+    fn publish_manifest(
+        &mut self,
+        candidate: Manifest,
+        bytes: &[u8],
+        durable: bool,
+    ) -> Result<()> {
+        self.write_manifest_chunk(bytes)?;
+        self.mounted.as_mut().expect("mounted ensured").manifest = candidate;
+        if durable {
+            self.durable_sync()?;
+        } else {
+            self.file.sync_all()?;
+        }
+        Ok(())
+    }
+
+    /// Clone the live manifest as a mutation candidate. The caller
+    /// applies its change to the clone, pre-validates it with
+    /// [`Manifest::serialize`], and only then enters the destructive
+    /// phase — an invalid name or a manifest-capacity overflow can never
+    /// leave the session half-mutated.
+    fn candidate_manifest(&self) -> Result<Manifest> {
+        Ok(self
+            .mounted
+            .as_ref()
+            .ok_or_else(|| FormatError::Manifest("no level mounted".into()))?
+            .manifest
+            .clone())
     }
 
     fn write_chunk_raw(&mut self, idx: ChunkIndex, data: &[u8; CHUNK_STORED_LEN]) -> Result<()> {
@@ -3382,5 +3554,225 @@ mod tests {
         let range = v.read_file_range("scratch", 95, 15).unwrap();
         assert_eq!(&range[..5], &[0x11; 5]);
         assert_eq!(&range[5..], &[0x22; 10]);
+    }
+
+    // ---- validate-before-mutation / no session poisoning (audit task 02) ----
+
+    /// The audit's poster case: a rename to an over-long name used to
+    /// mutate the live manifest and shred the destination BEFORE the
+    /// 255-byte rule fired inside `serialize`, leaving the session
+    /// poisoned — the next successful commit then published the
+    /// half-applied rename. The rename must now be a clean refusal.
+    #[test]
+    fn invalid_rename_does_not_poison_following_delete() {
+        let dir = tempdir().unwrap();
+        let path = dir.path().join("rename-error.vault");
+        let mut vault = VaultBuilder::single_passphrase(&path, pp("test"))
+            .total_chunks(16)
+            .build()
+            .unwrap();
+        drop(vault);
+        let mut vault = Vault::open(&path, pp("test"), no_auth()).unwrap();
+        vault.add_file("a", b"original A".to_vec()).unwrap();
+        vault.add_file("b", b"original B".to_vec()).unwrap();
+        let counter_before = vault.counter().unwrap();
+
+        assert!(matches!(
+            vault.rename_file("a", &"x".repeat(256)),
+            Err(FormatError::InvalidName)
+        ));
+        // The failed rename must not have touched anything.
+        assert_eq!(vault.counter().unwrap(), counter_before);
+        let delete_result = vault.delete_file("b");
+        assert!(delete_result.is_ok(), "failed rename poisoned the session");
+        assert_eq!(vault.read_file("a").unwrap(), b"original A");
+        drop(vault);
+
+        let mut reopened = Vault::open(&path, pp("test"), no_auth()).unwrap();
+        assert_eq!(reopened.read_file("a").unwrap(), b"original A");
+        assert!(matches!(
+            reopened.stat_file("b"),
+            Err(FormatError::FileNotFound(_))
+        ));
+    }
+
+    /// Every mutation entry point refuses an invalid name BEFORE any
+    /// state change: over-long Unicode names (byte length, not chars),
+    /// control characters, over-long folder paths.
+    #[test]
+    fn invalid_names_rejected_before_any_mutation() {
+        let dir = tempdir().unwrap();
+        let path = dir.path().join("names.vault");
+        let mut v = VaultBuilder::single_passphrase(&path, pp("test"))
+            .total_chunks(16)
+            .build()
+            .unwrap();
+        v.add_file("keep", b"KEEP".to_vec()).unwrap();
+        let counter_before = v.counter().unwrap();
+
+        // 128 two-byte chars = 256 bytes > 255: must fail although the
+        // char count (128) is well under the limit.
+        let wide = "é".repeat(128);
+        assert_eq!(wide.len(), 256);
+        assert!(matches!(v.add_file(&wide, b"x".to_vec()), Err(FormatError::InvalidName)));
+        assert!(matches!(v.create_file(&wide), Err(FormatError::InvalidName)));
+        assert!(matches!(v.create_file_exclusive(&wide), Err(FormatError::InvalidName)));
+        assert!(matches!(v.rename_file("keep", &wide), Err(FormatError::InvalidName)));
+        // Control characters.
+        assert!(matches!(v.create_file("bad\nname"), Err(FormatError::InvalidName)));
+        assert!(matches!(v.rename_file("keep", "bad\x07"), Err(FormatError::InvalidName)));
+        // Folder path over 1024 bytes.
+        let long_folder = "d".repeat(1025);
+        assert!(matches!(v.create_folder(&long_folder), Err(FormatError::InvalidName)));
+
+        // Nothing moved: counter unchanged, session usable, content intact.
+        assert_eq!(v.counter().unwrap(), counter_before);
+        assert_eq!(v.read_file("keep").unwrap(), b"KEEP");
+        v.create_file("still-works").unwrap();
+        drop(v);
+        let mut re = Vault::open(&path, pp("test"), no_auth()).unwrap();
+        assert_eq!(re.read_file("keep").unwrap(), b"KEEP");
+        assert!(re.stat_file("still-works").is_ok());
+    }
+
+    /// A manifest-capacity overflow (too many entries to fit the single
+    /// 64 KiB manifest chunk) must be refused BEFORE any destructive
+    /// I/O: prior files stay intact and the session stays usable.
+    #[test]
+    fn manifest_overflow_is_a_clean_refusal() {
+        let dir = tempdir().unwrap();
+        let path = dir.path().join("overflow.vault");
+        let mut v = VaultBuilder::single_passphrase(&path, pp("test"))
+            .total_chunks(16)
+            .build()
+            .unwrap();
+        v.add_file("keep", b"KEEP".to_vec()).unwrap();
+
+        // Empty files cost no chunks but ~268 bytes of manifest each —
+        // saturate until the overflow fires.
+        let mut hit_overflow = false;
+        for i in 0..400 {
+            let name = format!("{i:>0255}"); // 255-byte name
+            match v.create_file(&name) {
+                Ok(()) => {}
+                Err(FormatError::ManifestOverflow) => {
+                    hit_overflow = true;
+                    break;
+                }
+                Err(e) => panic!("unexpected error: {e:?}"),
+            }
+        }
+        assert!(hit_overflow, "never hit the manifest capacity");
+        let counter_before = v.counter().unwrap();
+
+        // The refusal poisoned nothing: mutations and reads still work.
+        assert_eq!(v.read_file("keep").unwrap(), b"KEEP");
+        assert!(matches!(
+            v.create_file(&"z".repeat(255)),
+            Err(FormatError::ManifestOverflow)
+        ));
+        assert_eq!(v.counter().unwrap(), counter_before);
+        v.delete_file("keep").unwrap();
+        drop(v);
+        let re = Vault::open(&path, pp("test"), no_auth()).unwrap();
+        assert!(matches!(re.stat_file("keep"), Err(FormatError::FileNotFound(_))));
+    }
+
+    /// Arithmetic near u64::MAX must be a clean `Overflow` error, not a
+    /// wrap-around or a panic.
+    #[test]
+    fn write_range_offset_overflow_rejected() {
+        let dir = tempdir().unwrap();
+        let path = dir.path().join("overflow-offset.vault");
+        let mut v = VaultBuilder::single_passphrase(&path, pp("test"))
+            .total_chunks(16)
+            .build()
+            .unwrap();
+        v.add_file("f", b"DATA".to_vec()).unwrap();
+        assert!(matches!(
+            v.write_file_range("f", u64::MAX - 1, b"xx"),
+            Err(FormatError::Overflow)
+        ));
+        // A merely-huge (non-wrapping) offset is refused before any
+        // allocation too — the chunk count exceeds what u32 can index.
+        assert!(matches!(
+            v.write_file_range("f", u64::MAX / 2, b"xx"),
+            Err(FormatError::Overflow)
+        ));
+        assert_eq!(v.read_file("f").unwrap(), b"DATA");
+        v.create_file("still-works").unwrap();
+    }
+
+    /// Growing a file beyond the vault's capacity must be refused up
+    /// front (`Full`), without materializing the extension in memory.
+    #[test]
+    fn truncate_grow_beyond_capacity_refused() {
+        let dir = tempdir().unwrap();
+        let path = dir.path().join("grow.vault");
+        let mut v = VaultBuilder::single_passphrase(&path, pp("test"))
+            .total_chunks(16)
+            .build()
+            .unwrap();
+        v.add_file("f", b"tiny".to_vec()).unwrap();
+        assert!(matches!(
+            v.truncate_file("f", 1 << 40),
+            Err(FormatError::Full)
+        ));
+        assert_eq!(v.read_file("f").unwrap(), b"tiny");
+    }
+
+    // ---- exclusive creation (audit task 03, engine side) ----
+
+    #[test]
+    fn create_file_exclusive_refuses_existing() {
+        let dir = tempdir().unwrap();
+        let path = dir.path().join("excl.vault");
+        let mut v = VaultBuilder::single_passphrase(&path, pp("test"))
+            .total_chunks(16)
+            .build()
+            .unwrap();
+        v.add_file("rapport.txt", b"PRECIOUS".to_vec()).unwrap();
+
+        // Exclusive create on an existing name: refused, content intact.
+        match v.create_file_exclusive("rapport.txt") {
+            Err(FormatError::AlreadyExists(n)) => assert_eq!(n, "rapport.txt"),
+            other => panic!("expected AlreadyExists, got {other:?}"),
+        }
+        assert_eq!(v.read_file("rapport.txt").unwrap(), b"PRECIOUS");
+
+        // On a fresh name it creates an empty file exactly once.
+        v.create_file_exclusive("rapport 2.txt").unwrap();
+        assert_eq!(v.stat_file("rapport 2.txt").unwrap().size, 0);
+        assert!(matches!(
+            v.create_file_exclusive("rapport 2.txt"),
+            Err(FormatError::AlreadyExists(_))
+        ));
+    }
+
+    // ---- owner boundary (audit task 02) ----
+
+    #[test]
+    fn overlong_owner_is_refused_not_truncated() {
+        let dir = tempdir().unwrap();
+        // 130 × "é" = 260 bytes: the old code truncated this at byte 256,
+        // splitting a UTF-8 character. It must now be refused at build.
+        let too_long = "é".repeat(130);
+        assert!(matches!(
+            VaultBuilder::single_passphrase(dir.path().join("o1.vault"), pp("t"))
+                .owner(Some(too_long))
+                .total_chunks(8)
+                .build(),
+            Err(FormatError::InvalidName)
+        ));
+        // Exactly 256 bytes (128 × "é") is the maximum and round-trips.
+        let at_limit = "é".repeat(128);
+        let v = VaultBuilder::single_passphrase(dir.path().join("o2.vault"), pp("t"))
+            .owner(Some(at_limit.clone()))
+            .total_chunks(8)
+            .build()
+            .unwrap();
+        drop(v);
+        let re = Vault::open(dir.path().join("o2.vault"), pp("t"), no_auth()).unwrap();
+        assert_eq!(re.owner(), Some(at_limit.as_str()));
     }
 }

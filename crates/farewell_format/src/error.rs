@@ -44,6 +44,25 @@ pub enum FormatError {
     #[error("invalid file name")]
     InvalidName,
 
+    /// Exclusive creation refused: a file with that name already exists.
+    /// Only returned by the `*_exclusive` operations — the plain
+    /// `create_file` keeps its idempotent `O_CREAT` semantics.
+    #[error("a file named \"{0}\" already exists")]
+    AlreadyExists(String),
+
+    /// A size, offset, or count arithmetic would overflow the supported
+    /// limits. Rejected before any allocation or write.
+    #[error("size or offset exceeds supported limits")]
+    Overflow,
+
+    /// A previous mutation failed at a point where the durable on-disk
+    /// state is uncertain (after destructive chunk I/O began, or after a
+    /// manifest write / sync whose outcome is ambiguous). Further
+    /// mutations are refused; reads stay available. Close and reopen the
+    /// vault to resynchronize with the on-disk truth.
+    #[error("a previous write failed and the session state is uncertain — reopen the vault")]
+    SessionPoisoned,
+
     /// Manifest exceeded the single-chunk size limit (~64 KiB).
     #[error("manifest too large to fit in a single chunk")]
     ManifestOverflow,
