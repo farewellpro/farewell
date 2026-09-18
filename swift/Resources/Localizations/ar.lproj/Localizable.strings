@@ -338,3 +338,7 @@
 "overwritten, but could not delete: %@" = "كُتب فوقه، لكن تعذّر حذفه: %@";
 "The original was NOT securely erased (%@) — it is still on disk." = "لم يُمحَ الأصل بأمان (%@) — ما يزال على القرص.";
 "Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "كُتب فوق الأصل %lld× في مكانه ثم حُذف. ملاحظة: قد تحتفظ اللقطات أو أنظمة الملفات ذات النسخ عند الكتابة بنسخ قديمة حتى على قرص صلب دوّار.";
+
+// Memory-lock degraded state (v0.23 — audit task 09)
+"key not pinned in RAM" = "المفتاح غير مثبَّت في الذاكرة";
+"The system refused to pin the vault key in RAM (memory-lock limit). The key is still erased when the vault closes, but the OS could swap it to disk while the vault is open." = "رفض النظام تثبيت مفتاح الخزنة في الذاكرة (حدّ قفل الذاكرة). ما يزال المفتاح يُمحى عند إغلاق الخزنة، لكن قد ينقله النظام إلى القرص (swap) ما دامت الخزنة مفتوحة.";

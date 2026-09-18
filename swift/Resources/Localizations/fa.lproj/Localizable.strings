@@ -338,3 +338,7 @@
 "overwritten, but could not delete: %@" = "بازنویسی شد، اما حذف ممکن نشد: %@";
 "The original was NOT securely erased (%@) — it is still on disk." = "نسخهٔ اصلی به‌طور امن پاک نشد (%@) — هنوز روی دیسک است.";
 "Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "نسخهٔ اصلی %lld× در جای خود بازنویسی و سپس حذف شد. توجه: عکس‌های لحظه‌ای یا سیستم‌های فایل copy-on-write ممکن است نسخه‌های قدیمی را حتی روی دیسک سخت نگه دارند.";
+
+// Memory-lock degraded state (v0.23 — audit task 09)
+"key not pinned in RAM" = "کلید در RAM سنجاق نشده است";
+"The system refused to pin the vault key in RAM (memory-lock limit). The key is still erased when the vault closes, but the OS could swap it to disk while the vault is open." = "سیستم از سنجاق کردن کلید گاوصندوق در RAM خودداری کرد (محدودیت قفل حافظه). کلید همچنان هنگام بستن گاوصندوق پاک می‌شود، اما تا زمانی که گاوصندوق باز است سیستم‌عامل ممکن است آن را روی دیسک (swap) بنویسد.";

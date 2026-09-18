@@ -338,3 +338,7 @@
 "overwritten, but could not delete: %@" = "écrasé, mais suppression impossible : %@";
 "The original was NOT securely erased (%@) — it is still on disk." = "L’original n’a PAS été effacé de façon sûre (%@) — il est toujours sur le disque.";
 "Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "Original écrasé %lld× sur place puis supprimé. Remarque : les instantanés ou les systèmes de fichiers en copie sur écriture peuvent conserver d’anciennes copies, même sur un disque dur.";
+
+// Memory-lock degraded state (v0.23 — audit task 09)
+"key not pinned in RAM" = "clef non épinglée en RAM";
+"The system refused to pin the vault key in RAM (memory-lock limit). The key is still erased when the vault closes, but the OS could swap it to disk while the vault is open." = "Le système a refusé d’épingler la clef du coffre en RAM (limite de verrouillage mémoire). La clef est toujours effacée à la fermeture du coffre, mais le système pourrait l’écrire sur le disque (swap) tant que le coffre est ouvert.";

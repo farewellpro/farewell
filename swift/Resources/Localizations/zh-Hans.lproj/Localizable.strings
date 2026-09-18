@@ -338,3 +338,7 @@
 "overwritten, but could not delete: %@" = "已覆写，但无法删除：%@";
 "The original was NOT securely erased (%@) — it is still on disk." = "原件未被安全擦除（%@）——仍在磁盘上。";
 "Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "原件已就地覆写 %lld× 并删除。注意：快照或写时复制文件系统可能保留旧副本，即使在机械硬盘上也是如此。";
+
+// Memory-lock degraded state (v0.23 — audit task 09)
+"key not pinned in RAM" = "密钥未固定在内存中";
+"The system refused to pin the vault key in RAM (memory-lock limit). The key is still erased when the vault closes, but the OS could swap it to disk while the vault is open." = "系统拒绝将保险库密钥固定在内存中（内存锁定限制）。关闭保险库时密钥仍会被擦除，但在保险库打开期间，操作系统可能将其换页到磁盘（swap）。";

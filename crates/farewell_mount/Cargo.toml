@@ -16,6 +16,7 @@ name = "farewell_mount"
 crate-type = ["staticlib", "rlib"]
 
 [dependencies]
+zeroize.workspace = true
 farewell_crypto.workspace = true
 farewell_format.workspace = true
 farewell_fido2.workspace = true

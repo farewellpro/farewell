@@ -972,6 +972,7 @@ dependencies = [
  "farewell_license",
  "farewell_passphrase",
  "tempfile",
+ "zeroize",
 ]
 
 [[package]]

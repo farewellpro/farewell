@@ -27,6 +27,7 @@
 #ifndef FAREWELL_MOUNT_H
 #define FAREWELL_MOUNT_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -521,6 +522,13 @@ uint64_t farewell_total_chunks(const FarewellVault *handle);
 int32_t farewell_counter(
     const FarewellVault *handle,
     uint64_t *out_counter);
+
+/*
+ * Whether the mounted level's master key is actually mlock()ed in RAM.
+ * false = degraded (rlimit/platform refusal): the key still zeroizes on
+ * close, but the OS could page it while the vault is open.
+ */
+int32_t farewell_memory_locked(FarewellVault *handle, bool *out_locked);
 
 /* Maximum hardware keys enrollable per vault (the slot cap). */
 #define FAREWELL_MAX_HW_KEYS 3u

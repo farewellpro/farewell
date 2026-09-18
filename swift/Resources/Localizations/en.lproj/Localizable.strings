@@ -338,3 +338,7 @@
 "overwritten, but could not delete: %@" = "overwritten, but could not delete: %@";
 "The original was NOT securely erased (%@) — it is still on disk." = "The original was NOT securely erased (%@) — it is still on disk.";
 "Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk.";
+
+// Memory-lock degraded state (v0.23 — audit task 09)
+"key not pinned in RAM" = "key not pinned in RAM";
+"The system refused to pin the vault key in RAM (memory-lock limit). The key is still erased when the vault closes, but the OS could swap it to disk while the vault is open." = "The system refused to pin the vault key in RAM (memory-lock limit). The key is still erased when the vault closes, but the OS could swap it to disk while the vault is open.";

@@ -118,7 +118,11 @@ impl SlotIndex {
 
 /// Successful unwrap of a slot: gives the master key. (HW credentials
 /// are consumed internally; callers do not need them.)
-#[derive(Debug, Clone)]
+///
+/// Deliberately neither `Debug` nor `Clone`: a debug print must never
+/// leak key bytes into a log, and every copy of the master key must be
+/// an explicit, accounted-for act. The keys are zeroized on drop, so
+/// early-`?` paths in the open flow erase them too.
 pub struct UnwrappedSlot {
     /// Per-level master key.
     pub master_key: [u8; MASTER_KEY_LEN],
@@ -136,6 +140,13 @@ pub struct UnwrappedSlot {
     /// lets callers report how many keys open the vault, and cap further
     /// enrollment at [`MAX_HW_KEYS_PER_LEVEL`].
     pub num_hw_keys: usize,
+}
+
+impl Drop for UnwrappedSlot {
+    fn drop(&mut self) {
+        self.master_key.zeroize();
+        self.metadata_key.zeroize();
+    }
 }
 
 /// Compute the `hmac-secret` salt presented to the authenticator from the

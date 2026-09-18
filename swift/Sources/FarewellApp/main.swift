@@ -322,6 +322,17 @@ final class VaultModel: ObservableObject {
     /// panel hosts the live prompts and the result instead of flashing the
     /// Open/Create screen. Reset in `finishOpen` and on any reopen failure.
     @Published var keyOpInProgress = false
+
+    /// Monotonic session generation (audit task 08). Every asynchronous
+    /// open/reopen captures the current value on the main thread BEFORE
+    /// dispatching its worker; a lock event (sleep, screen lock,
+    /// inactivity) bumps it. A handle delivered for an older generation
+    /// is closed on its worker executor and never shown.
+    private(set) var sessionGeneration: UInt64 = 0
+    /// A lock request that arrived while an operation was in flight —
+    /// remembered (with its reason) and applied when the operation
+    /// completes, in success AND error branches alike.
+    private var lockPending: String?
     /// True while the panel is loading the key list (the passphrase KDF can be
     /// slow for a passphrase-only vault), so the panel can show a spinner.
     @Published var keysLoading = false
@@ -438,11 +449,82 @@ final class VaultModel: ObservableObject {
         }
     }
 
-    /// Lock now if a vault is open and no key operation is in flight.
+    /// Handle a lock event (sleep, screen lock, inactivity).
+    ///
+    /// The old guard `isOpen && !busy` silently DROPPED the event during
+    /// any in-flight operation, and an open finishing after the event
+    /// happily displayed the vault on a locked Mac. Now the event is
+    /// always recorded:
+    ///  - the session generation is bumped, so any open still in flight
+    ///    delivers its handle to a dead generation and gets closed;
+    ///  - visible content is cleared immediately (safe on the main
+    ///    actor: workers never touch these @Published fields);
+    ///  - if no operation is running, the vault closes now; otherwise
+    ///    the lock is applied when the operation completes — the worker
+    ///    keeps exclusive use of the handle until then (no mid-call
+    ///    close, no use-after-free at the C boundary).
     func autoLock(reason: String) {
-        guard isOpen, !busy else { return }
-        close()
+        sessionGeneration &+= 1
+        // Clear what is on screen regardless of state.
+        selectedFileID = nil
+        selectedContent = nil
+        pendingEditFile = nil
+        if isOpen, !busy {
+            close()
+            autoLockNotice = String(localized: "Vault locked automatically (\(reason)). Unlock to continue.")
+        } else if busy || keyOpInProgress {
+            lockPending = reason
+        }
+    }
+
+    /// Capture the generation for an operation about to start (main
+    /// thread, before dispatching the worker).
+    func beginSessionOp() -> UInt64 { sessionGeneration }
+
+    /// Apply a deferred lock at operation completion. Call in EVERY
+    /// completion branch (success and error) after `busy` is cleared.
+    /// Returns true when the session was locked (the caller's result
+    /// must not be displayed).
+    @discardableResult
+    func applyPendingLock() -> Bool {
+        guard let reason = lockPending else { return false }
+        lockPending = nil
+        if isOpen { close() }
         autoLockNotice = String(localized: "Vault locked automatically (\(reason)). Unlock to continue.")
+        return true
+    }
+
+    /// Completion gate for an asynchronous operation: if a lock event
+    /// arrived while it ran (deferred lock, or a generation bump), close
+    /// the orphan handle — on the HID executor, the worker-owned side of
+    /// the C boundary, never concurrently with a worker still using it —
+    /// show the lock notice, and return true. The caller must then
+    /// neither display results nor auto-reopen: after a lock event, a
+    /// new unlock requires an explicit user action.
+    private func lockGateAtCompletion(generation: UInt64, orphan: OpaquePointer?) -> Bool {
+        guard generation != sessionGeneration || lockPending != nil else { return false }
+        if let h = orphan {
+            // Transfer (not share) the orphan handle to the HID executor
+            // for closing: the box is the single owner from here on.
+            struct OrphanHandle: @unchecked Sendable { let h: OpaquePointer }
+            let orphanBox = OrphanHandle(h: h)
+            HIDExecutor.shared.async { farewell_close(orphanBox.h) }
+        }
+        let reason = lockPending ?? String(localized: "screen lock")
+        lockPending = nil
+        keyOpInProgress = false
+        enrollFlow = .none
+        if isOpen { close() }
+        autoLockNotice = String(localized: "Vault locked automatically (\(reason)). Unlock to continue.")
+        return true
+    }
+
+    /// Deliver a freshly-opened handle: adopt it only if `generation` is
+    /// still current; otherwise it is closed and the lock notice shown.
+    /// Never displays content for a session locked mid-open.
+    private func adoptOrDiscard(handle: OpaquePointer, path: String, generation: UInt64) {
+        if lockGateAtCompletion(generation: generation, orphan: handle) { return }
+        finishOpen(handle: handle, path: path)
     }
 
     /// Seconds since the last system-wide user input, via IOHIDSystem — needs
@@ -670,6 +752,10 @@ final class VaultModel: ObservableObject {
         var hwKeys: Int = 0
         /// Opt-in creator identity recorded at create time ("" = anonymous).
         var owner: String = ""
+        /// Whether the master key is actually mlock()ed in RAM. `false`
+        /// = degraded (the OS could page the key while the vault is
+        /// open); shown honestly in the info panel.
+        var memoryLocked: Bool = true
     }
 
     /// `id == name` so selection survives a `refreshFiles()` call
@@ -762,7 +848,7 @@ final class VaultModel: ObservableObject {
             error = humanError(status: status)
             return
         }
-        finishOpen(handle: handle, path: path)
+        adoptOrDiscard(handle: handle, path: path, generation: beginSessionOp())
     }
 
     /// Open a vault, threading a connected YubiKey only if the vault actually
@@ -786,6 +872,7 @@ final class VaultModel: ObservableObject {
         // gives no real progress — show an *estimated* bar that eases toward
         // 95 % and snaps to 100 % when the open finishes.
         startUnlockEstimate()
+        let generation = beginSessionOp()
         let pp = Array(passphrase.utf8)
         let pn = Array(pin.utf8)
         // Runs on the dedicated HID run-loop thread (see HIDExecutor): the
@@ -802,7 +889,7 @@ final class VaultModel: ObservableObject {
             if s1 == .ffi_ok, let handle = h {
                 onMainWake {
                     self.stopUnlockEstimate(); self.progress = 1; self.busy = false
-                    self.finishOpen(handle: handle, path: path)
+                    self.adoptOrDiscard(handle: handle, path: path, generation: generation)
                 }
                 return
             }
@@ -813,6 +900,7 @@ final class VaultModel: ObservableObject {
                     self.stopUnlockEstimate(); self.busy = false
                     self.keyOpInProgress = false
                     self.error = humanError(status: s1)
+                    self.applyPendingLock()
                 }
                 return
             }
@@ -851,9 +939,10 @@ final class VaultModel: ObservableObject {
                 guard s2 == .ffi_ok, let handle = h2 else {
                     self.keyOpInProgress = false
                     self.error = humanError(status: s2)
+                    self.applyPendingLock()
                     return
                 }
-                self.finishOpen(handle: handle, path: path)
+                self.adoptOrDiscard(handle: handle, path: path, generation: generation)
             }
         }
     }
@@ -881,6 +970,7 @@ final class VaultModel: ObservableObject {
         progress = nil
         busy = true
         startProgressUpdates()
+        let generation = beginSessionOp()
         if hwKeys > 0 { enrollFlow = .creation }   // names the swap prompts
         let byteArrays = nonEmpty.map { Array($0.utf8) }
         let pn = Array(pin.utf8)
@@ -929,11 +1019,12 @@ final class VaultModel: ObservableObject {
                 self.progress = nil
                 guard status == .ffi_ok, let handle = h else {
                     self.error = "Could not create vault: \(humanError(status: status))"
+                    self.applyPendingLock()
                     return
                 }
                 // The vault comes back ALREADY OPEN (primary level mounted
                 // at creation) — no re-open, so no extra YubiKey touch.
-                self.finishOpen(handle: handle, path: path)
+                self.adoptOrDiscard(handle: handle, path: path, generation: generation)
             }
         }
     }
@@ -956,6 +1047,12 @@ final class VaultModel: ObservableObject {
 
         var hk: UInt32 = 0
         self.info.hwKeys = farewell_hw_key_count(handle, &hk) == .ffi_ok ? Int(hk) : 0
+
+        // Honest memory-lock state: if mlock failed (rlimit/platform),
+        // say so rather than silently pretending the key can't swap.
+        var mlocked = false
+        self.info.memoryLocked =
+            farewell_memory_locked(handle, &mlocked) == .ffi_ok ? mlocked : false
 
         // Opt-in creator identity, if one was recorded at create time.
         var olen: UInt64 = 0
@@ -1007,6 +1104,10 @@ final class VaultModel: ObservableObject {
         }
         isOpen = false
         files.removeAll()
+        folders.removeAll()
+        pendingEditFile = nil
+        keys = []
+        keysLoaded = false
         info = VaultInfo()
         renameNotice = nil
     }
@@ -1089,6 +1190,7 @@ final class VaultModel: ObservableObject {
 
         // Close our handle so the engine can open the source (releases the lock).
         close()
+        let generation = beginSessionOp()
         busyMessage = useHw
             ? String(localized: "Migrating… touch your YubiKey when it blinks.")
             : String(localized: "Preparing the new vault…")
@@ -1126,6 +1228,7 @@ final class VaultModel: ObservableObject {
                     // Engine failed: discard the temp, reopen the untouched source.
                     try? FileManager.default.removeItem(at: tempDst)
                     self.migrationStatus = String(localized: "Migration failed: \(humanError(status: status)). Your original vault is unchanged.")
+                    if self.lockGateAtCompletion(generation: generation, orphan: nil) { return }
                     self.reopenAfterMigration(path: srcPath, passphrase: passphrase, useHw: useHw, pin: pin)
                     return
                 }
@@ -1146,10 +1249,14 @@ final class VaultModel: ObservableObject {
                 } catch {
                     try? fm.removeItem(at: tempDst)
                     self.migrationStatus = String(localized: "Migration verified but the file swap failed: \(error.localizedDescription). Your original vault is unchanged.")
+                    if self.lockGateAtCompletion(generation: generation, orphan: nil) { return }
                     self.reopenAfterMigration(path: srcPath, passphrase: passphrase, useHw: useHw, pin: pin)
                     return
                 }
-                // Open the freshly-migrated vault.
+                // Open the freshly-migrated vault — unless a lock event
+                // arrived meanwhile (the completed swap is a safe, fully
+                // verified transaction; only the auto-REOPEN is refused).
+                if self.lockGateAtCompletion(generation: generation, orphan: nil) { return }
                 self.reopenAfterMigration(path: finalDst.path, passphrase: passphrase, useHw: useHw, pin: pin)
             }
         }
@@ -1199,6 +1306,7 @@ final class VaultModel: ObservableObject {
 
         // Release our lock so the engine can open the file read/write.
         close()
+        let generation = beginSessionOp()
         busyMessage = isFirst
             ? String(localized: "Enrolling your hardware key…")
             : String(localized: "Enrolling backup key…")
@@ -1245,9 +1353,11 @@ final class VaultModel: ObservableObject {
                         ? String(localized: "Hardware key enrolled. This vault now needs that key plus your passphrase to open. Enrol a backup key too — lose your only key and the vault is gone, with no recovery.")
                         : String(localized: "Backup key enrolled. Either key now opens this vault — keep the backup somewhere safe and separate. There is still no recovery if you lose both.")
                     // The engine handed back an ALREADY-OPEN vault (re-mounted
-                    // without a second touch), so just adopt it.
-                    self.finishOpen(handle: handle, path: srcPath)
+                    // without a second touch) — adopt it only if no lock
+                    // event arrived meanwhile.
+                    self.adoptOrDiscard(handle: handle, path: srcPath, generation: generation)
                 } else if status == .ffi_ok {
+                    if self.lockGateAtCompletion(generation: generation, orphan: nil) { return }
                     // Enrolled, but the convenience re-open didn't return a
                     // handle — fall back to a normal unlock (one touch).
                     self.keysStatus = isFirst
@@ -1258,7 +1368,9 @@ final class VaultModel: ObservableObject {
                     self.keysStatus = isFirst
                         ? String(localized: "Could not add the hardware key: \(humanError(status: status)). Your vault is unchanged.")
                         : String(localized: "Could not add the backup key: \(humanError(status: status)). Your vault is unchanged.")
-                    // Re-open the untouched vault so the user isn't left locked out.
+                    // Re-open the untouched vault so the user isn't left locked
+                    // out — unless a lock event arrived during the operation.
+                    if self.lockGateAtCompletion(generation: generation, orphan: nil) { return }
                     self.openHw(path: srcPath, passphrase: passphrase, pin: pin)
                 }
             }
@@ -1330,6 +1442,7 @@ final class VaultModel: ObservableObject {
         let pp = Array(passphrase.utf8)
         // Release our exclusive lock so the engine can open the file read/write.
         close()
+        let generation = beginSessionOp()
         keyOpInProgress = true   // keep the Keys panel mounted to host the flow
         keysLoading = true
         DispatchQueue.global(qos: .userInitiated).async {
@@ -1342,7 +1455,9 @@ final class VaultModel: ObservableObject {
                     ? String(localized: "Key revoked — it no longer opens this vault. Unlock again to continue.")
                     : String(localized: "Could not revoke the key: \(humanError(status: status)). Your vault is unchanged.")
                 // Reopen either way so the user isn't left locked out (a
-                // remaining key is still required → one touch).
+                // remaining key is still required → one touch) — unless a
+                // lock event arrived during the operation.
+                if self.lockGateAtCompletion(generation: generation, orphan: nil) { return }
                 self.openHw(path: srcPath, passphrase: passphrase, pin: pin)
             }
         }
@@ -1365,6 +1480,7 @@ final class VaultModel: ObservableObject {
         let pn = Array(pin.utf8)
 
         close()
+        let generation = beginSessionOp()
         busyMessage = String(localized: "Removing the last key…")
         progress = nil
         busy = true
@@ -1396,12 +1512,14 @@ final class VaultModel: ObservableObject {
                 self.progress = nil
                 if status == .ffi_ok, let handle = h {
                     self.keysStatus = String(localized: "Last key removed. This vault now opens with the passphrase alone — and opening is slower again, by design.")
-                    self.finishOpen(handle: handle, path: srcPath)
+                    self.adoptOrDiscard(handle: handle, path: srcPath, generation: generation)
                 } else if status == .ffi_ok {
                     self.keysStatus = String(localized: "Last key removed. Unlock again with your passphrase.")
+                    if self.lockGateAtCompletion(generation: generation, orphan: nil) { return }
                     self.openHw(path: srcPath, passphrase: passphrase, pin: pin)
                 } else {
                     self.keysStatus = String(localized: "Could not remove the last key: \(humanError(status: status)). Your vault is unchanged.")
+                    if self.lockGateAtCompletion(generation: generation, orphan: nil) { return }
                     self.openHw(path: srcPath, passphrase: passphrase, pin: pin)
                 }
             }
@@ -3291,6 +3409,16 @@ struct HeaderView: View {
                     Label("created by \(vault.info.owner)", systemImage: "person.crop.circle")
                         .help("This vault records its creator's identity (opt-in).")
                         .lineLimit(1).truncationMode(.middle)
+                }
+                if !vault.info.memoryLocked {
+                    // Degraded mlock: rare on macOS, but when it happens the
+                    // honest thing is to say so, not to keep the RAM promise.
+                    Label(
+                        String(localized: "key not pinned in RAM"),
+                        systemImage: "exclamationmark.triangle"
+                    )
+                    .foregroundStyle(.orange)
+                    .help(String(localized: "The system refused to pin the vault key in RAM (memory-lock limit). The key is still erased when the vault closes, but the OS could swap it to disk while the vault is open."))
                 }
                 Spacer()
             }

@@ -9,6 +9,7 @@
 //! v0.1 uses a fixed 64 KiB plaintext size.
 
 use byteorder::{ByteOrder, LittleEndian};
+use zeroize::{Zeroize, Zeroizing};
 use farewell_crypto::{
     aead::{self, AeadKey, NONCE_LEN, TAG_LEN},
     hash, rng,
@@ -55,7 +56,9 @@ pub fn encrypt_chunk(
     }
 
     // Pad to fixed plaintext size with zeros, then prepend a length tag.
-    let mut padded = vec![0u8; CHUNK_PLAINTEXT_LEN + 4];
+    // Zeroizing: this buffer holds the whole plaintext, and must be
+    // erased on EVERY exit path — including the `?` returns below.
+    let mut padded = Zeroizing::new(vec![0u8; CHUNK_PLAINTEXT_LEN + 4]);
     padded[..plaintext.len()].copy_from_slice(plaintext);
     LittleEndian::write_u32(&mut padded[CHUNK_PLAINTEXT_LEN..], plaintext.len() as u32);
 
@@ -85,7 +88,9 @@ pub fn decrypt_chunk(
     let mut nonce = [0u8; NONCE_LEN];
     nonce.copy_from_slice(&stored[..NONCE_LEN]);
     let aad = chunk_aad(index);
-    let pt = aead::decrypt(chunk_key, &nonce, &aad, &stored[NONCE_LEN..])?;
+    // Zeroizing: the FULL padded plaintext; erased on every exit once
+    // the real-length prefix has been copied out for the caller.
+    let pt = Zeroizing::new(aead::decrypt(chunk_key, &nonce, &aad, &stored[NONCE_LEN..])?);
     if pt.len() != CHUNK_PLAINTEXT_LEN + 4 {
         return Err(FormatError::Manifest("chunk plaintext length mismatch".into()));
     }
@@ -114,8 +119,13 @@ pub fn derive_chunk_key(master_key: &[u8; aead::KEY_LEN], index: ChunkIndex) -> 
     let mut input = [0u8; aead::KEY_LEN + 4];
     input[..aead::KEY_LEN].copy_from_slice(master_key);
     LittleEndian::write_u32(&mut input[aead::KEY_LEN..], index.0);
-    let k = hash::derive_key("farewell.chunk.key.v1", &input);
-    AeadKey::from_bytes(k)
+    let mut k = hash::derive_key("farewell.chunk.key.v1", &input);
+    // Erase the master-key-bearing derivation input and the interim
+    // key array; the AeadKey copy zeroizes itself on drop.
+    input.zeroize();
+    let key = AeadKey::from_bytes(k);
+    k.zeroize();
+    key
 }
 
 fn chunk_aad(index: ChunkIndex) -> [u8; 8] {

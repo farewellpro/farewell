@@ -71,6 +71,7 @@ use farewell_fido2::{
     MockAuthenticator,
 };
 use farewell_format::{FormatError, Vault};
+use zeroize::Zeroize;
 
 /// FIDO2 Relying-Party identifier. Must match the value used by every
 /// other entry point (the CLI uses the same), so a vault enrolled in one
@@ -435,12 +436,16 @@ pub unsafe extern "C" fn farewell_create_vault(
         // valid FarewellBytes.
         let entries = unsafe { std::slice::from_raw_parts(passphrases, count) };
 
-        let mut specs: Vec<farewell_format::LevelSpec> = Vec::with_capacity(count);
+        // Zeroizing: an early return (invalid entry, weak passphrase)
+        // must erase every passphrase copied so far, not hand them to
+        // the allocator. Only the final, fully-validated batch is moved
+        // out into the specs (whose consumer zeroizes at use).
+        let mut pws: Vec<zeroize::Zeroizing<Vec<u8>>> = Vec::with_capacity(count);
         for e in entries {
             // SAFETY: each entry's ptr/len validity is the caller's
             // contract.
             let pw = match unsafe { e.to_vec() } {
-                Some(v) if !v.is_empty() => v,
+                Some(v) if !v.is_empty() => zeroize::Zeroizing::new(v),
                 _ => return FarewellStatus::InvalidArgument,
             };
             // Strength policy backstop: every level's passphrase must pass
@@ -452,8 +457,12 @@ pub unsafe extern "C" fn farewell_create_vault(
                     return FarewellStatus::WeakPassphrase;
                 }
             }
-            specs.push(farewell_format::LevelSpec::passphrase_only(pw));
+            pws.push(pw);
         }
+        let specs: Vec<farewell_format::LevelSpec> = pws
+            .into_iter()
+            .map(|mut z| farewell_format::LevelSpec::passphrase_only(std::mem::take(&mut *z)))
+            .collect();
 
         let builder = match farewell_format::VaultBuilder::new(&path, specs) {
             Ok(b) => b,
@@ -547,11 +556,14 @@ pub unsafe extern "C" fn farewell_create_vault_hw(
         // SAFETY: caller contract.
         let entries = unsafe { std::slice::from_raw_parts(passphrases, count) };
 
-        // Collect + policy-check every passphrase first.
-        let mut pws: Vec<Vec<u8>> = Vec::with_capacity(count);
+        // Collect + policy-check every passphrase first. Zeroizing: the
+        // hardware path below has MANY early returns (no key present,
+        // enrollment refused, CTAP errors) between collection and use —
+        // every one of them must erase these copies.
+        let mut pws: Vec<zeroize::Zeroizing<Vec<u8>>> = Vec::with_capacity(count);
         for e in entries {
             let pw = match unsafe { e.to_vec() } {
-                Some(v) if !v.is_empty() => v,
+                Some(v) if !v.is_empty() => zeroize::Zeroizing::new(v),
                 _ => return FarewellStatus::InvalidArgument,
             };
             if let Ok(s) = std::str::from_utf8(&pw) {
@@ -581,7 +593,9 @@ pub unsafe extern "C" fn farewell_create_vault_hw(
         if hw == 0 {
             let specs: Vec<_> = pws
                 .into_iter()
-                .map(farewell_format::LevelSpec::passphrase_only)
+                .map(|mut z| {
+                    farewell_format::LevelSpec::passphrase_only(std::mem::take(&mut *z))
+                })
                 .collect();
             let builder = match farewell_format::VaultBuilder::new(&path, specs) {
                 Ok(b) => b,
@@ -650,15 +664,17 @@ pub unsafe extern "C" fn farewell_create_vault_hw(
         }
 
         let mut specs: Vec<farewell_format::LevelSpec> = Vec::with_capacity(count);
-        for pw in pws {
+        for mut pw in pws {
             let mut enr = farewell_format::LevelEnrollment::passphrase_only();
             for (cred, out) in &key_creds {
                 if enr.push(cred.clone(), *out).is_err() {
+                    // `pw` and the rest of the iterator's Zeroizing
+                    // entries erase themselves on this return.
                     return FarewellStatus::Internal;
                 }
             }
             specs.push(farewell_format::LevelSpec {
-                passphrase: pw,
+                passphrase: std::mem::take(&mut *pw),
                 enrollment: enr,
             });
         }
@@ -1256,8 +1272,13 @@ fn apply_pin(auth: &mut HidAuthenticator, pin: *const u8, pin_len: u64) {
         return;
     }
     if let Some(bytes) = collect_passphrase(pin, pin_len) {
-        if let Ok(s) = String::from_utf8(bytes) {
-            auth.set_pin(s);
+        match String::from_utf8(bytes) {
+            Ok(s) => auth.set_pin(s),
+            Err(e) => {
+                // Invalid UTF-8: still a PIN copy — erase it.
+                let mut b = e.into_bytes();
+                b.zeroize();
+            }
         }
     }
 }
@@ -2156,6 +2177,38 @@ pub unsafe extern "C" fn farewell_total_chunks(handle: *const FarewellVault) -> 
 /// store the counter externally after every write; on next mount,
 /// compare and refuse if it dropped. See THREAT_MODEL §5.6.
 ///
+/// Whether the mounted level's master key is actually `mlock`ed in RAM.
+/// `false` = DEGRADED: the key still zeroizes on close, but the OS could
+/// page it to disk while the vault is open (rlimit or platform refusal).
+/// The UI surfaces this honestly instead of silently ignoring it.
+///
+/// # Safety
+///
+/// `handle` must be a valid open vault; `out_locked` must be writable.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn farewell_memory_locked(
+    handle: *const FarewellVault,
+    out_locked: *mut bool,
+) -> i32 {
+    catch_panic(|| {
+        if handle.is_null() || out_locked.is_null() {
+            return FarewellStatus::InvalidArgument;
+        }
+        // SAFETY: handle non-null per contract.
+        let vault = unsafe { &(*handle).inner };
+        match vault.memory_locked() {
+            Some(locked) => {
+                // SAFETY: out_locked non-null and writable per contract.
+                unsafe {
+                    *out_locked = locked;
+                }
+                FarewellStatus::Ok
+            }
+            None => FarewellStatus::Manifest,
+        }
+    })
+}
+
 /// # Safety
 ///
 /// `handle` must be a valid open vault; `out_counter` must be writable.

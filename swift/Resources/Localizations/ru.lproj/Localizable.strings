@@ -338,3 +338,7 @@
 "overwritten, but could not delete: %@" = "перезаписан, но удалить не удалось: %@";
 "The original was NOT securely erased (%@) — it is still on disk." = "Оригинал НЕ был надёжно стёрт (%@) — он всё ещё на диске.";
 "Original overwritten %lld× in place and deleted. Note: snapshots or copy-on-write filesystems can retain older copies even on a hard disk." = "Оригинал перезаписан %lld× на месте и удалён. Примечание: снимки и файловые системы с копированием при записи могут сохранять старые копии даже на жёстком диске.";
+
+// Memory-lock degraded state (v0.23 — audit task 09)
+"key not pinned in RAM" = "ключ не закреплён в RAM";
+"The system refused to pin the vault key in RAM (memory-lock limit). The key is still erased when the vault closes, but the OS could swap it to disk while the vault is open." = "Система отказалась закрепить ключ сейфа в RAM (лимит блокировки памяти). Ключ по-прежнему стирается при закрытии сейфа, но пока сейф открыт, ОС может выгрузить его на диск (swap).";

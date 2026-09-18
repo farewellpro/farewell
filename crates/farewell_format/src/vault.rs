@@ -2001,14 +2001,26 @@ impl Vault {
 
     // ---- internals ----
 
-    fn master_key_view(&self) -> Result<[u8; aead::KEY_LEN]> {
+    /// A short-lived copy of the master key that erases itself on drop
+    /// (including every early `?` return in the caller). Callers keep
+    /// it for the duration of one operation, never store it.
+    fn master_key_view(&self) -> Result<zeroize::Zeroizing<[u8; aead::KEY_LEN]>> {
         let m = self
             .mounted
             .as_ref()
             .ok_or_else(|| FormatError::Manifest("no level mounted".into()))?;
-        let mut k = [0u8; aead::KEY_LEN];
+        let mut k = zeroize::Zeroizing::new([0u8; aead::KEY_LEN]);
         k.copy_from_slice(m.master.as_slice());
         Ok(k)
+    }
+
+    /// Whether the mounted level's master key is actually `mlock`ed in
+    /// RAM. `Some(false)` is the DEGRADED state (rlimit or platform
+    /// refusal): the key still zeroizes on close, but the OS could page
+    /// it while the vault is open. Surfaced to the UI so the promise
+    /// stays honest.
+    pub fn memory_locked(&self) -> Option<bool> {
+        self.mounted.as_ref().map(|m| m.master.is_locked())
     }
 
     /// Refuse mutations on a poisoned session (see [`Vault::poisoned`]).
